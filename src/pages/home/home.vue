@@ -23,7 +23,7 @@
   export default {
     name: PAGE_NAME,
     page: {
-      title: 'home'
+      title: ''
     },
     components: {
       Navigation,

@@ -2,6 +2,7 @@
 
 import axios from 'axios'
 import storage from 'storage-controller'
+import {BASE_URL} from './config'
 import * as Utils from './request-utils'
 
 const TIME_OUT = 10000
@@ -10,6 +11,7 @@ const ERR_NO = -404
 const COMMON_HEADER = {}
 
 const http = axios.create({
+  baseURL: BASE_URL.api,
   timeout: TIME_OUT,
   headers: COMMON_HEADER
 })
@@ -17,7 +19,8 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
-    config.headers['Authorization'] = storage.get('token', '')
+    // config.headers['Authorization'] = storage.get('token', '')
+    config.headers['Authorization'] = '3cac54de7f2cad323432c2c9f2a2dd26b73b59bb' || storage.get('token')
     return config
   },
   (error) => {
@@ -77,61 +80,31 @@ function requestException(res) {
   return error
 }
 
-export default {
-  post(url, data, loading = true) {
+// http请求
+const methodArr = ['get', 'post', 'put', 'delete']
+const HTTP = {}
+methodArr.forEach((item) => {
+  let method = item.toUpperCase()
+  HTTP[item] = (...args) => {
+    // 路径 数据 loading toast 中间件方法名称 自定义的方法...
+    const [url, data, loading = false, , middleFnName] = args
     Utils.showLoading(loading)
     return http({
-      method: 'post',
+      method,
       url,
-      data // post 请求时带的参数
+      data,
+      params: data,
     })
-      .then((response) => {
-        return checkStatus(response)
-      })
-      .then((res) => {
-        return checkCode(res)
-      })
-  },
-  get(url, params, loading = true) {
-    Utils.showLoading(loading)
-    return http({
-      method: 'get',
-      url,
-      params // get 请求时带的参数
+    .then((response) => {
+      return checkStatus(response)
     })
-      .then((response) => {
-        return checkStatus(response)
-      })
-      .then((res) => {
-        return checkCode(res)
-      })
-  },
-  put(url, data, loading = true) {
-    Utils.showLoading(loading)
-    return http({
-      method: 'put',
-      url,
-      data // put 请求时带的参数
+    .then((res) => {
+      return checkCode(res)
     })
-      .then((response) => {
-        return checkStatus(response)
-      })
-      .then((res) => {
-        return checkCode(res)
-      })
-  },
-  delete(url, data, loading = true) {
-    Utils.showLoading(loading)
-    return http({
-      method: 'delete',
-      url,
-      data // put 请求时带的参数
+    .then((res) => {
+      let fn = Utils[middleFnName] // 调用中间件的方法
+      return fn ? fn(res, ...args) : res
     })
-      .then((response) => {
-        return checkStatus(response)
-      })
-      .then((res) => {
-        return checkCode(res)
-      })
   }
-}
+})
+export default HTTP

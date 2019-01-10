@@ -10,7 +10,8 @@ const DEV_URL = {
 }
 
 const TEST_URL = {
-  api: 'https://zhidian-api.jkweixin.net'
+  api: 'https://ws-api.jkweixin.net', // todo
+  // api: 'https://zhidian-api.jkweixin.net'
 }
 
 const PROD_URL = {
@@ -20,7 +21,7 @@ const PROD_URL = {
 export const BASE_URL =
   env.NODE_ENV === 'production'
     ? PROD_URL
-    : env.NODE_ENV === 'test'
+    : env.NODE_ENV === 'development'
       ? TEST_URL
       : env.NODE_ENV === 'development'
         ? DEV_URL

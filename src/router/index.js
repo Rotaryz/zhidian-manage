@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import VueMeta from 'vue-meta'
 import NProgress from 'nprogress/nprogress'
 import routes from './routes'
+import stroage from 'storage-controller'
+import {LOGIN_PAGE} from '@utils/constant'
 
 NProgress.configure({showSpinner: false})
 
@@ -24,6 +26,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((routeTo, routeFrom, next) => {
+  if (routeTo.path !== LOGIN_PAGE) {
+
+    return stroage.has('token') ? next() : next(LOGIN_PAGE)
+  }
   if (routeFrom.name !== null) {
     NProgress.start()
   }

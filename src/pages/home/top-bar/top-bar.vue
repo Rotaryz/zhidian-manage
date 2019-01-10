@@ -2,9 +2,9 @@
   <div class="top-bar">
     <section class="userInfo-wrapper">
       <div class="avatar-wrapper">
-        <img :src="defaultAvatar" alt="" width="40" height="40">
+        <img :src="userInfo.avatar || defaultAvatar" alt="" width="40" height="40">
       </div>
-      <p class="name">{{'zan-bo'}}</p>
+      <p class="name">{{userInfo.name || 'super'}}</p>
       <div class="log-out" @click="tryToLogOut"></div>
     </section>
     <!--<section class="title-wrapper">-->
@@ -15,6 +15,7 @@
 
 <script type="text/ecmascript-6">
   import {globalComputed} from '@state/helpers'
+  import {LOGIN_PAGE} from '@utils/constant'
 
   const COMPONENT_NAME = 'TOP_BAR'
   const DEFAULT_AVATAR = `https://zhidian-img.jkweixin.com/2018%2F11%2F23%2F1542945169074-logo.jpg`
@@ -29,11 +30,16 @@
     },
     computed: {
       ...globalComputed,
-    // ...authComputed
+      // ...authComputed
+      userInfo() {
+        return this.$storage.get('info', {})
+      }
     },
     methods: {
       // ...authMethods,
       tryToLogOut() {
+        this.$storage.remove('token')
+        this.$router.replace(LOGIN_PAGE)
       // this.logOut()
       // this.$router.replace({name: 'login', query: {redirectFrom: this.$route.fullPath}})
       }
