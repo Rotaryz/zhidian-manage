@@ -1,24 +1,11 @@
+import {HOME_PAGE, LOGIN_PAGE} from '@utils/constant'
+
 export default [
-  // 测试页面配置
-  // {
-  //   path: '/test-page1',
-  //   name: 'test-page1',
-  //   component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
-  // },
-  // // 测试页面注释
-  // {
-  //   path: '/test-page',
-  //   name: 'test-page',
-  //   component: () => lazyLoadView(import('@pages/test-page/test-page'))
-  // },
-  {
-    path: '/',
-    redirect: '/home'
-  },
   {
     path: '/home',
     name: 'home',
     component: () => lazyLoadView(import('@pages/home/home')),
+    redirect: HOME_PAGE,
     children: [
       // 测试页面配置
       {
@@ -33,6 +20,17 @@ export default [
         component: () => lazyLoadView(import('@pages/test-page/test-page'))
       },
     ]
+  },
+  // ROOT
+  {
+    path: '/',
+    redirect: LOGIN_PAGE
+  },
+  // 登陆
+  {
+    path: '/login',
+    name: 'login',
+    component: () => lazyLoadView(import('@pages/login/login'))
   },
   {
     path: '/404',
