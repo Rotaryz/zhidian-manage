@@ -5,6 +5,22 @@
         <d-header-item :dataInfo="item"></d-header-item>
       </li>
     </ul>
+    <section class="charts-wrapper">
+      <div class="c-item">
+        <d-charts-panel></d-charts-panel>
+      </div>
+      <div class="c-item">
+        <d-charts-panel></d-charts-panel>
+      </div>
+    </section>
+    <section class="charts-wrapper">
+      <div class="c-item">
+        <d-charts-panel></d-charts-panel>
+      </div>
+      <div class="c-item">
+        <d-charts-panel></d-charts-panel>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -12,6 +28,7 @@
   import API from '@api'
   import {OVERVIEW} from './data-config'
   import DHeaderItem from './d-header-item/d-header-item'
+  import DChartsPanel from './d-charts-panel/d-charts-panel'
 
   const PAGE_NAME = 'DATA_OVERVIEW'
   const TITLE = '数据统计'
@@ -22,7 +39,8 @@
       title: TITLE
     },
     components: {
-      DHeaderItem
+      DHeaderItem,
+      DChartsPanel
     },
     data() {
       return {
@@ -55,6 +73,14 @@
       .h-item
         flex: 1
         margin-right :25px
+        &:last-child
+          margin-right :0
+    .charts-wrapper
+      margin-top :25px
+      layout(row,block,nowrap)
+      .c-item
+        flex:1
+        margin-right: 25px
         &:last-child
           margin-right :0
 
