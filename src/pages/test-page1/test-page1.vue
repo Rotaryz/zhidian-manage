@@ -11,6 +11,9 @@
     name: PAGE_NAME,
     data() {
       return {}
+    },
+    created() {
+      alert(123)
     }
   }
 </script>

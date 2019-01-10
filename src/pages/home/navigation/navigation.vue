@@ -42,6 +42,16 @@
       isLight: false,
       children: []
     },
+    {
+      title: '商家管理',
+      url: '/home/test-page2',
+      icon: require('./icon-shop@2x.png'),
+      iconSelected: require('./icon-shop_select@2x.png'),
+      childrenIndex: 0,
+      isRouter: true,
+      isLight: false,
+      children: []
+    },
     // {
     //   title: '商品管理',
     //   url: '/goods-manager',

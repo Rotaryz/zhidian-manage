@@ -20,6 +20,11 @@ export default [
         name: 'test-page1',
         component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
       },
+      {
+        path: 'test-page2',
+        name: 'test-page2',
+        component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
+      },
     ]
   },
   // ROOT
