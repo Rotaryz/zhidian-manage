@@ -1,10 +1,12 @@
 import {mapState, mapGetters, mapActions} from 'vuex'
 
-export const someComputed = {
-  ...mapState('some', {
-    currentUser: (state) => state.currentUser
+export const globalComputed = {
+  ...mapState('global', {
+    currentTitles: (state) => state.currentTitles,
+    marginBottom: (state) => state.marginBottom,
   }),
-  ...mapGetters('some', ['constants'])
+  ...mapGetters('global', []) // todo
 }
-
-export const someMethods = mapActions('some', ['action1', 'action2'])
+export const globalMethods = {
+  ...mapActions('global', []) // todo
+}

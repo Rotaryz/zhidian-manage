@@ -1,30 +1,38 @@
 export default [
   // 测试页面配置
-  {
-    path: '/test-page1',
-    name: 'test-page1',
-    component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
-  },
-  // 测试页面注释
-  {
-    path: '/test-page',
-    name: 'test-page',
-    component: () => lazyLoadView(import('@pages/test-page/test-page'))
-  },
+  // {
+  //   path: '/test-page1',
+  //   name: 'test-page1',
+  //   component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
+  // },
+  // // 测试页面注释
+  // {
+  //   path: '/test-page',
+  //   name: 'test-page',
+  //   component: () => lazyLoadView(import('@pages/test-page/test-page'))
+  // },
   {
     path: '/',
+    redirect: '/home'
+  },
+  {
+    path: '/home',
     name: 'home',
-    component: () => lazyLoadView(import('@pages/home/home'))
-  },
-  {
-    path: '/sample',
-    name: 'sample',
-    component: () => lazyLoadView(import('@pages/sample/sample'))
-  },
-  {
-    path: '/other-pages',
-    name: 'other-pages',
-    component: () => lazyLoadView(import('@pages/other-pages/other-pages'))
+    component: () => lazyLoadView(import('@pages/home/home')),
+    children: [
+      // 测试页面配置
+      {
+        path: 'test-page1',
+        name: 'test-page1',
+        component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
+      },
+      // 测试页面注释
+      {
+        path: 'data-overview',
+        name: 'test-page',
+        component: () => lazyLoadView(import('@pages/test-page/test-page'))
+      },
+    ]
   },
   {
     path: '/404',

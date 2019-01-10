@@ -5,6 +5,7 @@
   "author": "Ben <xuedengheng@outlook.com>",
   "private": true,
   "scripts": {
+    "start": "npm run release",
     "dev": "vue-cli-service serve --mode development",
     "release": "vue-cli-service serve --mode release",
     "prod": "vue-cli-service serve --mode production",
@@ -26,6 +27,8 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.2.0-rc.2",
+    "iview": "^3.2.1",
     "lodash": "^4.17.11",
     "nprogress": "^0.2.0",
     "storage-controller": "^1.0.4",

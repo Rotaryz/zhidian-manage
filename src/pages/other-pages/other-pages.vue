@@ -17,10 +17,11 @@
     },
     created() {
       // todo
-      let path = this.$route.path
-      if (path !== '/other-pages') {
-        this.isTwoPage = true
-      }
+      // let path = this.$route.path
+      // if (path !== '/other-pages') {
+      //   this.isTwoPage = true
+      // }
+      this.$toast.show('12321313')
     },
     methods: {
       showToast() {

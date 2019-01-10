@@ -1,6 +1,6 @@
 <template>
   <div class="test-page">
-    test-page
+    data-page
   </div>
 </template>
 
@@ -19,5 +19,6 @@
   @import "~@design"
 
   .test-page
-    width: 100%
+    height :100%
+    background yellowgreen
 </style>
