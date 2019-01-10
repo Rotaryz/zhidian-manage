@@ -19,7 +19,8 @@ const http = axios.create({
 http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
-    config.headers['Authorization'] = storage.get('token', '')
+    // config.headers['Authorization'] = storage.get('token', '')
+    config.headers['Authorization'] = '3cac54de7f2cad323432c2c9f2a2dd26b73b59bb' || storage.get('token')
     return config
   },
   (error) => {
@@ -86,7 +87,7 @@ methodArr.forEach((item) => {
   let method = item.toUpperCase()
   HTTP[item] = (...args) => {
     // 路径 数据 loading toast 中间件方法名称 自定义的方法...
-    const [url, data, loading = true, , middleFnName] = args
+    const [url, data, loading = false, , middleFnName] = args
     Utils.showLoading(loading)
     return http({
       method,

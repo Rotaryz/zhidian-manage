@@ -25,8 +25,8 @@
     {
       title: '数据管理',
       url: '/home/data-overview',
-      icon: require('./icon-user@2x.png'),
-      iconSelected: require('./icon-user_select@2x.png'),
+      icon: require('./icon-data@2x.png'),
+      iconSelected: require('./icon-data_selecrt@2x.png'),
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
