@@ -286,13 +286,21 @@
         overflow: hidden
         background: $color-menu-bg
         box-sizing: border-box
-        border-left: 5px solid transparent
+        border-left: 0px solid transparent
         transition: all .2s
+        position :relative
         &:hover
           background: $color-menu-bg-active
         &.active
-          border-left: 5px solid $color-main
+          //border-left: 5px solid $color-main
           background: $color-menu-bg-active
+          &:after
+            content: ''
+            width :5px
+            height :20px
+            border-radius: 2.5px
+            col-center()
+            background :$color-main
           &.no-border
             border-color: transparent
           & > p
