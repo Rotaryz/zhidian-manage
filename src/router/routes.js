@@ -1,7 +1,6 @@
 import {HOME_PAGE, LOGIN_PAGE} from '@utils/constant'
 
 export default [
-
   {
     path: '/home',
     name: 'home',
@@ -20,6 +19,20 @@ export default [
         name: 'test-page1',
         component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
       },
+      // 商家管理/品牌管理
+      {
+        path: '/brand-manage',
+        name: 'brand-manage',
+        component: () => lazyLoadView(import('@pages/brand-manage/brand-manage'))
+      },
+      // // 商家管理/店铺管理
+      // {
+      //   path: '/store-manage',
+      //   component: StoreManage,
+      //   meta: {
+      //     title: '商家管理,店铺管理'
+      //   }
+      // },
     ]
   },
   // ROOT
