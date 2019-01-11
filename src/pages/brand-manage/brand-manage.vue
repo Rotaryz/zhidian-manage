@@ -2,6 +2,7 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
+        水电费撒旦法撒旦法
         <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         <base-search placeHolder="请输入团长名称" @search="search"></base-search>
       </div>
@@ -10,12 +11,10 @@
       <div class="list-header">
         <div v-for="(item, index) in headerList"
              :key="index"
-             :class="{'handle': index === 4 || index === 5 || index === 6}"
              class="header-key"
              :style="{flex: item.width}"
-             @click="handleClick(index)"
         >
-          <span class="contxt" :class="`${headClass[`class${index}`]}`">{{item.name}}</span>
+          <span class="contxt">{{item.name}}</span>
         </div>
       </div>
       <div class="list-content">
@@ -24,6 +23,7 @@
             v-for="(val, ind) in headerList"
             :key="ind"
             :style="{flex: val.width}"
+            class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-else class="list-handle item">
@@ -73,10 +73,10 @@
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
   const TAB_LIST = [
-    {name: '店铺名称', width: '1', value: 'storeName', class: 'item'},
+    {name: '品牌名称', width: '1', value: 'storeName', class: 'item'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
-    {name: '品牌', width: '1', value: 'brand', class: 'item'},
+    {name: '门店', width: '1', value: 'brand', class: 'item'},
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'code', class: 'item'},
@@ -113,7 +113,7 @@
         dispatchSelect: {
           check: false,
           show: false,
-          content: '分类',
+          content: '全部状态',
           type: 'default',
           data: [{name: ''}]
         },
@@ -129,7 +129,8 @@
         showPopContent: '',
         endTime: '',
         addTime: '',
-        expire_time: ''
+        expire_time: '',
+        typeId: ''
       }
     },
     watch: {
@@ -152,51 +153,8 @@
         this.requestData.sort_type = ''
         this.getMemberList()
       },
-      handleClick(num) {
-        switch (num) {
-        case 2:
-          this.requestData.sort_type = 7
-          break
-        case 3:
-          this.requestData.sort_type = 1
-          break
-        case 4:
-          this.requestData.sort_type = 3
-          break
-        case 5:
-          this.requestData.sort_type = 5
-          break
-        }
-        if (this.handleIndex === num) {
-          if (this.headClass[`class${num}`] === 'down') {
-            this.headClass[`class${num}`] = 'up'
-            switch (num) {
-            case 2:
-              this.requestData.sort_type = 8
-              break
-            case 3:
-              this.requestData.sort_type = 2
-              break
-            case 4:
-              this.requestData.sort_type = 4
-              break
-            case 5:
-              this.requestData.sort_type = 6
-              break
-            }
-          } else {
-            this.headClass[`class${num}`] = 'down'
-          }
-        } else {
-          this.handleIndex = num
-          for (let val in this.headClass) {
-            this.headClass[val] = ''
-          }
-          this.headClass[`class${num}`] = 'down'
-        }
-        this.requestData.page = 1
-        this.$refs.pageDetail.beginPage()
-        this.getBrandList()
+      setValue(item) {
+        this.typeId = item.id
       },
       openPop(item) {
         // 打开弹窗
@@ -212,6 +170,26 @@
           .replace(/\//g, '-')
           .replace(/\b\d\b/g, '0$&')
       // this.addTime.toLocaleDateString().replace(/\//g, '-')
+      },
+      openBusiness() {
+        if (!this.expire_time) {
+          this.$refs.toast.show('请选择延迟日期')
+          return
+        }
+        if (new Date(this.expire_time) < new Date(this.endTime)) {
+          this.$refs.toast.show('选择日期应大于到期日期')
+          return
+        }
+        // Business.openBusiness({merchant_id: this.merchant_id, expire_time: this.expire_time})
+        //   .then((res) => {
+        //     if (res.error !== ERR_OK) {
+        //       this.$refs.toast.show(res.message)
+        //       return
+        //     }
+        //     this.getBusinessList()
+        //     this.$refs.toast.show(res.message)
+        //   })
+        this.closePop()
       },
       closePop() {
         // 关闭弹窗
@@ -270,32 +248,6 @@
           overflow: hidden
           &:last-child
             flex: 1.5
-        .handle
-          cursor: pointer
-          .contxt
-            position: relative
-            &:before
-            &:after
-              content: ''
-              display: inline-block
-              width: 0
-              height: 0
-              border: 4px solid #999
-              border-top-color: transparent
-              border-right-color: transparent
-              border-bottom-color: transparent
-              position: absolute
-              right: -16px
-              top: 1px
-              transition: all 0.4s
-              transform: rotate(-90deg)
-            &:after
-              transform: rotate(90deg)
-              top: 12px
-          .down:after
-            border-left-color: $color-main
-          .up:before
-            border-left-color: $color-main
       .list-content
         .list-item
           height: 60px
@@ -307,6 +259,10 @@
           box-sizing: border-box
           border-bottom: 0.5px solid $color-line
           text-align: left
+          .item-box
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
           .item
             flex: 1
             line-height: 18px

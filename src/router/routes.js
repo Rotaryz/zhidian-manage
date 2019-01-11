@@ -15,13 +15,13 @@ export default [
       },
       // 商家管理/品牌管理
       {
-        path: 'business-manage/brand-manage',
+        path: 'business-manage/store-manage',
         name: 'brand-manage',
         title: '商家管理',
         component: () => lazyLoadView(import('@pages/store-manage/store-manage'))
       },
       {
-        path: 'business-manage/store-manage',
+        path: 'business-manage/brand-manage',
         name: 'store-manage',
         title: '品牌管理',
         component: () => lazyLoadView(import('@pages/brand-manage/brand-manage'))
