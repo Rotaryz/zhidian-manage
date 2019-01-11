@@ -10,7 +10,7 @@ const DEV_URL = {
 }
 
 const TEST_URL = {
-  api: 'https://ws-api.jkweixin.net', // todo
+  api: 'https://ws-api.jkweixin.net' // todo
   // api: 'https://zhidian-api.jkweixin.net'
 }
 

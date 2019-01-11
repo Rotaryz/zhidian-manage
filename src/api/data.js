@@ -17,7 +17,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  getTotalMode(data, loading ,toast) {
+  getTotalMode(data, loading, toast) {
     let url = '/api/admin/real-stats'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalModeData)
   },

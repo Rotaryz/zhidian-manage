@@ -1,7 +1,6 @@
 import {HOME_PAGE, LOGIN_PAGE} from '@utils/constant'
 
 export default [
-
   {
     path: '/home',
     name: 'home',
@@ -24,7 +23,7 @@ export default [
         path: 'test-page2',
         name: 'test-page2',
         component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
-      },
+      }
     ]
   },
   // ROOT

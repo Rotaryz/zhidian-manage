@@ -22,7 +22,7 @@
 
   export default {
     name: COMPONENT_NAME,
-    props:{
+    props: {
       dataInfo: {
         type: Object,
         default() {

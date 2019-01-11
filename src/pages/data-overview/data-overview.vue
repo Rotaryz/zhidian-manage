@@ -44,7 +44,7 @@
     },
     data() {
       return {
-        headerArray: OVERVIEW,
+        headerArray: OVERVIEW
       }
     },
     created() {

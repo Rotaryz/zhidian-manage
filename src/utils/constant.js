@@ -3,4 +3,3 @@ export const DEFAULT_STR = '未知'
 export const API_DEFAULT_MIDDLE_FN = 'defaultMiddleWare'
 export const HOME_PAGE = '/home/data-overview'
 export const LOGIN_PAGE = '/login'
-

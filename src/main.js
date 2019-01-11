@@ -4,7 +4,10 @@ import router from '@router'
 import store from '@state/store'
 import '@components/_globals'
 import {Plugins} from '@utils/plugins'
+import {DatePicker} from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(DatePicker)
 Vue.use(Plugins)
 
 Vue.config.productionTip = process.env.NODE_ENV === 'production'
