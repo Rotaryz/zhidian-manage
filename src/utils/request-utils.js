@@ -46,8 +46,8 @@ export function defaultMiddleWare(res, ...args) {
     _loadingHide()
   }
   // 错误处理
-  if (res == null || res.error == null) {
-    return res
+  if (res == null || res.error == null || res.data == null) {
+    throw new Error(res)
   }
   // toast处理
   if (_this.$ERR_OK !== res.error) {
