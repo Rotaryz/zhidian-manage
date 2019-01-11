@@ -6,19 +6,49 @@ export const OVERVIEW = [
 ]
 
 export const CHATS_DATA_TYPE = {
-  user: 'user'
+  user: 'user',
+  shop: 'shop',
+  order: 'order',
+  amount: 'amount'
 }
+const _X = ['2:00', '4:00', '06:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00']
+const _XB = ['0:00 ~ 2:00', '2:00 ~ 4:00', '4:00 ~ 6:00', '6:00 ~ 8:00', '8:00 ~ 10:00', '10:00 ~ 12:00', '12:00 ~ 14:00', '14:00 ~ 16:00', '16:00 ~ 18:00', '18:00 ~ 20:00', '20:00 ~ 22:00', '22:00 ~ 24:00']
 
 export const CHATS_CONFIG = {
   [CHATS_DATA_TYPE.user]: {
-    xAxisData: ['2:00', '4:00', '06:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'],
-    xBetweenData: ['0:00 ~ 2:00', '2:00 ~ 4:00', '4:00 ~ 6:00', '6:00 ~ 8:00', '8:00 ~ 10:00', '10:00 ~ 12:00', '12:00 ~ 14:00', '14:00 ~ 16:00', '16:00 ~ 18:00', '18:00 ~ 20:00', '20:00 ~ 22:00', '22:00 ~ 24:00'],
+    xAxisData: _X,
+    xBetweenData: _XB,
     seriesData: {potential_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], consume_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
     formatter: _userFormatter,
-    drawFn: 'drawCustomer',
+    drawFn: '_drawCustomer',
     chartType: 1
+  },
+  [CHATS_DATA_TYPE.shop]: {
+    xAxisData: _X,
+    xBetweenData: _XB,
+    seriesData: {pay_amount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    formatter: '',
+    drawFn: '_drawOpenShop',
+    chartType: 2
+  },
+  [CHATS_DATA_TYPE.order]: {
+    xAxisData: _X,
+    xBetweenData: _XB,
+    seriesData: {refund_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], pay_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], submit_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    formatter: '',
+    drawFn: '_drawOrder',
+    chartType: 3
+  },
+  [CHATS_DATA_TYPE.amount]: {
+    xAxisData: _X,
+    xBetweenData: _XB,
+    seriesData: {pay_amount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    formatter: '',
+    drawFn: '_drawAmount',
+    chartType: 4
   }
 }
+
 function _userFormatter(params, xBetweenData) {
   let total = 0
   params.forEach((item) => {

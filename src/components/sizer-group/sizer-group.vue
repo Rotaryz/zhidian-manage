@@ -36,11 +36,15 @@
       tabActive: {
         type: Number,
         default: 5
+      },
+      defaultIndex: {
+        type: Number,
+        default: 0
       }
     },
     data() {
       return {
-        tabIndex: 0,
+        tabIndex: this.defaultIndex,
         preIndex: 0,
         showPicker: true
       }

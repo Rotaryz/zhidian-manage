@@ -45,18 +45,33 @@ export default {
 function _resolveGetTotalChartData(res) {
   let xAxisData = []
   let xBetweenData = []
-  let seriesData = {}
+  let seriesData = {
+    potential_num: [], // 潜在用户
+    consume_num: [], // 消费用户
+    shop_num: [], // 店铺数量
+    pay_amount: [], // 交易金额
+    submit_num: [], // 提交订单
+    pay_num: [], // 支付订单
+    refund_num: [], // 退款订单
+  }
   res.data.forEach((item) => {
-    xAxisData.push(item.at)
-    xBetweenData.push(item.at_between)
-    for(let [key,val] of Object.entries(item)) {
-      if (seriesData[key]) {
-        seriesData[key].push(val)
-      } else {
-        seriesData[key] = []
-        seriesData[key].push(val)
-      }
-    }
+    xAxisData.push(item.at) // x 轴每个点对应y轴的值
+    xBetweenData.push(item.at_between) // x 轴 间隔的值
+    seriesData.potential_num.push(_DEFAULT_NUM(item.potential_num))
+    seriesData.consume_num.push(_DEFAULT_NUM(item.consume_num))
+    seriesData.shop_num.push(_DEFAULT_NUM(item.shop_num))
+    seriesData.submit_num.push(_DEFAULT_NUM(item.submit_num))
+    seriesData.pay_num.push(_DEFAULT_NUM(item.pay_num))
+    seriesData.refund_num.push(_DEFAULT_NUM(item.refund_num))
+    seriesData.pay_amount.push(_DEFAULT_NUM(item.pay_amount))
+    // for(let [key,val] of Object.entries(item)) {
+    //   if (seriesData[key]) {
+    //     seriesData[key].push(val)
+    //   } else {
+    //     seriesData[key] = []
+    //     seriesData[key].push(val)
+    //   }
+    // }
   })
   res.data = {
     xAxisData,
@@ -65,7 +80,9 @@ function _resolveGetTotalChartData(res) {
   }
   return res
 }
-
+function _DEFAULT_NUM(num) {
+  return +num || ~~(Math.random() *100)
+}
 // 解析统计数据
 function _resolveGetTotalModeData(res) {
   let resData = res.data

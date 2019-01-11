@@ -10,15 +10,15 @@
         <d-charts-panel title="用户统计" :chartType="CHATS_DATA_TYPE.user"></d-charts-panel>
       </div>
       <div class="c-item">
-        <d-charts-panel title="店铺统计"></d-charts-panel>
+        <d-charts-panel title="店铺统计" :chartType="CHATS_DATA_TYPE.shop"></d-charts-panel>
       </div>
     </section>
     <section class="charts-wrapper">
       <div class="c-item">
-        <d-charts-panel title="订单统计"></d-charts-panel>
+        <d-charts-panel title="订单统计" :chartType="CHATS_DATA_TYPE.order"></d-charts-panel>
       </div>
       <div class="c-item">
-        <d-charts-panel title="交易统计"></d-charts-panel>
+        <d-charts-panel title="交易统计" :chartType="CHATS_DATA_TYPE.amount"></d-charts-panel>
       </div>
     </section>
   </div>

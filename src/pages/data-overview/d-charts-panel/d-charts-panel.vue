@@ -4,7 +4,7 @@
       <div class="title">{{title}}</div>
       <date-picker ref="_datePicker" @change="changeHandle($event, 'date')"></date-picker>
       <div class="btn-group">
-        <sizer-group ref="group" :btnGroup="btnGroup" @change="changeHandle"></sizer-group>
+        <sizer-group ref="group" :btnGroup="btnGroup" :defaultIndex="2" @change="changeHandle"></sizer-group>
       </div>
     </header>
     <section class="charts-wrapper">
@@ -26,7 +26,7 @@
     {title: '7天', status: 'week'},
     {title: '30天', status: 'month'},
   ]
-  const DEFAULT_STATUS = 'yesterday'
+  const DEFAULT_STATUS = 'month'
   export default {
     name: COMPONENT_NAME,
     components: {
@@ -54,7 +54,8 @@
         btnGroup: NAV,
         dateType: DEFAULT_STATUS,
         startDate: '',
-        endDate: ''
+        endDate: '',
+        myChart: null
       }
     },
     computed:{
@@ -64,8 +65,9 @@
     },
     created() {
       this._getTotalChart()
-    },
-    mounted() {
+      window.addEventListener('resize', () => {
+        this.myChart.resize()
+      })
     },
     methods: {
       changeHandle(e, type) {
@@ -92,15 +94,498 @@
         }
         API.Data.getTotalChart(data).then((res) => {
           let {xAxisData, xBetweenData, seriesData} = res.data
-          this[this.CHATS_CONFIG.drawFn](xAxisData, xBetweenData, seriesData)
+          let _this = this
+          xAxisData = xAxisData || this.CHATS_CONFIG.xAxisData
+          xBetweenData = xBetweenData || this.CHATS_CONFIG.xBetweenData
+          seriesData = seriesData || this.CHATS_CONFIG.seriesData
+          // let myChart = this.$echarts.init(this.$refs.chartItem)
+          this.myChart = this.$echarts.init(this.$refs.chartItem)
+          this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
         })
       },
-      drawCustomer(xAxisData, xBetweenData, seriesData) {
-        let _this = this
-        xAxisData = xAxisData || this.CHATS_CONFIG.xAxisData
-        xBetweenData = xBetweenData || this.CHATS_CONFIG.xBetweenData
-        seriesData = seriesData || this.CHATS_CONFIG.seriesData
-        let myChart = this.$echarts.init(this.$refs.chartItem)
+      _drawOrder(_this, xAxisData, xBetweenData, seriesData, myChart) {
+        myChart.setOption({
+          // formatter: function (params) {
+          //   if (typeof params !== 'object') {
+          //     return params
+          //   }
+          //   let tatol = 0
+          //   params.forEach((item) => {
+          //     tatol += parseFloat(item.data)
+          //   })
+          //   let arr = `<p style="text-align: left;margin: 0px 10px 6px;font-size: 16px;font-family: PingFangSC-Regular">${between[params[0].dataIndex]}(合计: ${tatol})</p>`
+          //   params.forEach((item) => {
+          //     let marker = `<span style="display:inline-block;margin-right:8px;border-radius:50%;width:5px;height:5px;background-color:${item.color}"></span>`
+          //     arr += `<p style="text-align: left; margin: 0px 10px 6px; font-size: 14px; font-family: PingFangSC-Regular">${marker}${item.seriesName} ${item.data}</p>`
+          //   })
+          //   return arr
+          // },
+          legend: {
+            itemWidth: 14,
+            itemHeight: 14,
+            borderRadius: 0,
+            bottom: 19,
+            data: [
+              {name: '提交订单', icon: 'rect'},
+              {name: '支付订单', icon: 'rect'},
+              {name: '退款订单', icon: 'rect'}
+            ]
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '63',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxisData,
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: '#E6E6E6',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              color: '#666',
+              fontSize: 12,
+              align: 'center'
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            }
+          },
+          tooltip: {
+            trigger: 'axis',
+            textStyle: {
+              align: 'left'
+            },
+            axisPointer: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            padding: [10, 50, 10, 20]
+          },
+          yAxis: {
+            minInterval: 1,
+            type: 'value',
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#EFEFEF',
+                width: 0.5,
+                type: 'dotted'
+              }
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              formatter: '{value}',
+              color: '#666'
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            }
+          },
+          series: [{
+            name: '提交订单',
+            data: seriesData.submit_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(169,129,255,0.3)'
+                }, {
+                  offset: 1, color: 'rgba(169,129,255,0.3)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(169,129,255,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(169,129,255,1)',
+                  width: 3
+                }
+              }
+            }
+          }, {
+            name: '支付订单',
+            data: seriesData.pay_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(73,133,252,1)',
+                  width: 3
+                }
+              }
+            }
+          }, {
+            name: '退款订单',
+            data: seriesData.refund_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(104,212,165,0.28)'
+                }, {
+                  offset: 1, color: 'rgba(104,212,165,0.28)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(79,209,102,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(79,209,102,1)',
+                  width: 3
+                }
+              }
+            }
+          }]
+        })
+        myChart.resize()
+      },
+      _drawAmount(_this, xAxisData, xBetweenData, seriesData, myChart) {
+        myChart.setOption({
+          // formatter: function (params) {
+          //   let tatol = 0
+          //   params.forEach((item) => {
+          //     tatol += parseFloat(item.data)
+          //   })
+          //   let arr = `<p style="text-align: left;margin: 0px 10px 6px;font-size: 16px;font-family: PingFangSC-Regular">${between[params[0].dataIndex]}(合计: ${tatol})</p>`
+          //   params.forEach((item) => {
+          //     let marker = `<span style="display:inline-block;margin-right:8px;border-radius:50%;width:5px;height:5px;background-color:${item.color}"></span>`
+          //     arr += `<p style="text-align: left; margin: 0px 10px 6px; font-size: 14px; font-family: PingFangSC-Regular">${marker}${item.seriesName} ${item.data}</p>`
+          //   })
+          //   return arr
+          // },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '63',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxisData,
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: '#E6E6E6',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              color: '#666',
+              fontSize: 12,
+              align: 'center'
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            }
+          },
+          tooltip: {
+            trigger: 'axis',
+            textStyle: {
+              align: 'left'
+            },
+            axisPointer: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            padding: [10, 50, 10, 20]
+          },
+          yAxis: {
+            minInterval: 1,
+            type: 'value',
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#EFEFEF',
+                width: 0.5,
+                type: 'dotted'
+              }
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              formatter: '{value}',
+              color: '#666'
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            }
+          },
+          series: [{
+            name: '交易金额',
+            data: seriesData.pay_amount,
+            type: 'line',
+            // smooth: true,
+            // showSymbol: false,
+            // symbol: 'circle',
+            // smoothMonotone: 'x',
+            // symbolSize: 3,
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(73,133,252,1)',
+                  width: 3
+                }
+              }
+            }
+          }]
+        })
+        myChart.resize()
+      },
+      _drawOpenShop(_this, xAxisData, xBetweenData, seriesData, myChart) {
+        myChart.setOption({
+          // formatter: function (params) {
+          //   let tatol = 0
+          //   params.forEach((item) => {
+          //     tatol += parseFloat(item.data)
+          //   })
+          //   let arr = `<p style="text-align: left;margin: 0px 10px 6px;font-size: 16px;font-family: PingFangSC-Regular">${between[params[0].dataIndex]}(合计: ${tatol})</p>`
+          //   params.forEach((item) => {
+          //     let marker = `<span style="display:inline-block;margin-right:8px;border-radius:50%;width:5px;height:5px;background-color:${item.color}"></span>`
+          //     arr += `<p style="text-align: left; margin: 0px 10px 6px; font-size: 14px; font-family: PingFangSC-Regular">${marker}${item.seriesName} ${item.data}</p>`
+          //   })
+          //   return arr
+          // },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '63',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: xAxisData,
+            splitLine: {
+              show: false,
+              lineStyle: {
+                color: '#E6E6E6',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              color: '#666',
+              fontSize: 12,
+              align: 'center'
+            },
+            axisTick: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            }
+          },
+          tooltip: {
+            trigger: 'axis',
+            textStyle: {
+              align: 'left'
+            },
+            axisPointer: {
+              lineStyle: {
+                color: '#ccc',
+                width: 0.5
+              }
+            },
+            padding: [10, 50, 10, 20]
+          },
+          yAxis: {
+            minInterval: 1,
+            type: 'value',
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#EFEFEF',
+                width: 0.5,
+                type: 'dotted'
+              }
+            },
+            axisTick: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            },
+            axisLabel: {
+              formatter: '{value}',
+              color: '#666'
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#c4c4c4',
+                width: 0.5
+              }
+            }
+          },
+          series: [{
+            name: '店铺数量',
+            data: seriesData.shop_num,
+            type: 'line',
+            // smooth: true,
+            // showSymbol: false,
+            // symbol: 'circle',
+            // smoothMonotone: 'x',
+            // symbolSize: 3,
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(73,133,252,1)',
+                  width: 3
+                }
+              }
+            }
+          }]
+        })
+        myChart.resize()
+      },
+      _drawCustomer(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
           tooltip: {
             trigger: 'axis',
