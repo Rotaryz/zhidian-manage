@@ -34,14 +34,27 @@
     },
     {
       title: '商家管理',
-      url: '/home/test-page1',
+      url: '/home/business-manage/',
       icon: require('./icon-shop@2x.png'),
       iconSelected: require('./icon-shop_select@2x.png'),
       childrenIndex: 0,
-      isRouter: true,
+      isRouter: false,
       isLight: false,
-      children: []
-    },
+      children: [
+        {
+          title: '品牌管理',
+          url: '/home/business-manage/brand-manage',
+          isRouter: true,
+          isLight: false
+        },
+        {
+          title: '店铺管理',
+          url: '/home/business-manage/store-manage',
+          isRouter: true,
+          isLight: false
+        }
+      ]
+    }
     // {
     //   title: '商品管理',
     //   url: '/goods-manager',

@@ -1,6 +1,10 @@
 <template>
   <div class="base-search">
-    <input v-model="searchText" type="text" class="search-input" :placeholder="placeHolder" @keydown="_enter">
+    <div class="search">
+      <input v-model="searchText" type="text" class="search-input" :placeholder="placeHolder" @keydown="_enter">
+      <span class="before"></span>
+      <span class="after"></span>
+    </div>
     <div class="search-icon-box" @click="_search">
       <span class="search-icon hand"></span>
     </div>
@@ -46,37 +50,24 @@
   .base-search
     display: flex
     height: 28px
-    width: 244px
-    overflow: hidden
-
+    width: 290px
+  .search
+    input-animate(224, 28)
   .search-input
     flex: 1
     color: $color-text-main
     font-family: $font-family-regular
     font-size: $font-size-12
-    height: 100%
-    width: 100%
-    box-sizing: border-box
-    border: 1px solid $color-line
-    border-right: none
-    border-radius: 4px 0px 0px 4px
-    padding-left: 14px
-    transition: all 0.2s
-    &:hover
-      border: 1px solid #ACACAC
-      border-right: none
+    text-indent: 8px
     &::placeholder
       font-family: $font-family-regular
       color: $color-text-assist
-    &:focus
-      border: 1px solid $color-sub !important
-      border-right: none !important
-
   .search-icon-box
-    width: 47px
-    height: 100%
+    width: 52px
+    height: 28px
     overflow: hidden
-    border-radius: 0px 4px 4px 0px
+    margin-left: 20px
+    border-radius: 4px
     .search-icon
       width: 47px
       height: 100%

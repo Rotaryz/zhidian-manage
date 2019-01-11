@@ -246,12 +246,12 @@ border-animate($color = $color-text-999, $radius = 4px, $font-color = #333)
       height: 100%
 
 // input边框 宽度= 原宽度 + 1; 高度= 原高度 + 1
-input-animate($w, $h,$radius = 4px,$color = $color-text-999,$l = -1px, $t = -1px, $b = 0, $font-color = $color-text-main)
+input-animate($w, $h,$radius = 4px,$color = #999,$l = -1px, $t = -1px, $b = 0, $font-color = $color-text-main)
   $relative-width = 2
   position: relative
   box-sizing: content-box
   input, textarea, select
-    border: 1px solid $color-sub-line
+    border: 1px solid #D9D9D9
     position: relative
     z-index: 10
     border-radius :$radius
