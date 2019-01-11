@@ -2,9 +2,9 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         <base-search placeHolder="请输入团长名称" @search="search"></base-search>
       </div>
+      <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
     <div class="content-list">
       <div class="list-header">
@@ -27,7 +27,8 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-else class="list-handle item">
-              <span class="handle-item" @click="openPop(item)">开通</span>
+              <span class="handle-item" @click="openPop('look', item)">查看</span>
+              <span class="handle-item" @click="openPop('freeze', item)">{{item.is_freeze_str === '正常' ? '冻结' : '解冻'}}</span>
             </div>
           </div>
         </div>
@@ -42,26 +43,21 @@
           <span>圣诞节分开了圣诞节</span>
           <span class="closePop" @click="closePop"></span>
         </header>
-        <div class="pop-main">
-          <p class="end-time">
-            <span class="type">到期时间: </span>
-            {{endTime}}
-          </p>
-          <p class="add-time">
-            <span class="type">延迟至</span>
-            <el-date-picker
-              v-model="addTime"
-              type="date"
-              placeholder="选择日期"
-              size="mini"
-              style="width:180px"
-            >
-            </el-date-picker>
-          </p>
+        <div v-if="showPopContent === 1 || showPopContent === 2" class="pop-main">
+          <div v-if="showPopContent === 1" class="input-box-big">
+            <span class="after"></span>
+            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <span class="before"></span>
+          </div>
+          <div v-if="showPopContent === 2" class="reasonTxt">冻结原因：{{reasonTxt}}</div>
           <div class="content-btn">
             <div class="btn" @click="closePop">取消</div>
-            <div class="btn active" @click="openBusiness">确定</div>
+            <div class="btn active" @click="operate">{{showPopContent === 1 ? '冻结' : '解冻'}}</div>
           </div>
+        </div>
+        <div v-if="showPopContent === 3" class="pop-main code">
+          <img v-if="!loadImg" key="1" :src="codeUrl" alt="" class="xcx-img">
+          <img v-if="loadImg" key="2" src="./loading.gif" alt="" class="load-img">
         </div>
       </div>
     </div>
@@ -110,31 +106,26 @@
           limit: 10
         },
         handleIndex: 0,
-        dispatchSelect: {
-          check: false,
-          show: false,
-          content: '分类',
-          type: 'default',
-          data: [{name: ''}]
+        headClass: {
+          class2: '',
+          class3: '',
+          class4: '',
+          class5: ''
         },
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
+        excelUrl: '',
         showPop: false,
         showActive: false,
         popName: '',
         merchant_id: '',
         showPopContent: '',
-        endTime: '',
-        addTime: '',
-        expire_time: ''
-      }
-    },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
+        loadImg: false,
+        codeUrl: '',
+        reasonTxt: ''
       }
     },
     methods: {
@@ -198,20 +189,32 @@
         this.$refs.pageDetail.beginPage()
         this.getBrandList()
       },
-      openPop(item) {
+      openPop(type, item) {
         // 打开弹窗
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
         this.popName = item.name
         this.merchant_id = item.id
+        switch (type) {
+        case 'freeze':
+          if (item.is_freeze_str === '正常') {
+            this.showPopContent = 1
+          } else {
+            this.showPopContent = 2
+          }
+          break
+        case 'look':
+          this.showPopContent = 3
+          break
+        }
       },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
+      operate() {
+        if (this.showPopContent === 1) {
+          this.closePop()
+        } else {
+          this.closePop()
+        }
       },
       closePop() {
         // 关闭弹窗
@@ -220,7 +223,7 @@
           this.showPop = false
         }, 200)
         this.showActive = false
-        this.expire_time = ''
+        this.popTxt = ''
       },
       addPage(num) {
         this.requestData.page = num
@@ -365,6 +368,27 @@
         text-align: left
         .input-box-big
           input-animate(#999, 0px, 471px, 91px)
+        .popTxt
+          padding: 8px
+          resize: none
+          font-size: 14px
+          width: 100%
+          height: 90px
+          outline: none
+          box-sizing: border-box
+          border: 0.5px solid $color-line
+          &::-webkit-input-placeholder
+            color: #CCC
+        .reasonTxt
+          padding: 8px
+          resize: none
+          font-size: 14px
+          width: 100%
+          height: 90px
+          box-sizing: border-box
+          border: 0.5px solid $color-line
+          color: $color-text-main
+          background: #f5f7fb
         .content-btn
           display: flex
           justify-content: flex-end
@@ -425,4 +449,9 @@
         .cancelPower
           margin-top: 20px
           padding-bottom: 40px
+      .code
+        display: flex
+        height: 260px
+        justify-content: center
+        align-items: center
 </style>

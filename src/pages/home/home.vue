@@ -31,23 +31,23 @@
     },
     data() {
       return {
-        // title: ''
+      // title: ''
       }
     },
     computed: {
       ...globalComputed,
-      panelStyle () {
+      panelStyle() {
         let index = 0
-        if (this.$route.path.includes('data-overview')){
+        if (this.$route.path.includes('data-overview')) {
           index = 1
         }
         return PANEL_CNAME[index]
       }
     },
     created() {
-      // console.log(this.$route)
-      // console.log(this.$store.dispatch('auth/validate'))
-      // this.title = this.currentTitles.length ? this.currentTitles[this.currentTitles.length - 1] : ''
+    // console.log(this.$route)
+    // console.log(this.$store.dispatch('auth/validate'))
+    // this.title = this.currentTitles.length ? this.currentTitles[this.currentTitles.length - 1] : ''
     },
     methods: {
       ...globalMethods

@@ -27,7 +27,6 @@ const router = new VueRouter({
 
 router.beforeEach((routeTo, routeFrom, next) => {
   if (routeTo.path !== LOGIN_PAGE) {
-
     return stroage.has('token') ? next() : next(LOGIN_PAGE)
   }
   if (routeFrom.name !== null) {

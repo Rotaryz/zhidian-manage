@@ -18,7 +18,7 @@ export default [
         path: 'business-manage/brand-manage',
         name: 'brand-manage',
         title: '商家管理',
-        component: () => lazyLoadView(import('@pages/brand-manage/brand-manage'))
+        component: () => lazyLoadView(import('@pages/store-manage/store-manage'))
       },
       {
         path: 'business-manage/store-manage',

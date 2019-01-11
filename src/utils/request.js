@@ -93,18 +93,18 @@ methodArr.forEach((item) => {
       method,
       url,
       data,
-      params: data,
+      params: data
     })
-    .then((response) => {
-      return checkStatus(response)
-    })
-    .then((res) => {
-      return checkCode(res)
-    })
-    .then((res) => {
-      let fn = Utils[middleFnName] // 调用中间件的方法
-      return fn ? fn(res, ...args) : res
-    })
+      .then((response) => {
+        return checkStatus(response)
+      })
+      .then((res) => {
+        return checkCode(res)
+      })
+      .then((res) => {
+        let fn = Utils[middleFnName] // 调用中间件的方法
+        return fn ? fn(res, ...args) : res
+      })
   }
 })
 export default HTTP
