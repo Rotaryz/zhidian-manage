@@ -13,18 +13,19 @@ export default [
         name: 'data-overview',
         component: () => lazyLoadView(import('@pages/data-overview/data-overview'))
       },
-      // 测试页面配置
-      {
-        path: 'test-page1',
-        name: 'test-page1',
-        component: () => lazyLoadView(import('@pages/test-page1/test-page1'))
-      },
       // 商家管理/品牌管理
       {
-        path: '/brand-manage',
+        path: 'business-manage/store-manage',
         name: 'brand-manage',
-        component: () => lazyLoadView(import('@pages/brand-manage/brand-manage'))
+        title: '商家管理',
+        component: () => lazyLoadView(import('@pages/store-manage/store-manage'))
       },
+      {
+        path: 'business-manage/brand-manage',
+        name: 'store-manage',
+        title: '品牌管理',
+        component: () => lazyLoadView(import('@pages/brand-manage/brand-manage'))
+      }
       // // 商家管理/店铺管理
       // {
       //   path: '/store-manage',

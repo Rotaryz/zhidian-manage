@@ -2,19 +2,20 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        水电费撒旦法撒旦法
-        <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         <base-search placeHolder="请输入团长名称" @search="search"></base-search>
       </div>
+      <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
     <div class="content-list">
       <div class="list-header">
         <div v-for="(item, index) in headerList"
              :key="index"
+             :class="{'handle': index === 4 || index === 5 || index === 6}"
              class="header-key"
              :style="{flex: item.width}"
+             @click="handleClick(index)"
         >
-          <span class="contxt">{{item.name}}</span>
+          <span class="contxt" :class="`${headClass[`class${index}`]}`">{{item.name}}</span>
         </div>
       </div>
       <div class="list-content">
@@ -23,11 +24,11 @@
             v-for="(val, ind) in headerList"
             :key="ind"
             :style="{flex: val.width}"
-            class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-else class="list-handle item">
-              <span class="handle-item" @click="openPop(item)">开通</span>
+              <span class="handle-item" @click="openPop('look', item)">查看</span>
+              <span class="handle-item" @click="openPop('freeze', item)">{{item.is_freeze_str === '正常' ? '冻结' : '解冻'}}</span>
             </div>
           </div>
         </div>
@@ -42,26 +43,21 @@
           <span>圣诞节分开了圣诞节</span>
           <span class="closePop" @click="closePop"></span>
         </header>
-        <div class="pop-main">
-          <p class="end-time">
-            <span class="type">到期时间: </span>
-            {{endTime}}
-          </p>
-          <p class="add-time">
-            <span class="type">延迟至</span>
-            <el-date-picker
-              v-model="addTime"
-              type="date"
-              placeholder="选择日期"
-              size="mini"
-              style="width:180px"
-            >
-            </el-date-picker>
-          </p>
+        <div v-if="showPopContent === 1 || showPopContent === 2" class="pop-main">
+          <div v-if="showPopContent === 1" class="input-box-big">
+            <span class="after"></span>
+            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <span class="before"></span>
+          </div>
+          <div v-if="showPopContent === 2" class="reasonTxt">冻结原因：{{reasonTxt}}</div>
           <div class="content-btn">
             <div class="btn" @click="closePop">取消</div>
-            <div class="btn active" @click="openBusiness">确定</div>
+            <div class="btn active" @click="operate">{{showPopContent === 1 ? '冻结' : '解冻'}}</div>
           </div>
+        </div>
+        <div v-if="showPopContent === 3" class="pop-main code">
+          <img v-if="!loadImg" key="1" :src="codeUrl" alt="" class="xcx-img">
+          <img v-if="loadImg" key="2" src="./loading.gif" alt="" class="load-img">
         </div>
       </div>
     </div>
@@ -73,10 +69,10 @@
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
   const TAB_LIST = [
-    {name: '品牌名称', width: '1', value: 'storeName', class: 'item'},
+    {name: '店铺名称', width: '1', value: 'storeName', class: 'item'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
-    {name: '门店', width: '1', value: 'brand', class: 'item'},
+    {name: '品牌', width: '1', value: 'brand', class: 'item'},
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'code', class: 'item'},
@@ -110,32 +106,26 @@
           limit: 10
         },
         handleIndex: 0,
-        dispatchSelect: {
-          check: false,
-          show: false,
-          content: '全部状态',
-          type: 'default',
-          data: [{name: ''}]
+        headClass: {
+          class2: '',
+          class3: '',
+          class4: '',
+          class5: ''
         },
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
+        excelUrl: '',
         showPop: false,
         showActive: false,
         popName: '',
         merchant_id: '',
         showPopContent: '',
-        endTime: '',
-        addTime: '',
-        expire_time: '',
-        typeId: ''
-      }
-    },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
+        loadImg: false,
+        codeUrl: '',
+        reasonTxt: ''
       }
     },
     methods: {
@@ -153,43 +143,78 @@
         this.requestData.sort_type = ''
         this.getMemberList()
       },
-      setValue(item) {
-        this.typeId = item.id
+      handleClick(num) {
+        switch (num) {
+        case 2:
+          this.requestData.sort_type = 7
+          break
+        case 3:
+          this.requestData.sort_type = 1
+          break
+        case 4:
+          this.requestData.sort_type = 3
+          break
+        case 5:
+          this.requestData.sort_type = 5
+          break
+        }
+        if (this.handleIndex === num) {
+          if (this.headClass[`class${num}`] === 'down') {
+            this.headClass[`class${num}`] = 'up'
+            switch (num) {
+            case 2:
+              this.requestData.sort_type = 8
+              break
+            case 3:
+              this.requestData.sort_type = 2
+              break
+            case 4:
+              this.requestData.sort_type = 4
+              break
+            case 5:
+              this.requestData.sort_type = 6
+              break
+            }
+          } else {
+            this.headClass[`class${num}`] = 'down'
+          }
+        } else {
+          this.handleIndex = num
+          for (let val in this.headClass) {
+            this.headClass[val] = ''
+          }
+          this.headClass[`class${num}`] = 'down'
+        }
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getBrandList()
       },
-      openPop(item) {
+      openPop(type, item) {
         // 打开弹窗
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
         this.popName = item.name
         this.merchant_id = item.id
-      },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
-      },
-      openBusiness() {
-        if (!this.expire_time) {
-          this.$refs.toast.show('请选择延迟日期')
-          return
+        switch (type) {
+        case 'freeze':
+          if (item.is_freeze_str === '正常') {
+            this.showPopContent = 1
+          } else {
+            this.showPopContent = 2
+          }
+          break
+        case 'look':
+          this.showPopContent = 3
+          break
         }
-        if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$refs.toast.show('选择日期应大于到期日期')
-          return
+      },
+      operate() {
+        if (this.showPopContent === 1) {
+          this.closePop()
+        } else {
+          this.closePop()
         }
-        // Business.openBusiness({merchant_id: this.merchant_id, expire_time: this.expire_time})
-        //   .then((res) => {
-        //     if (res.error !== ERR_OK) {
-        //       this.$refs.toast.show(res.message)
-        //       return
-        //     }
-        //     this.getBusinessList()
-        //     this.$refs.toast.show(res.message)
-        //   })
-        this.closePop()
       },
       closePop() {
         // 关闭弹窗
@@ -198,7 +223,7 @@
           this.showPop = false
         }, 200)
         this.showActive = false
-        this.expire_time = ''
+        this.popTxt = ''
       },
       addPage(num) {
         this.requestData.page = num
@@ -248,6 +273,32 @@
           overflow: hidden
           &:last-child
             flex: 1.5
+        .handle
+          cursor: pointer
+          .contxt
+            position: relative
+            &:before
+            &:after
+              content: ''
+              display: inline-block
+              width: 0
+              height: 0
+              border: 4px solid #999
+              border-top-color: transparent
+              border-right-color: transparent
+              border-bottom-color: transparent
+              position: absolute
+              right: -16px
+              top: 1px
+              transition: all 0.4s
+              transform: rotate(-90deg)
+            &:after
+              transform: rotate(90deg)
+              top: 12px
+          .down:after
+            border-left-color: $color-main
+          .up:before
+            border-left-color: $color-main
       .list-content
         .list-item
           height: 60px
@@ -259,10 +310,6 @@
           box-sizing: border-box
           border-bottom: 0.5px solid $color-line
           text-align: left
-          .item-box
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
           .item
             flex: 1
             line-height: 18px
@@ -321,6 +368,27 @@
         text-align: left
         .input-box-big
           input-animate(#999, 0px, 471px, 91px)
+        .popTxt
+          padding: 8px
+          resize: none
+          font-size: 14px
+          width: 100%
+          height: 90px
+          outline: none
+          box-sizing: border-box
+          border: 0.5px solid $color-line
+          &::-webkit-input-placeholder
+            color: #CCC
+        .reasonTxt
+          padding: 8px
+          resize: none
+          font-size: 14px
+          width: 100%
+          height: 90px
+          box-sizing: border-box
+          border: 0.5px solid $color-line
+          color: $color-text-main
+          background: #f5f7fb
         .content-btn
           display: flex
           justify-content: flex-end
@@ -381,4 +449,9 @@
         .cancelPower
           margin-top: 20px
           padding-bottom: 40px
+      .code
+        display: flex
+        height: 260px
+        justify-content: center
+        align-items: center
 </style>
