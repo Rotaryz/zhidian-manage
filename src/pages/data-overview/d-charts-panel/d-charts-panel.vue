@@ -2,7 +2,7 @@
   <div class="d-charts-panel">
     <header class="header">
       <div class="title">用户统计</div>
-      <date-picker></date-picker>
+      <date-picker @change="changeHandle($event, 'date')"></date-picker>
       <div class="btn-group">
         <sizer-group :btnGroup="btnGroup" @change="changeHandle"></sizer-group>
       </div>
@@ -16,12 +16,9 @@
   const COMPONENT_NAME = 'D_CHARTS_PANEL'
 
   const NAV = [
-    // {title: '今天', status: 'today'},
     {title: '昨天', status: 'yesterday'},
     {title: '7天', status: 'week'},
     {title: '30天', status: 'month'},
-    // {title: '全部', status: ''},
-    // {title: '自定义', status: 'set'}
   ]
   export default {
     name: COMPONENT_NAME,
@@ -35,8 +32,8 @@
       }
     },
     methods: {
-      changeHandle(e) {
-        // console.log(e)
+      changeHandle(e, type) {
+        this.$emit('change', e, type)
       }
     }
   }

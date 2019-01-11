@@ -55,6 +55,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  $color-text-999=#999
   @import "~@design"
 
   .el-input__icon.el-range__close-icon
@@ -91,13 +92,13 @@
     &:hover
       border-color: transparent
       &:after
-        border-top: 1px solid $color-text-sub
-        border-bottom: 1px solid $color-text-sub
+        border-top: 1px solid $color-text-999
+        border-bottom: 1px solid $color-text-999
         transition: all 0.3s ease-out
         width: 100%
       &:before
-        border-right: 1px solid $color-text-sub
-        border-left: 1px solid $color-text-sub
+        border-right: 1px solid $color-text-999
+        border-left: 1px solid $color-text-999
         transition: all 0.3s ease-out
         height: 100%
   .animate-border

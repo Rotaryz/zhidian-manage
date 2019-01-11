@@ -7,7 +7,7 @@
     </ul>
     <section class="charts-wrapper">
       <div class="c-item">
-        <d-charts-panel></d-charts-panel>
+        <d-charts-panel @change="btnChangeHandle"></d-charts-panel>
       </div>
       <div class="c-item">
         <d-charts-panel></d-charts-panel>
@@ -55,6 +55,9 @@
         API.Data.getTotalMode().then((res) => {
           this.headerArray = res.data
         })
+      },
+      btnChangeHandle(e, type) {
+        // console.log(e, type)
       }
     }
   }

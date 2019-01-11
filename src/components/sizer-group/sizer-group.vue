@@ -4,7 +4,7 @@
       {{item.title}}
       <transition name="fade">
         <div v-if="item.status === 'set'" v-show="tabIndex === tabActive" class="block">
-          <date-picker ref="_datePicker" @change="dateChange"></date-picker>
+          <date-picker ref="_datePicker" @change="dateChange($event, 'date')"></date-picker>
         </div>
       </transition>
     </li>
@@ -56,8 +56,8 @@
       _clearTime() {
         this.$refs._datePicker && this.$refs._datePicker[0] && this.$refs._datePicker[0].clearTime()
       },
-      dateChange(time) {
-        this.$emit('change', time)
+      dateChange(time, type) {
+        this.$emit('change', time, type)
       },
       checkTab(item, index) {
         this.tabIndex = index
@@ -89,8 +89,6 @@
     text-align :center
     cursor :pointer
     user-select :none
-    &:hover
-      border: 1px solid red
     &:nth-child(1)
       border-left: 0.5px solid $color-line-btn
     &:last-child
