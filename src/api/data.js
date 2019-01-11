@@ -3,15 +3,15 @@ import {API_DEFAULT_MIDDLE_FN} from '@utils/constant'
 import {OVERVIEW} from '@pages/data-overview/data-config'
 
 export default {
-  /**
-   * 交易金额（昨天/今天)
-   * @param data
-   * @returns {*}
-   */
-  exchangeMoney(data) {
-    let url = '/api/admin/total-today'
-    return request.get(url, data)
-  },
+  // /**
+  //  * 交易金额（昨天/今天)
+  //  * @param data
+  //  * @returns {*}
+  //  */
+  // exchangeMoney(data) {
+  //   let url = '/api/admin/total-today'
+  //   return request.get(url, data)
+  // },
   /**
    * 商家/门店/订单数量/金额统计
    * @param data
@@ -30,15 +30,15 @@ export default {
     let url = '/api/admin/history-stats'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalChartData)
   },
-  /**
-   * 客户统计
-   * @param data
-   * @returns {*}
-   */
-  customerStats(data) {
-    let url = '/api/admin/customer-stats'
-    return request.get(url, data)
-  }
+  // /**
+  //  * 客户统计
+  //  * @param data
+  //  * @returns {*}
+  //  */
+  // customerStats(data) {
+  //   let url = '/api/admin/customer-stats'
+  //   return request.get(url, data)
+  // }
 }
 
 // 解析图标数据

@@ -9,10 +9,14 @@
         <img :src="item.isLight ? item.iconSelected : item.icon" alt="">
         <p>{{item.title}}</p>
         <i :class="item.children.length ? 'rotate' : ''"></i>
+        <em :class="item | isActive" class="flag"></em>
       </dt>
       <dd :style="item | childrenActive">
         <template v-for="(child, idx) in item.children">
-          <p :key="idx" :class="child | isActive" @click="navHandle(child, idx, item)">{{child.title}}</p>
+          <div :key="idx" :class="child | isActive" class="child" @click="navHandle(child, idx, item)">
+            {{child.title}}
+            <em :class="child | isActive" class="flag"></em>
+          </div>
         </template>
       </dd>
     </dl>
@@ -292,18 +296,23 @@
         border-left: 0px solid transparent
         transition: all .2s
         position :relative
+        .flag
+          width :5px
+          height :0
+          border-radius: 2.5px
+          left :0
+          col-center()
+          background :$color-main
+          transition :all 0.3s
+          &.active
+            height :20px
+            &.no-border
+              height :0
         &:hover
           background: $color-menu-bg-active
         &.active
           //border-left: 5px solid $color-main
           background: $color-menu-bg-active
-          &:after
-            content: ''
-            width :5px
-            height :20px
-            border-radius: 2.5px
-            col-center()
-            background :$color-main
           &.no-border
             border-color: transparent
           & > p
@@ -336,7 +345,7 @@
         transition: height 0.3s
         layout()
         overflow: hidden
-        p
+        .child
           width: 100%
           layout()
           background: $color-menu-bg
@@ -344,13 +353,26 @@
           justify-content: center
           flex: 1
           box-sizing :border-box
-          border-left: 5px solid transparent
+          border-left: 0px solid transparent
           margin: 5px 0
           transition: all .2s
+          position :relative
+          .flag
+            width :5px
+            height :0
+            border-radius: 2.5px
+            left :0
+            col-center()
+            background :$color-main
+            transition :all 0.3s
+            &.active
+              height :20px
+              &.no-border
+                height :0
           &:hover
             background: $color-menu-bg-active
           &.active
-            border-left: 5px solid $color-main
+            //border-left: 0px solid $color-main
             background: $color-menu-bg-active
             color: $color-white
 </style>

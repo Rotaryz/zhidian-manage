@@ -67,7 +67,10 @@
       this._getTotalChart()
       window.addEventListener('resize', () => {
         this.myChart.resize()
-      })
+      }, false)
+    },
+    beforeDestroy() {
+      // window.removeEventListener('resize')
     },
     methods: {
       changeHandle(e, type) {
