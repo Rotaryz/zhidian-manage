@@ -17,7 +17,7 @@ export default {
    * @param data
    * @returns {*}
    */
-  getTotalMode(data, loading, toast) {
+  getTotalMode(data, loading, toast = true) {
     let url = '/api/admin/real-stats'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalModeData)
   },
@@ -26,9 +26,9 @@ export default {
    * @param data
    * @returns {*}
    */
-  totalChart(data) {
+  getTotalChart(data, loading, toast = true) {
     let url = '/api/admin/history-stats'
-    return request.get(url, data)
+    return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalChartData)
   },
   /**
    * 客户统计
@@ -41,6 +41,32 @@ export default {
   }
 }
 
+// 解析图标数据
+function _resolveGetTotalChartData(res) {
+  let xAxisData = []
+  let xBetweenData = []
+  let seriesData = {}
+  res.data.forEach((item) => {
+    xAxisData.push(item.at)
+    xBetweenData.push(item.at_between)
+    for(let [key,val] of Object.entries(item)) {
+      if (seriesData[key]) {
+        seriesData[key].push(val)
+      } else {
+        seriesData[key] = []
+        seriesData[key].push(val)
+      }
+    }
+  })
+  res.data = {
+    xAxisData,
+    xBetweenData,
+    seriesData
+  }
+  return res
+}
+
+// 解析统计数据
 function _resolveGetTotalModeData(res) {
   let resData = res.data
   let data = OVERVIEW

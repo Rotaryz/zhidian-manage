@@ -56,6 +56,9 @@
       _clearTime() {
         this.$refs._datePicker && this.$refs._datePicker[0] && this.$refs._datePicker[0].clearTime()
       },
+      _clearActive() {
+        this.tabIndex = -1
+      },
       dateChange(time, type) {
         this.$emit('change', time, type)
       },

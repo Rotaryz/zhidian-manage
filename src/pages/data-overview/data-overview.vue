@@ -7,18 +7,18 @@
     </ul>
     <section class="charts-wrapper">
       <div class="c-item">
-        <d-charts-panel @change="btnChangeHandle"></d-charts-panel>
+        <d-charts-panel title="用户统计" :chartType="CHATS_DATA_TYPE.user"></d-charts-panel>
       </div>
       <div class="c-item">
-        <d-charts-panel></d-charts-panel>
+        <d-charts-panel title="店铺统计"></d-charts-panel>
       </div>
     </section>
     <section class="charts-wrapper">
       <div class="c-item">
-        <d-charts-panel></d-charts-panel>
+        <d-charts-panel title="订单统计"></d-charts-panel>
       </div>
       <div class="c-item">
-        <d-charts-panel></d-charts-panel>
+        <d-charts-panel title="交易统计"></d-charts-panel>
       </div>
     </section>
   </div>
@@ -26,7 +26,7 @@
 
 <script type="text/ecmascript-6">
   import API from '@api'
-  import {OVERVIEW} from './data-config'
+  import {OVERVIEW, CHATS_DATA_TYPE} from './data-config'
   import DHeaderItem from './d-header-item/d-header-item'
   import DChartsPanel from './d-charts-panel/d-charts-panel'
 
@@ -44,7 +44,8 @@
     },
     data() {
       return {
-        headerArray: OVERVIEW
+        headerArray: OVERVIEW,
+        CHATS_DATA_TYPE: CHATS_DATA_TYPE
       }
     },
     created() {
@@ -55,9 +56,6 @@
         API.Data.getTotalMode().then((res) => {
           this.headerArray = res.data
         })
-      },
-      btnChangeHandle(e, type) {
-        // console.log(e, type)
       }
     }
   }

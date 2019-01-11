@@ -36,6 +36,7 @@ export function radarTimeFormat(time) {
 }
 
 export function formatDateTime(time) {
+  if (!time) return ''
   let date = new Date(time)
   const year = date.getFullYear()
   const month = date.getMonth() + 1
