@@ -30,7 +30,7 @@
       title: '数据管理',
       url: '/home/data-overview',
       icon: require('./icon-data@2x.png'),
-      iconSelected: require('./icon-data_selecrt@2x.png'),
+      iconSelected: require('./icon-data_select@2x.png'),
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
@@ -62,8 +62,8 @@
     {
       title: '用户管理',
       url: '/home/user-manage',
-      icon: require('./icon-data@2x.png'),
-      iconSelected: require('./icon-data_selecrt@2x.png'),
+      icon: require('./icon-user@2x.png'),
+      iconSelected: require('./icon-user_select@2x.png'),
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
@@ -72,8 +72,8 @@
     {
       title: '内容管理',
       url: '/home/content-manage/',
-      icon: require('./icon-shop@2x.png'),
-      iconSelected: require('./icon-shop_select@2x.png'),
+      icon: require('./icon-content@2x.png'),
+      iconSelected: require('./icon-content_select@2x.png'),
       childrenIndex: 0,
       isRouter: false,
       isLight: false,
@@ -95,8 +95,8 @@
     {
       title: '订单管理',
       url: '/home/order-form-manage',
-      icon: require('./icon-data@2x.png'),
-      iconSelected: require('./icon-data_selecrt@2x.png'),
+      icon: require('./icon-indent@2x.png'),
+      iconSelected: require('./icon-indent_select@2x.png'),
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
@@ -105,8 +105,8 @@
     {
       title: '财务管理',
       url: '/home/finance-manage/',
-      icon: require('./icon-shop@2x.png'),
-      iconSelected: require('./icon-shop_select@2x.png'),
+      icon: require('./icon-money@2x.png'),
+      iconSelected: require('./icon-money_select@2x.png'),
       childrenIndex: 0,
       isRouter: false,
       isLight: false,
