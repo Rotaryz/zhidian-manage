@@ -2,7 +2,7 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        <base-search placeHolder="请输入团长名称" @search="search"></base-search>
+        <base-search placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -28,7 +28,7 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img src="" class="img" alt="">
+              <img :src="item.url" class="img" alt="">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
     <div v-show="showPop" class="pop-box">
       <div class="pop-content" :class="showActive ? 'model-active' : 'model-noactive'">
@@ -71,8 +71,9 @@
 
 <script type="text/ecmascript-6">
   import {BASE_URL} from '@utils/config'
-  const PAGE_NAME = 'BRAND_MANAGE'
-  const TITLE = '品牌管理'
+  import API from '@api'
+  const PAGE_NAME = 'STORE_MANGE'
+  const TITLE = '店铺管理'
   const TAB_LIST = [
     {name: '店铺名称', width: '1.8', value: 'storeName', class: 'item head'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
@@ -92,18 +93,7 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            storeName: '店铺名称水电费说的',
-            name: '姓名大是大非',
-            phone: '13584260103',
-            brand: '什么牌子',
-            business: '客人',
-            code: '156456131',
-            money: '130.00',
-            date: '2019-01-11'
-          }
-        ],
+        data: [],
         requestData: {
           keyword: '',
           sort_type: '',
@@ -125,58 +115,79 @@
         showPop: false,
         showActive: false,
         popName: '',
-        merchant_id: '',
         showPopContent: '',
         loadImg: false,
         codeUrl: '',
         reasonTxt: ''
       }
     },
+    created() {
+      this.getList()
+    },
     methods: {
-      getBrandList() {
+      getList() {
+        API.Store.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
+        this.getExcelUrl()
         let accessToken = `access_token=${this.$storage.get('aiToken')}`
         this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+      },
+      // 搜索功能
       search(inputTxt) {
-        this.requestData.keyword = inputTxt
-        this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
         for (let val in this.headClass) {
           this.headClass[val] = ''
         }
-        this.requestData.sort_type = ''
-        this.getMemberList()
+        this.requestData = {
+          keyword: inputTxt,
+          start_date: this.requestData.start_date,
+          end_data: this.requestData.end_data,
+          date_type: this.requestData.date_type,
+          sort_type: '',
+          sort: '',
+          page: 1,
+          limit: 10
+        }
+        this.getList()
       },
       handleClick(num) {
         switch (num) {
-        case 2:
+        case 4:
           this.requestData.sort_type = 7
           break
-        case 3:
+        case 5:
           this.requestData.sort_type = 1
           break
-        case 4:
+        case 6:
           this.requestData.sort_type = 3
-          break
-        case 5:
-          this.requestData.sort_type = 5
           break
         }
         if (this.handleIndex === num) {
           if (this.headClass[`class${num}`] === 'down') {
             this.headClass[`class${num}`] = 'up'
             switch (num) {
-            case 2:
+            case 4:
               this.requestData.sort_type = 8
               break
-            case 3:
+            case 5:
               this.requestData.sort_type = 2
               break
-            case 4:
+            case 6:
               this.requestData.sort_type = 4
-              break
-            case 5:
-              this.requestData.sort_type = 6
               break
             }
           } else {
@@ -191,7 +202,7 @@
         }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        this.getBrandList()
+        this.getList()
       },
       openPop(type, item) {
         // 打开弹窗
@@ -229,9 +240,10 @@
         this.showActive = false
         this.popTxt = ''
       },
+      // 翻页
       addPage(num) {
         this.requestData.page = num
-        this.getMemberList()
+        this.getServiceList()
       }
     }
   }

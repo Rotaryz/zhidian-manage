@@ -5,7 +5,7 @@
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         </div>
-        <base-search placeHolder="请输入团长名称" @search="search"></base-search>
+        <base-search placeHolder="请输入名称" @search="search"></base-search>
       </div>
     </div>
     <div class="content-list">
@@ -27,20 +27,20 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': true}">{{(val.class === 'item status') ? '已激活' : '未激活'}}</span>
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已激活' : '未激活'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img src="" class="img" alt="">
+              <img :src="item.url" class="img" alt="">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
-              <span class="handle-item" :class="{'grey': true}" @click="openPop(item)">开通</span>
+              <span class="handle-item" :class="{'grey': +item[val.value] !== 0}" @click="openPop(item)">开通</span>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
     <div v-show="showPop" class="pop-box">
       <div class="pop-content" :class="showActive ? 'model-active' : 'model-noactive'">
@@ -75,7 +75,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {BASE_URL} from '@utils/config'
+  import API from '@api'
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
   const TAB_LIST = [
@@ -83,9 +83,9 @@
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
     {name: '门店', width: '1', value: 'num', class: 'item'},
-    {name: '状态', width: '1', value: 'status', class: 'item status'},
+    {name: '状态', width: '1', value: 'actived', class: 'item status'},
     {name: '开通时间', width: '1', value: 'date', class: 'item'},
-    {name: '操作', width: '1', value: '', class: 'item handle'}
+    {name: '操作', width: '1', value: 'status', class: 'item handle'}
   ]
   export default {
     name: PAGE_NAME,
@@ -95,68 +95,72 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            storeName: '店铺名称水电费说的',
-            name: '姓名大是大非',
-            phone: '13584260103',
-            num: '50',
-            status: '已激活',
-            date: '2019-01-11'
-          }
-        ],
+        data: [],
         requestData: {
           keyword: '',
-          sort_type: '',
+          type: '',
           page: 1,
           limit: 10
         },
-        handleIndex: 0,
         dispatchSelect: {
           check: false,
           show: false,
-          content: '全部状态',
+          content: '品牌类型',
           type: 'default',
-          data: [{name: '1'}, {name: '2'}]
+          data: [{name: '单店', id: 0}, {name: '多店', id: 1}]
         },
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
+        addTime: '',
+        endTime: '',
         showPop: false,
         showActive: false,
         popName: '',
-        merchant_id: '',
-        showPopContent: '',
-        endTime: '',
-        addTime: '',
-        expire_time: '',
-        typeId: ''
+        openItem: {}
       }
     },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
-      }
+    created() {
+      this.getList()
     },
     methods: {
-      getBrandList() {
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
+      getList() {
+        API.Brand.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
       },
+      // 搜索功能
       search(inputTxt) {
+        this.$refs.pageDetail.beginPage()
         this.requestData.keyword = inputTxt
         this.requestData.page = 1
-        this.$refs.pageDetail.beginPage()
-        for (let val in this.headClass) {
-          this.headClass[val] = ''
-        }
-        this.requestData.sort_type = ''
-        this.getMemberList()
+        this.getList()
       },
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
+        } else {
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
+        }
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getList()
+      },
+      // 选择品牌类型
       setValue(item) {
-        this.typeId = item.id
+        this.requestData.type = item.id
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getList()
       },
       openPop(item) {
         // 打开弹窗
@@ -164,34 +168,23 @@
         this.showPop = true
         this.showActive = true
         this.popName = item.name
-        this.merchant_id = item.id
-      },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
+        this.openItem = item
       },
       openBusiness() {
-        if (!this.expire_time) {
-          this.$refs.toast.show('请选择延迟日期')
+        if (!this.addTime) {
+          this.$toast.show('请选择延迟日期')
           return
         }
         if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$refs.toast.show('选择日期应大于到期日期')
+          this.$toast.show('选择日期应大于到期日期')
           return
         }
-        // Business.openBusiness({merchant_id: this.merchant_id, expire_time: this.expire_time})
-        //   .then((res) => {
-        //     if (res.error !== ERR_OK) {
-        //       this.$refs.toast.show(res.message)
-        //       return
-        //     }
-        //     this.getBusinessList()
-        //     this.$refs.toast.show(res.message)
-        //   })
         this.closePop()
+        API.Brand.open(this.openItem.store_id)
+          .then(res => {
+            this.$toast.show('开通成功')
+          })
+
       },
       closePop() {
         // 关闭弹窗
@@ -204,7 +197,7 @@
       },
       addPage(num) {
         this.requestData.page = num
-        this.getMemberList()
+        this.getList()
       }
     }
   }

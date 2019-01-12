@@ -3,12 +3,12 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="timeChange"></sizer-group>
+          <sizer-group @change="checkTime"></sizer-group>
         </div>
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         </div>
-        <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
+        <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
     </div>
     <div class="content-list">
@@ -32,7 +32,7 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-if="val.class === 'item status'" class="item status">
-              <span class="txt-content">水电费水电费</span>
+              <span class="txt-content">{{item.status}}</span>
               <span class="icon"></span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
 
     <div v-show="showPop" class="pop-box">
@@ -59,9 +59,9 @@
 
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
-  import {BASE_URL} from '@utils/config'
-  const PAGE_NAME = 'BRAND_MANAGE'
-  const TITLE = '品牌管理'
+  import API from '@api'
+  const PAGE_NAME = 'CASH_APPLY'
+  const TITLE = '提现记录'
   const TAB_LIST = [
     {name: '订单号', width: '1.3', value: 'orderCode', class: 'item'},
     {name: '提交时间', width: '1.2', value: 'date', class: 'item'},
@@ -86,33 +86,22 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            orderCode: '465564654',
-            date: '2019.1.11 11:00:00',
-            account: '13545645664',
-            canCashMoney: '2000.00',
-            freezeMoney: '1000.00',
-            cashMoney: '1000.00',
-            nickName: '某某',
-            cardType: '建设银行',
-            cardNum: '****',
-            status: '1'
-          }
-        ],
+        data: [],
         requestData: {
-          keyword: '',
-          sort_type: '',
+          withdraw_sn: '',
+          status: '-1',
+          start_date: '',
+          end_date: '',
+          date_type: '',
           page: 1,
           limit: 10
         },
-        handleIndex: 0,
         dispatchSelect: {
           check: false,
           show: false,
           content: '处理状态',
           type: 'default',
-          data: [{name: '1'}, {name: '2'}]
+          data: [{name: '待审核', id: 0}, {name: '微信受理成功', id: 1}, {name: '审核不通过', id: 2}, {name: '微信打款成功', id: 3}, {name: '微信打款失败', id: 4}]
         },
         pageDetail: {
           total: 1,
@@ -123,52 +112,49 @@
         showActive: false,
         popName: '',
         merchant_id: '',
-        showPopContent: '',
-        endTime: '',
-        addTime: '',
-        expire_time: '',
-        typeId: ''
+        showPopContent: ''
       }
     },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
-      }
+    created() {
+      this.getList()
     },
     methods: {
-      getApplyList() {
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
+      // 获取列表
+      getList() {
+        API.CashApply.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
       },
-      timeChange(time, type) {
-        let date = ''
-        if (type) {
-          let startTime = time[0]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          let endTime = time[1]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          date = [startTime, endTime]
-        } else {
-          date = time
-        }
-        console.log(date, type)
-      },
+      // 搜索功能
       search(inputTxt) {
-        this.requestData.keyword = inputTxt
+        this.$refs.pageDetail.beginPage()
+        this.requestData.withdraw_sn = inputTxt
+        this.requestData.page = 1
+        this.getList()
+      },
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
+        } else {
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
+        }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        for (let val in this.headClass) {
-          this.headClass[val] = ''
-        }
-        this.requestData.sort_type = ''
-        this.getApplyList()
+        this.getList()
       },
+      // 选择处理状态
       setValue(item) {
-        this.typeId = item.id
+        this.requestData.status = item.id
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getList()
       },
       openPop(item) {
         // 打开弹窗
@@ -177,24 +163,6 @@
         this.showActive = true
         this.popName = item.name
         this.merchant_id = item.id
-      },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
-      },
-      openBusiness() {
-        if (!this.expire_time) {
-          this.$refs.toast.show('请选择延迟日期')
-          return
-        }
-        if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$refs.toast.show('选择日期应大于到期日期')
-          return
-        }
-        this.closePop()
       },
       closePop() {
         // 关闭弹窗
@@ -207,7 +175,7 @@
       },
       addPage(num) {
         this.requestData.page = num
-        this.getApplyList()
+        this.getList()
       }
     }
   }

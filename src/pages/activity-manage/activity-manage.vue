@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group></sizer-group>
+          <sizer-group @change="checkTime"></sizer-group>
         </div>
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
@@ -33,9 +33,9 @@
             @click="handleClick(index)"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': true}">{{(val.class === 'item status') ? '已上架' : '已下架'}}</span>
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img src="" class="img" alt="">
+              <img :src="item.url" class="img" alt="">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
 
@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
   </div>
 </template>
@@ -52,14 +52,15 @@
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
   import {BASE_URL} from '@utils/config'
+  import API from '@api'
   const PAGE_NAME = 'ACTIVITY_MANAGE'
-  const TITLE = '品牌管理'
+  const TITLE = '活动管理'
   const TAB_LIST = [
     {name: '服务', width: '2', value: 'title', class: 'item head'},
     {name: '价格', width: '1', value: 'price', class: 'item'},
-    {name: '浏览量', width: '1', value: 'num', class: 'item'},
-    {name: '销量', width: '1', value: 'stock', class: 'item'},
+    {name: '类型', width: '1', value: 'type', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item status'},
+    {name: '关联', width: '1', value: 'link', class: 'item'},
     {name: '来源', width: '1', value: 'source', class: 'item'},
     {name: '创建时间', width: '1', value: 'date', class: 'item'}
   ]
@@ -74,136 +75,90 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            title: '店铺名称水电费说的',
-            price: '122.00',
-            num: '200',
-            stock: '100',
-            status: '已上架',
-            source: '某某公司',
-            date: '2019-01-11'
-          }
-        ],
+        data: [],
         requestData: {
-          keyword: '',
-          sort_type: '',
+          activity_name: '',
+          rule_id: '',
+          start_date: '',
+          end_date: '',
+          date_type: '',
           page: 1,
           limit: 10
         },
-        handleIndex: 0,
         dispatchSelect: {
           check: false,
           show: false,
           content: '活动类型',
           type: 'default',
-          data: [{name: '1'}, {name: '2'}]
+          data: [{name: '拼团', id: '1'}, {name: '砍价', id: '3'}]
         },
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
-        endTime: '',
-        addTime: '',
-        excelUrl: '',
-        typeId: ''
+        excelUrl: ''
       }
     },
-    watch: {},
+    created() {
+      this.getList()
+    },
     methods: {
-      getBrandList() {
+      // 获取列表
+      getList() {
+        API.Activity.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
+        this.getExcelUrl()
         let accessToken = `access_token=${this.$storage.get('aiToken')}`
         this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+      },
+      // 搜索功能
       search(inputTxt) {
-        this.requestData.keyword = inputTxt
-        this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        for (let val in this.headClass) {
-          this.headClass[val] = ''
-        }
-        this.requestData.sort_type = ''
-        this.getMemberList()
+        this.requestData.activity_name = inputTxt
+        this.requestData.page = 1
+        this.getList()
       },
+      // 选择活动类型
       setValue(item) {
-        this.typeId = item.id
+        this.requestData.rule_id = item.id
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getList()
       },
-      handleClick(num) {
-        switch (num) {
-        case 2:
-          this.requestData.sort_type = 7
-          break
-        case 3:
-          this.requestData.sort_type = 1
-          break
-        case 4:
-          this.requestData.sort_type = 3
-          break
-        case 5:
-          this.requestData.sort_type = 5
-          break
-        }
-        if (this.handleIndex === num) {
-          if (this.headClass[`class${num}`] === 'down') {
-            this.headClass[`class${num}`] = 'up'
-            switch (num) {
-            case 2:
-              this.requestData.sort_type = 8
-              break
-            case 3:
-              this.requestData.sort_type = 2
-              break
-            case 4:
-              this.requestData.sort_type = 4
-              break
-            case 5:
-              this.requestData.sort_type = 6
-              break
-            }
-          } else {
-            this.headClass[`class${num}`] = 'down'
-          }
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
         } else {
-          this.handleIndex = num
-          for (let val in this.headClass) {
-            this.headClass[val] = ''
-          }
-          this.headClass[`class${num}`] = 'down'
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
         }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        this.getBrandList()
+        this.getList()
       },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      },
-      openBusiness() {
-        if (!this.expire_time) {
-          this.$refs.toast.show('请选择延迟日期')
-          return
-        }
-        if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$refs.toast.show('选择日期应大于到期日期')
-          return
-        }
-        this.closePop()
-      },
-      closePop() {
-        // 关闭弹窗
-        this.$modal.hideShade()
-        setTimeout(() => {
-          this.showPop = false
-        }, 200)
-        this.showActive = false
-        this.expire_time = ''
-      },
+      // 翻页
       addPage(num) {
         this.requestData.page = num
-        this.getMemberList()
+        this.getList()
       }
     }
   }

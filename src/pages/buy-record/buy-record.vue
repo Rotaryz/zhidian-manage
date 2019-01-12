@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="timeChange"></sizer-group>
+          <sizer-group @change="checkTime"></sizer-group>
         </div>
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
   </div>
 </template>
@@ -44,13 +44,15 @@
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
   import {BASE_URL} from '@utils/config'
-  const PAGE_NAME = 'BRAND_MANAGE'
-  const TITLE = '品牌管理'
+  import API from '@api'
+  const PAGE_NAME = 'BUY_RECORD'
+  const TITLE = '交易记录'
   const TAB_LIST = [
     {name: '订单号', width: '1', value: 'code', class: 'item'},
     {name: '交易号', width: '1', value: 'orderCode', class: 'item'},
     {name: '交易金额', width: '1', value: 'orderMoney', class: 'item'},
-    {name: '交易类型', width: '1', value: 'orderType', class: 'item'},
+    {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
+    {name: '交易类型', width: '1', value: 'isRefund', class: 'item'},
     {name: '付款人', width: '1', value: 'person', class: 'item'},
     {name: '支付时间', width: '1', value: 'date', class: 'item'}
   ]
@@ -65,92 +67,89 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            code: '5415645612132',
-            orderCode: '564541465',
-            orderMoney: '100',
-            orderType: '支付',
-            person: '啦啦啦',
-            date: '2019.1.11 10:20:00'
-          }
-        ],
+        data: [],
         requestData: {
-          keyword: '',
-          sort_type: '',
+          order_sn: '',
+          is_refund: '-1',
+          start_date: '',
+          end_date: '',
+          date_type: '',
           page: 1,
           limit: 10
         },
-        handleIndex: 0,
         dispatchSelect: {
           check: false,
           show: false,
           content: '交易类型',
           type: 'default',
-          data: [{name: '1'}, {name: '2'}]
+          data: [{name: '退款', id: 1}, {name: '支付', id: 0}]
         },
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
-        endTime: '',
-        addTime: '',
-        expire_time: '',
-        typeId: '',
         excelUrl: ''
       }
     },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
-      }
+    created() {
+      this.getList()
     },
     methods: {
-      getRecordList() {
+      // 获取列表
+      getList() {
+        API.BuyRecord.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
+        this.getExcelUrl()
         let accessToken = `access_token=${this.$storage.get('aiToken')}`
         this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
-      timeChange(time, type) {
-        let date = ''
-        if (type) {
-          let startTime = time[0]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          let endTime = time[1]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          date = [startTime, endTime]
-        } else {
-          date = time
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
         }
-        console.log(date, type)
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
       },
+      // 搜索功能
       search(inputTxt) {
-        this.requestData.keyword = inputTxt
+        this.$refs.pageDetail.beginPage()
+        this.requestData.order_sn = inputTxt
+        this.requestData.page = 1
+        this.getList()
+      },
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
+        } else {
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
+        }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        for (let val in this.headClass) {
-          this.headClass[val] = ''
-        }
-        this.requestData.sort_type = ''
-        this.getRecordList()
+        this.getList()
       },
+      // 选择交易类型
       setValue(item) {
-        this.typeId = item.id
-      },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
+        this.requestData.is_refund = item.id
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getList()
       },
       addPage(num) {
         this.requestData.page = num
-        this.getRecordList()
+        this.getList()
       }
     }
   }

@@ -18,10 +18,7 @@
       <div class="content-top">
         <div class="left">
           <div class="status">
-            <sizer-group @change="timeChange"></sizer-group>
-          </div>
-          <div class="status">
-            <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
+            <sizer-group @change="checkTime"></sizer-group>
           </div>
           <base-search placeHolder="请输入订单号" @search="search"></base-search>
         </div>
@@ -63,7 +60,7 @@
         </div>
       </div>
       <div class="bot-page">
-        <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+        <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
       </div>
     </div>
   </div>
@@ -72,15 +69,19 @@
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
   import {BASE_URL} from '@utils/config'
-  const PAGE_NAME = 'BRAND_MANAGE'
-  const TITLE = '品牌管理'
+  import API from '@api'
+  const PAGE_NAME = 'ORDER_FORM'
+  const TITLE = '订单管理'
   const TAB_LIST = [
     {name: '订单号', width: '1', value: 'code', class: 'item'},
-    {name: '交易号', width: '1', value: 'orderCode', class: 'item'},
-    {name: '交易金额', width: '1', value: 'orderMoney', class: 'item'},
-    {name: '交易类型', width: '1', value: 'orderType', class: 'item'},
-    {name: '付款人', width: '1', value: 'person', class: 'item'},
-    {name: '支付时间', width: '1', value: 'date', class: 'item'}
+    {name: '商品信息', width: '1', value: 'title', class: 'item'},
+    {name: '单价', width: '1', value: 'price', class: 'item'},
+    {name: '数量', width: '1', value: 'num', class: 'item'},
+    {name: '实付金额', width: '1', value: 'total', class: 'item'},
+    {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
+    {name: '下单用户', width: '1', value: 'customer', class: 'item'},
+    {name: '下单时间', width: '1', value: 'date', class: 'item'},
+    {name: '状态', width: '1', value: 'status', class: 'item'}
   ]
   export default {
     name: PAGE_NAME,
@@ -93,103 +94,103 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            code: '5415645612132',
-            orderCode: '564541465',
-            orderMoney: '100',
-            orderType: '支付',
-            person: '啦啦啦',
-            date: '2019.1.11 10:20:00'
-          }
-        ],
+        data: [],
         topTab: ['全部', '服务', '拼团', '砍价'],
         statusTab: ['全部', '待付款', '待结算', '已完成', '已关闭'],
         requestData: {
-          keyword: '',
-          sort_type: '',
+          order_sn: '',
+          status: '',
+          order_type: '',
+          start_date: '',
+          end_date: '',
+          date_type: '',
           page: 1,
           limit: 10
         },
-        handleIndex: 0,
-        dispatchSelect: {
-          check: false,
-          show: false,
-          content: '交易类型',
-          type: 'default',
-          data: [{name: '1'}, {name: '2'}]
-        },
+        orderType: ['', 1, 4, 7], // 业务类型 1服务 4团购 7砍价
+        status: ['', 'waiting_received', 'payment', 'finish', 'close', 'waiting_groupon', 'refund'], // 全部，待使用|待结算，待付款，已完成，已关闭，待成团，已退款
         pageDetail: {
           total: 1,
           per_page: 10,
           total_page: 1
         },
-        endTime: '',
-        addTime: '',
-        expire_time: '',
-        typeId: '',
         excelUrl: '',
         tabInd: 0,
         tabIdx: 0
       }
     },
-    watch: {
-      addTime(date, oldDate) {
-        this.addDate()
-      }
+    created() {
+      this.getList()
     },
     methods: {
-      getRecordList() {
+      // 获取列表
+      getList() {
+        API.OrderForm.getList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
+        this.getExcelUrl()
         let accessToken = `access_token=${this.$storage.get('aiToken')}`
         this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+      },
+      // 搜索功能
+      search(inputTxt) {
+        this.$refs.pageDetail.beginPage()
+        this.requestData.order_sn = inputTxt
+        this.requestData.page = 1
+        this.getList()
+      },
       changeType(index, item) {
+        this.requestData = {
+          order_sn: '',
+          status: '',
+          order_type: this.orderType[index],
+          start_date: '',
+          end_date: '',
+          date_type: '',
+          page: 1,
+          limit: 10
+        }
+        this.$refs.pageDetail.beginPage()
+        this.tabIdx = 0
         this.tabInd = index
+        this.getList()
       },
       changeTab(index, item) {
+        this.requestData.status = this.status[index]
         this.tabIdx = index
-        console.log(index, item)
+        this.getList()
       },
-      timeChange(time, type) {
-        let date = ''
-        if (type) {
-          let startTime = time[0]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          let endTime = time[1]
-            .toLocaleDateString()
-            .replace(/\//g, '-')
-            .replace(/\b\d\b/g, '0$&')
-          date = [startTime, endTime]
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
         } else {
-          date = time
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
         }
-        console.log(date, type)
-      },
-      search(inputTxt) {
-        this.requestData.keyword = inputTxt
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        for (let val in this.headClass) {
-          this.headClass[val] = ''
-        }
-        this.requestData.sort_type = ''
-        this.getRecordList()
-      },
-      setValue(item) {
-        this.typeId = item.id
-      },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      // this.addTime.toLocaleDateString().replace(/\//g, '-')
+        this.getList()
       },
       addPage(num) {
         this.requestData.page = num
-        this.getRecordList()
+        this.getList()
       }
     }
   }

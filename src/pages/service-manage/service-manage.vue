@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group></sizer-group>
+          <sizer-group @change="checkTime"></sizer-group>
         </div>
         <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
       </div>
@@ -18,7 +18,7 @@
              :style="{flex: item.width}"
              @click="handleClick(index)"
         >
-          <span class="contxt">{{item.name}}</span>
+          <span class="contxt" :class="`${headClass[`class${index}`]}`">{{item.name}}</span>
         </div>
       </div>
       <div class="list-content">
@@ -30,9 +30,9 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': true}">{{(val.class === 'item status') ? '已上架' : '已下架'}}</span>
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img src="" class="img" alt="">
+              <img :src="item.url" class="img" alt="">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
 
@@ -41,7 +41,7 @@
       </div>
     </div>
     <div class="bot-page">
-      <base-pagination ref="pageDetail" :pageDtail="pageDetail" @addPage="addPage"></base-pagination>
+      <base-pagination ref="pageDetail" :pageDetail="pageDetail" @addPage="addPage"></base-pagination>
     </div>
   </div>
 </template>
@@ -49,8 +49,9 @@
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
   import {BASE_URL} from '@utils/config'
+  import API from '@api'
   const PAGE_NAME = 'SERVICE_MANAGE'
-  const TITLE = '品牌管理'
+  const TITLE = '服务管理'
   const TAB_LIST = [
     {name: '服务', width: '2', value: 'title', class: 'item head'},
     {name: '价格', width: '1', value: 'price', class: 'item'},
@@ -71,61 +72,87 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [
-          {
-            title: '店铺名称水电费说的',
-            price: '122.00',
-            num: '200',
-            stock: '100',
-            status: '已上架',
-            source: '某某公司',
-            date: '2019-01-11'
-          }
+        data: [ // 页面数据数组
         ],
-        requestData: {
-          keyword: '',
+        requestData: { // 请求数据
+          title: '',
+          start_date: '',
+          end_date: '',
+          date_type: '',
           sort_type: '',
+          sort: '',
           page: 1,
           limit: 10
         },
+        sortType: ['browse_count', 'sale_count'],
+        sort: ['asc', 'desc'],
         headClass: {
           class2: '',
           class3: ''
         },
-        handleIndex: 0,
-        pageDetail: {
-          total: 1,
+        handleIndex: 0, // 点击排序
+        pageDetail: { // 翻页
+          total: 2,
           per_page: 10,
           total_page: 1
         },
-        endTime: '',
-        addTime: '',
-        excelUrl: ''
+        excelUrl: '' // 表格地址
       }
     },
-    watch: {},
+    created() {
+      this.getServiceList()
+    },
     methods: {
-      getBrandList() {
+      // 获取列表
+      getServiceList() {
+        API.Service.getServiceList(this.requestData)
+          .then(res => {
+            this.pageDetail = res.obj
+            this.data = res.arr
+          })
+        this.getExcelUrl()
         let accessToken = `access_token=${this.$storage.get('aiToken')}`
         this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+      },
+      // 搜索功能
       search(inputTxt) {
-        this.requestData.keyword = inputTxt
-        this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
         for (let val in this.headClass) {
           this.headClass[val] = ''
         }
-        this.requestData.sort_type = ''
-        this.getMemberList()
+        this.requestData = {
+          title: inputTxt,
+          start_date: this.requestData.start_date,
+          end_data: this.requestData.end_data,
+          date_type: this.requestData.date_type,
+          sort_type: '',
+          sort: '',
+          page: 1,
+          limit: 10
+        }
+        this.getServiceList()
       },
+      // 排序方式选择
       handleClick(num) {
         switch (num) {
         case 2:
-          this.requestData.sort_type = 7
+          this.requestData.sort_type = this.sortType[0]
+          this.requestData.sort = this.sort[1]
           break
         case 3:
-          this.requestData.sort_type = 1
+          this.requestData.sort_type = this.sortType[1]
+          this.requestData.sort = this.sort[1]
           break
         }
         if (this.handleIndex === num) {
@@ -133,10 +160,12 @@
             this.headClass[`class${num}`] = 'up'
             switch (num) {
             case 2:
-              this.requestData.sort_type = 8
+              this.requestData.sort_type = this.sortType[0]
+              this.requestData.sort = this.sort[0]
               break
             case 3:
-              this.requestData.sort_type = 2
+              this.requestData.sort_type = this.sortType[1]
+              this.requestData.sort = this.sort[0]
               break
             }
           } else {
@@ -151,37 +180,27 @@
         }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        this.getBrandList()
+        this.getServiceList()
       },
-      addDate() {
-        this.expire_time = this.addTime
-          .toLocaleDateString()
-          .replace(/\//g, '-')
-          .replace(/\b\d\b/g, '0$&')
-      },
-      openBusiness() {
-        if (!this.expire_time) {
-          this.$refs.toast.show('请选择延迟日期')
-          return
+      // 自定义日期选择
+      checkTime(status) {
+        if (status instanceof Array) {
+          this.requestData.start_date = status[0]
+          this.requestData.end_date = status[1]
+          this.requestData.date_type = 'custom'
+        } else {
+          this.requestData.date_type = status
+          this.requestData.start_date = ''
+          this.requestData.end_date = ''
         }
-        if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$refs.toast.show('选择日期应大于到期日期')
-          return
-        }
-        this.closePop()
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
+        this.getServiceList()
       },
-      closePop() {
-        // 关闭弹窗
-        this.$modal.hideShade()
-        setTimeout(() => {
-          this.showPop = false
-        }, 200)
-        this.showActive = false
-        this.expire_time = ''
-      },
+      // 翻页
       addPage(num) {
         this.requestData.page = num
-        this.getMemberList()
+        this.getServiceList()
       }
     }
   }
