@@ -7,7 +7,7 @@ export default {
    * @returns {*}
    */
   login(data, loading = true, toast = true) {
-    let url = '/api/jwt/super/login'
-    return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+    let url = '/api/jwt/admin/login'
+    return request.post(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }

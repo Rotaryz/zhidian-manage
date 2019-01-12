@@ -21,7 +21,11 @@
   import {formatDateTime} from '@utils/common'
 
   const COMPONENT_NAME = 'D_CHARTS_PANEL'
-  const NAV = [{title: '昨天', status: 'yesterday'}, {title: '7天', status: 'week'}, {title: '30天', status: 'month'}]
+  const NAV = [
+    {title: '昨天', status: 'yesterday'},
+    {title: '7天', status: 'week'},
+    {title: '30天', status: 'month'},
+  ]
   const DEFAULT_STATUS = 'month'
   export default {
     name: COMPONENT_NAME,
@@ -43,7 +47,7 @@
       chartType: {
         type: String,
         default: ''
-      }
+      },
     },
     data() {
       return {
@@ -51,26 +55,27 @@
         dateType: DEFAULT_STATUS,
         startDate: '',
         endDate: '',
-        myChart: null
+        myChart: null,
       }
     },
-    computed: {
+    computed:{
       CHATS_CONFIG() {
         return CHATS_CONFIG[this.chartType]
       }
     },
+    created() {
+    },
     mounted() {
-      this._getTotalChart()
-      window.addEventListener(
-        'resize',
-        () => {
-          this.myChart && this.myChart.resize()
-        },
-        false
-      )
+      this.myChart = this.$echarts.init(this.$refs.chartItem)
+      setTimeout(() => {
+        this._getTotalChart()
+      }, this.CHATS_CONFIG.timeout)
+      window.addEventListener('resize', () => {
+        this.myChart && this.myChart.resize()
+      }, false)
     },
     beforeDestroy() {
-    // window.removeEventListener('resize')
+      // window.removeEventListener('resize')
     },
     methods: {
       changeHandle(e, type) {
@@ -95,16 +100,19 @@
           start_date: this.startDate,
           end_date: this.endDate
         }
-        API.Data.getTotalChart(data).then((res) => {
-          let {xAxisData, xBetweenData, seriesData} = res.data
-          let _this = this
-          xAxisData = xAxisData || this.CHATS_CONFIG.xAxisData
-          xBetweenData = xBetweenData || this.CHATS_CONFIG.xBetweenData
-          seriesData = seriesData || this.CHATS_CONFIG.seriesData
-          // let myChart = this.$echarts.init(this.$refs.chartItem)
-          this.myChart = this.$echarts.init(this.$refs.chartItem)
-          this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
-        })
+        API.Data.getTotalChart(data)
+          .then((res) => {
+            let {xAxisData, xBetweenData, seriesData} = res.data
+            let _this = this
+            this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
+          })
+          .catch((e) => {
+            console.log(e)
+            e.message === '系统异常.' && this.$toast.show(e.message)
+            let _this = this
+            let {xAxisData, xBetweenData, seriesData} = this.CHATS_CONFIG
+            this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
+          })
       },
       _drawOrder(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -128,7 +136,11 @@
             itemHeight: 14,
             borderRadius: 0,
             bottom: 19,
-            data: [{name: '提交订单', icon: 'rect'}, {name: '支付订单', icon: 'rect'}, {name: '退款订单', icon: 'rect'}]
+            data: [
+              {name: '提交订单', icon: 'rect'},
+              {name: '支付订单', icon: 'rect'},
+              {name: '退款订单', icon: 'rect'}
+            ]
           },
           grid: {
             left: '3%',
@@ -208,130 +220,111 @@
               }
             }
           },
-          series: [
-            {
-              name: '提交订单',
-              data: seriesData.submit_num,
-              type: 'line',
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  x2: 0,
-                  y: 0,
-                  y2: 1,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: 'rgba(169,129,255,0.3)'
-                    },
-                    {
-                      offset: 1,
-                      color: 'rgba(169,129,255,0.3)'
-                    }
-                  ],
-                  globalCoord: false
-                }
-              },
-              itemStyle: {
-                normal: {
+          series: [{
+            name: '提交订单',
+            data: seriesData.submit_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(169,129,255,0.3)'
+                }, {
+                  offset: 1, color: 'rgba(169,129,255,0.3)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(169,129,255,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
                   color: 'rgba(169,129,255,1)',
-                  borderWidth: 1,
-                  // borderColor: '#fff',
-                  // shadowColor: 'rgba(73,133,252,1)',
-                  // shadowOffsetY: 0,
-                  // shadowOffsetX: 0,
-                  // shadowBlur: 10,
-                  lineStyle: {
-                    color: 'rgba(169,129,255,1)',
-                    width: 3
-                  }
-                }
-              }
-            },
-            {
-              name: '支付订单',
-              data: seriesData.pay_num,
-              type: 'line',
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  x2: 0,
-                  y: 0,
-                  y2: 1,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
-                    },
-                    {
-                      offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
-                    }
-                  ],
-                  globalCoord: false
-                }
-              },
-              itemStyle: {
-                normal: {
-                  color: 'rgba(73,133,252,1)',
-                  borderWidth: 1,
-                  // borderColor: '#fff',
-                  // shadowColor: 'rgba(73,133,252,1)',
-                  // shadowOffsetY: 0,
-                  // shadowOffsetX: 0,
-                  // shadowBlur: 10,
-                  lineStyle: {
-                    color: 'rgba(73,133,252,1)',
-                    width: 3
-                  }
-                }
-              }
-            },
-            {
-              name: '退款订单',
-              data: seriesData.refund_num,
-              type: 'line',
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  x2: 0,
-                  y: 0,
-                  y2: 1,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: 'rgba(104,212,165,0.28)'
-                    },
-                    {
-                      offset: 1,
-                      color: 'rgba(104,212,165,0.28)'
-                    }
-                  ],
-                  globalCoord: false
-                }
-              },
-              itemStyle: {
-                normal: {
-                  color: 'rgba(79,209,102,1)',
-                  borderWidth: 1,
-                  // borderColor: '#fff',
-                  // shadowColor: 'rgba(73,133,252,1)',
-                  // shadowOffsetY: 0,
-                  // shadowOffsetX: 0,
-                  // shadowBlur: 10,
-                  lineStyle: {
-                    color: 'rgba(79,209,102,1)',
-                    width: 3
-                  }
+                  width: 3
                 }
               }
             }
-          ]
+          }, {
+            name: '支付订单',
+            data: seriesData.pay_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(73,133,252,1)',
+                  width: 3
+                }
+              }
+            }
+          }, {
+            name: '退款订单',
+            data: seriesData.refund_num,
+            type: 'line',
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(104,212,165,0.28)'
+                }, {
+                  offset: 1, color: 'rgba(104,212,165,0.28)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(79,209,102,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
+                  color: 'rgba(79,209,102,1)',
+                  width: 3
+                }
+              }
+            }
+          }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawAmount(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -425,55 +418,48 @@
               }
             }
           },
-          series: [
-            {
-              name: '交易金额',
-              data: seriesData.pay_amount,
-              type: 'line',
-              // smooth: true,
-              // showSymbol: false,
-              // symbol: 'circle',
-              // smoothMonotone: 'x',
-              // symbolSize: 3,
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  x2: 0,
-                  y: 0,
-                  y2: 1,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
-                    },
-                    {
-                      offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
-                    }
-                  ],
-                  globalCoord: false
-                }
-              },
-              itemStyle: {
-                normal: {
+          series: [{
+            name: '交易金额',
+            data: seriesData.pay_amount,
+            type: 'line',
+            // smooth: true,
+            // showSymbol: false,
+            // symbol: 'circle',
+            // smoothMonotone: 'x',
+            // symbolSize: 3,
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
                   color: 'rgba(73,133,252,1)',
-                  borderWidth: 1,
-                  // borderColor: '#fff',
-                  // shadowColor: 'rgba(73,133,252,1)',
-                  // shadowOffsetY: 0,
-                  // shadowOffsetX: 0,
-                  // shadowBlur: 10,
-                  lineStyle: {
-                    color: 'rgba(73,133,252,1)',
-                    width: 3
-                  }
+                  width: 3
                 }
               }
             }
-          ]
+          }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawOpenShop(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -567,55 +553,48 @@
               }
             }
           },
-          series: [
-            {
-              name: '店铺数量',
-              data: seriesData.shop_num,
-              type: 'line',
-              // smooth: true,
-              // showSymbol: false,
-              // symbol: 'circle',
-              // smoothMonotone: 'x',
-              // symbolSize: 3,
-              areaStyle: {
-                color: {
-                  type: 'linear',
-                  x: 0,
-                  x2: 0,
-                  y: 0,
-                  y2: 1,
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
-                    },
-                    {
-                      offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
-                    }
-                  ],
-                  globalCoord: false
-                }
-              },
-              itemStyle: {
-                normal: {
+          series: [{
+            name: '店铺数量',
+            data: seriesData.shop_num,
+            type: 'line',
+            // smooth: true,
+            // showSymbol: false,
+            // symbol: 'circle',
+            // smoothMonotone: 'x',
+            // symbolSize: 3,
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                x2: 0,
+                y: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(73,133,252, 0.55)'
+                }, {
+                  offset: 1, color: 'rgba(73,133,252, 0.05)'
+                }],
+                globalCoord: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: 'rgba(73,133,252,1)',
+                borderWidth: 1,
+                // borderColor: '#fff',
+                // shadowColor: 'rgba(73,133,252,1)',
+                // shadowOffsetY: 0,
+                // shadowOffsetX: 0,
+                // shadowBlur: 10,
+                lineStyle: {
                   color: 'rgba(73,133,252,1)',
-                  borderWidth: 1,
-                  // borderColor: '#fff',
-                  // shadowColor: 'rgba(73,133,252,1)',
-                  // shadowOffsetY: 0,
-                  // shadowOffsetX: 0,
-                  // shadowBlur: 10,
-                  lineStyle: {
-                    color: 'rgba(73,133,252,1)',
-                    width: 3
-                  }
+                  width: 3
                 }
               }
             }
-          ]
+          }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawCustomer(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -624,7 +603,7 @@
             axisPointer: {
               type: 'shadow'
             },
-            formatter: function(params) {
+            'formatter': function (params) {
               return _this.CHATS_CONFIG.formatter(params, xBetweenData)
             }
           },
@@ -633,7 +612,10 @@
             itemHeight: 14,
             borderRadius: 0,
             bottom: 19,
-            data: [{name: '潜在用户', icon: 'rect'}, {name: '消费用户', icon: 'rect'}]
+            data: [
+              {name: '潜在用户', icon: 'rect'},
+              {name: '消费用户', icon: 'rect'}
+            ]
           },
           grid: {
             left: '3%',
@@ -716,8 +698,8 @@
             }
           ]
         })
-        myChart.resize()
-      }
+        // myChart.resize()
+      },
     }
   }
 </script>

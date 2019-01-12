@@ -3,15 +3,6 @@ import {API_DEFAULT_MIDDLE_FN} from '@utils/constant'
 import {OVERVIEW} from '@pages/data-overview/data-config'
 
 export default {
-  // /**
-  //  * 交易金额（昨天/今天)
-  //  * @param data
-  //  * @returns {*}
-  //  */
-  // exchangeMoney(data) {
-  //   let url = '/api/admin/total-today'
-  //   return request.get(url, data)
-  // },
   /**
    * 商家/门店/订单数量/金额统计
    * @param data
@@ -29,20 +20,14 @@ export default {
   getTotalChart(data, loading, toast = true) {
     let url = '/api/admin/history-stats'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalChartData)
-  }
-  // /**
-  //  * 客户统计
-  //  * @param data
-  //  * @returns {*}
-  //  */
-  // customerStats(data) {
-  //   let url = '/api/admin/customer-stats'
-  //   return request.get(url, data)
-  // }
+  },
 }
 
 // 解析图标数据
 function _resolveGetTotalChartData(res) {
+  if (!res.data.length) {
+    throw new Error('系统异常.')
+  }
   let xAxisData = []
   let xBetweenData = []
   let seriesData = {
@@ -52,14 +37,14 @@ function _resolveGetTotalChartData(res) {
     pay_amount: [], // 交易金额
     submit_num: [], // 提交订单
     pay_num: [], // 支付订单
-    refund_num: [] // 退款订单
+    refund_num: [], // 退款订单
   }
   res.data.forEach((item) => {
     xAxisData.push(item.at) // x 轴每个点对应y轴的值
     xBetweenData.push(item.at_between) // x 轴 间隔的值
     seriesData.potential_num.push(_DEFAULT_NUM(item.potential_num))
     seriesData.consume_num.push(_DEFAULT_NUM(item.consume_num))
-    seriesData.shop_num.push(_DEFAULT_NUM(item.shop_num))
+    seriesData.shop_num.push(_DEFAULT_NUM(item.invite_num))
     seriesData.submit_num.push(_DEFAULT_NUM(item.submit_num))
     seriesData.pay_num.push(_DEFAULT_NUM(item.pay_num))
     seriesData.refund_num.push(_DEFAULT_NUM(item.refund_num))
@@ -81,32 +66,36 @@ function _resolveGetTotalChartData(res) {
   return res
 }
 function _DEFAULT_NUM(num) {
-  return +num || ~~(Math.random() * 100)
+  return num || 0
 }
 // 解析统计数据
 function _resolveGetTotalModeData(res) {
   let resData = res.data
+  let newCustomer = resData.new_customer || {}
+  let formalShop = resData.formal_shop || {}
+  let successOrder = resData.success_order || {}
+  let successOrderAmount = resData.success_order_amount || {}
   let data = OVERVIEW
   data.forEach((item) => {
     if (item.icon === 'user') {
-      item.number = _formatNumber(resData.new_customer.today_num)
-      item.yesterday = _formatNumber(resData.new_customer.yesterday_num)
-      item.total = _formatNumber(resData.new_customer.total_num)
+      item.number = _formatNumber(newCustomer.today_num)
+      item.yesterday = _formatNumber(newCustomer.yesterday_num)
+      item.total = _formatNumber(newCustomer.total_num)
     }
     if (item.icon === 'shop') {
-      item.number = _formatNumber(resData.formal_shop.today_num)
-      item.total = _formatNumber(resData.formal_shop.total_num)
-      item.yesterday = _formatNumber(resData.formal_shop.yesterday_num)
+      item.number = _formatNumber(formalShop.today_num)
+      item.total = _formatNumber(formalShop.total_num)
+      item.yesterday = _formatNumber(formalShop.yesterday_num)
     }
     if (item.icon === 'order') {
-      item.number = _formatNumber(resData.success_order.today_num)
-      item.yesterday = _formatNumber(resData.success_order.yesterday_num)
-      item.total = _formatNumber(resData.success_order.total_num)
+      item.number = _formatNumber(successOrder.today_num)
+      item.yesterday = _formatNumber(successOrder.yesterday_num)
+      item.total = _formatNumber(successOrder.total_num)
     }
     if (item.icon === 'amount') {
-      item.number = _formatNumber(resData.success_order_amount.today_amount)
-      item.yesterday = _formatNumber(resData.success_order_amount.yesterday_amount)
-      item.total = _formatNumber(resData.success_order_amount.total_amount)
+      item.number = _formatNumber(successOrderAmount.today_amount)
+      item.yesterday = _formatNumber(successOrderAmount.yesterday_amount)
+      item.total = _formatNumber(successOrderAmount.total_amount)
     }
   })
   res.data = data
@@ -115,6 +104,9 @@ function _resolveGetTotalModeData(res) {
 
 // 组装三位带，的数字
 function _formatNumber(num) {
+  if (!num) {
+    return '0'
+  }
   let arr = ('' + num).split('.')
   let reg = /(?=(\B)(\d{3})+$)/g
   let number = arr[0].replace(reg, ',')

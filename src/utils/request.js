@@ -20,7 +20,7 @@ http.interceptors.request.use(
   (config) => {
     // 请求数据前的拦截
     // config.headers['Authorization'] = storage.get('token', '')
-    config.headers['Authorization'] = '3cac54de7f2cad323432c2c9f2a2dd26b73b59bb' || storage.get('token')
+    config.headers['Authorization'] = storage.get('token', '')
     return config
   },
   (error) => {

@@ -4,7 +4,7 @@
       <div class="avatar-wrapper">
         <img :src="userInfo.avatar || defaultAvatar" alt="" width="40" height="40">
       </div>
-      <p class="name">{{userInfo.name || 'super'}}</p>
+      <p class="name">{{userInfo.username || 'SUPER'}}</p>
       <div class="log-out" @click="tryToLogOut"></div>
     </section>
     <!--<section class="title-wrapper">-->

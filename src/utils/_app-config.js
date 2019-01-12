@@ -1,9 +1,9 @@
-const version = ``
+const version = '/v1'
 const versionIm = ``
 export default {
   app: '赞播平台',
-  env: 'dev',
-  api: 'https://ws-api.jkweixin.net' + version,
+  env: 'release',
+  api: 'https://zhidian-api.jkweixin.net' + version,
   upload: 'https://zhidian-api.jkweixin.net' + version,
   mall: 'https://exchange-mall-api.jkweixin.net' + version,
   oauthURI: 'https://zhidian-api.jkweixin.net',
