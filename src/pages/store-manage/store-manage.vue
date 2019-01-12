@@ -24,9 +24,14 @@
             v-for="(val, ind) in headerList"
             :key="ind"
             :style="{flex: val.width}"
+            class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <div v-else class="list-handle item">
+            <div v-if="val.class === 'item head'" class="head item">
+              <img src="" class="img" alt="">
+              <span class="txt">{{item[val.value] + '' || '---'}}</span>
+            </div>
+            <div v-if="val.class === 'item handle'" class="list-handle item">
               <span class="handle-item" @click="openPop('look', item)">查看</span>
               <span class="handle-item" @click="openPop('freeze', item)">{{item.is_freeze_str === '正常' ? '冻结' : '解冻'}}</span>
             </div>
@@ -69,15 +74,15 @@
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
   const TAB_LIST = [
-    {name: '店铺名称', width: '1', value: 'storeName', class: 'item'},
+    {name: '店铺名称', width: '1.8', value: 'storeName', class: 'item head'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
-    {name: '品牌', width: '1', value: 'brand', class: 'item'},
+    {name: '品牌', width: '1.8', value: 'brand', class: 'item'},
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
-    {name: '交易金额', width: '1', value: 'code', class: 'item'},
-    {name: '开通时间', width: '1', value: 'money', class: 'item'},
-    {name: '操作', width: '1.5', value: 'date', class: 'item handle'}
+    {name: '交易金额', width: '1', value: 'money', class: 'item'},
+    {name: '开通时间', width: '1', value: 'date', class: 'item'},
+    {name: '操作', width: '1', value: '', class: 'item handle'}
   ]
   export default {
     name: PAGE_NAME,
@@ -310,10 +315,25 @@
           box-sizing: border-box
           border-bottom: 0.5px solid $color-line
           text-align: left
+          .item-box
+            overflow: hidden
+            no-wrap()
           .item
             flex: 1
             line-height: 18px
-            no-wrap()
+            padding-right: 20px
+          .head
+            display: flex
+            align-items: center
+            .img
+              margin-right: 10px
+              width: 40px
+              height: 40px
+              object-fit: cover
+              background: #f5f5f5
+            .txt
+              no-wrap()
+              flex: 1
           .list-handle
             color: $color-main
             white-space: nowrap

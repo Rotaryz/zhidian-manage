@@ -54,7 +54,63 @@
           isLight: false
         }
       ]
-    }
+    },
+    {
+      title: '用户管理',
+      url: '/home/user-manage',
+      icon: require('./icon-data@2x.png'),
+      iconSelected: require('./icon-data_selecrt@2x.png'),
+      childrenIndex: 0,
+      isRouter: true, // 是否跳转
+      isLight: false, // 是否亮灯
+      children: []
+    },
+    {
+      title: '内容管理',
+      url: '/home/content-manage/',
+      icon: require('./icon-shop@2x.png'),
+      iconSelected: require('./icon-shop_select@2x.png'),
+      childrenIndex: 0,
+      isRouter: false,
+      isLight: false,
+      children: [
+        {
+          title: '服务管理',
+          url: '/home/content-manage/service-manage',
+          isRouter: true,
+          isLight: false
+        },
+        {
+          title: '活动管理',
+          url: '/home/content-manage/activity-manage',
+          isRouter: true,
+          isLight: false
+        }
+      ]
+    },
+    {
+      title: '财务管理',
+      url: '/home/finance-manage/',
+      icon: require('./icon-shop@2x.png'),
+      iconSelected: require('./icon-shop_select@2x.png'),
+      childrenIndex: 0,
+      isRouter: false,
+      isLight: false,
+      children: [
+        {
+          title: '交易记录',
+          url: '/home/finance-manage/buy-record',
+          isRouter: true,
+          isLight: false
+        },
+        {
+          title: '提现申请',
+          url: '/home/finance-manage/cash-apply',
+          isRouter: true,
+          isLight: false
+        }
+      ]
+    },
     // {
     //   title: '商品管理',
     //   url: '/goods-manager',
