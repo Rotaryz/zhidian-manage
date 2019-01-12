@@ -110,9 +110,13 @@
       timeChange(time, type) {
         let date = ''
         if (type) {
-          date = time[0].toLocaleDateString()
+          let startTime = time[0].toLocaleDateString()
             .replace(/\//g, '-')
             .replace(/\b\d\b/g, '0$&')
+          let endTime = time[1].toLocaleDateString()
+            .replace(/\//g, '-')
+            .replace(/\b\d\b/g, '0$&')
+          date = [startTime, endTime]
         } else {
           date = time
         }
