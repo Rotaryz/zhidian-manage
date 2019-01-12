@@ -63,11 +63,14 @@
         return CHATS_CONFIG[this.chartType]
       }
     },
-    created() {
+    mounted() {
       this._getTotalChart()
       window.addEventListener('resize', () => {
-        this.myChart.resize()
-      })
+        this.myChart && this.myChart.resize()
+      }, false)
+    },
+    beforeDestroy() {
+      // window.removeEventListener('resize')
     },
     methods: {
       changeHandle(e, type) {

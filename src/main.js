@@ -6,6 +6,7 @@ import '@components/_globals'
 import {Plugins} from '@utils/plugins'
 import {DatePicker} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@utils/env-clear'
 
 Vue.use(DatePicker)
 Vue.use(Plugins)

@@ -18,7 +18,12 @@
   import {globalComputed, globalMethods} from '@state/helpers'
 
   const PAGE_NAME = 'HOME'
-  const PANEL_CNAME = ['container-default', 'container-data']
+  // const PANEL_CNAME = ['container-default', 'container-data', 'container-order']
+  const PANEL_CNAME = {
+    'default': 'container-default',
+    '/home/data-overview' : 'container-data',
+    '/home/order-manger' : 'container-order'
+  }
 
   export default {
     name: PAGE_NAME,
@@ -37,11 +42,8 @@
     computed: {
       ...globalComputed,
       panelStyle() {
-        let index = 0
-        if (this.$route.path.includes('data-overview')) {
-          index = 1
-        }
-        return PANEL_CNAME[index]
+        let cname = PANEL_CNAME[this.$route.path] || PANEL_CNAME['default']
+        return cname
       }
     },
     created() {
@@ -86,4 +88,6 @@
       flex:1
       user-select: text
       margin :22px
+    .container-order
+      // todo
 </style>

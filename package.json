@@ -23,8 +23,14 @@
     "test:e2e": "vue-cli-service test:e2e --headless",
     "test": "run-s test:unit test:e2e",
     "test:ci": "run-s test:unit:ci test:e2e",
-    "new": "hygen new"
+    "new": "hygen new",
+    "init": "node _config/index.js",
+    "check:appconfig": "node _config/check.js",
+    "look": "node _config/look.js"
   },
+  "pre-commit": [
+    "check:appconfig"
+  ],
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.2.0-rc.2",
@@ -60,6 +66,7 @@
     "imagemin-lint-staged": "0.3.x",
     "lint-staged": "8.0.x",
     "npm-run-all": "4.1.x",
+    "pre-commit": "^1.2.2",
     "qr-image": "^3.2.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
