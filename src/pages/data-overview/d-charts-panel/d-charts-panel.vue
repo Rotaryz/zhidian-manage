@@ -100,18 +100,19 @@
           start_date: this.startDate,
           end_date: this.endDate
         }
-        API.Data.getTotalChart(data).then((res) => {
-          let {xAxisData, xBetweenData, seriesData} = res.data
-          let _this = this
-          xAxisData = xAxisData || this.CHATS_CONFIG.xAxisData
-          xBetweenData = xBetweenData || this.CHATS_CONFIG.xBetweenData
-          seriesData = seriesData || this.CHATS_CONFIG.seriesData
-          // xAxisData = this.CHATS_CONFIG.xAxisData
-          // xBetweenData = this.CHATS_CONFIG.xBetweenData
-          // seriesData = this.CHATS_CONFIG.seriesData
-          // let myChart = this.$echarts.init(this.$refs.chartItem)
-          this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
-        })
+        API.Data.getTotalChart(data)
+          .then((res) => {
+            let {xAxisData, xBetweenData, seriesData} = res.data
+            let _this = this
+            this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
+          })
+          .catch((e) => {
+            console.log(e)
+            e.message === '系统异常.' && this.$toast.show(e.message)
+            let _this = this
+            let {xAxisData, xBetweenData, seriesData} = this.CHATS_CONFIG
+            this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
+          })
       },
       _drawOrder(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({

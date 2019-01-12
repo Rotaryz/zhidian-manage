@@ -16,6 +16,7 @@
     },
     methods: {
       show(content, time) {
+        if (this.showToast) return
         if (!content) return
         this.content = content
         this.showToast = true

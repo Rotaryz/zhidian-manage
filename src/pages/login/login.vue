@@ -64,14 +64,6 @@
       //   this.focusPass = false
       // },
       login() {
-        // todo
-        let flag = true
-        if (flag) {
-          this.$storage.set('token', 'todo')
-          this.$router.replace(HOME_PAGE)
-          return
-        }
-        // todo end
         if (this.user === '') {
           this.$toast.show('请输入用户名')
           return false
@@ -79,16 +71,14 @@
           this.$toast.show('请输入密码')
           return false
         }
-        let data = {account: this.user, password: this.password}
+        let data = {username: this.user, password: this.password}
         this.$loading.show()
         API.Global.login(data).then((res) => {
           let data = res.data
-          this.$storage.set('token', data.access_token)
-          this.$storage.set('info', data.info)
+          this.$storage.set('token', data.token)
+          this.$storage.set('info', data.admin_info)
           this.$toast.show('登陆成功!')
-          setTimeout(() => {
-            this.$router.replace(HOME_PAGE)
-          }, 300)
+          this.$router.replace(HOME_PAGE)
         })
       }
     }
