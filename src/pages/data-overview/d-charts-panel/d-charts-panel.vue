@@ -64,7 +64,10 @@
       }
     },
     mounted() {
-      this._getTotalChart()
+      // this._getTotalChart()
+      setTimeout(() => {
+        this._getTotalChart()
+      }, this.CHATS_CONFIG.timeout)
       window.addEventListener('resize', () => {
         this.myChart && this.myChart.resize()
       }, false)
