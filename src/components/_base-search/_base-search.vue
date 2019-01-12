@@ -68,11 +68,17 @@
     overflow: hidden
     margin-left: 20px
     border-radius: 4px
+    display: flex
+    align-items: center
+    justify-content: center
+    background: $color-main
+    cursor: pointer
     .search-icon
-      width: 47px
-      height: 100%
+      width: 16px
+      height: 16px
       transition: all 0.3s
       icon-image('icon-search')
+
       &:active
         transform: scale(1.1)
 </style>

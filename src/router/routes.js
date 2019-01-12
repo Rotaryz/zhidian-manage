@@ -48,6 +48,13 @@ export default [
         title: '服务管理',
         component: () => lazyLoadView(import('@pages/activity-manage/activity-manage'))
       },
+      // 订单管理
+      {
+        path: 'order-form-manage',
+        name: 'order-form-manage',
+        title: '订单管理',
+        component: () => lazyLoadView(import('@pages/order-form-manage/order-form-manage'))
+      },
       // 交易记录
       {
         path: 'finance-manage/buy-record',
@@ -61,7 +68,7 @@ export default [
         name: 'cash-apply',
         title: '提现申请',
         component: () => lazyLoadView(import('@pages/cash-apply/cash-apply'))
-      },
+      }
       // // 商家管理/店铺管理
       // {
       //   path: '/store-manage',

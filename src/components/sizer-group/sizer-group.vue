@@ -25,7 +25,7 @@
   ]
   export default {
     name: COMPONENT_NAME,
-    components:{
+    components: {
       DatePicker
     },
     props: {

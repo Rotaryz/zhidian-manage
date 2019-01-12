@@ -93,6 +93,16 @@
       ]
     },
     {
+      title: '订单管理',
+      url: '/home/order-form-manage',
+      icon: require('./icon-data@2x.png'),
+      iconSelected: require('./icon-data_selecrt@2x.png'),
+      childrenIndex: 0,
+      isRouter: true, // 是否跳转
+      isLight: false, // 是否亮灯
+      children: []
+    },
+    {
       title: '财务管理',
       url: '/home/finance-manage/',
       icon: require('./icon-shop@2x.png'),
@@ -114,84 +124,84 @@
           isLight: false
         }
       ]
-    },
-    // {
-    //   title: '商品管理',
-    //   url: '/goods-manager',
-    //   icon: require('./icon-goods@2x.png'),
-    //   iconSelected: require('./icon-goods_select@2x.png'),
-    //   childrenIndex: 0,
-    //   isRouter: false,
-    //   isLight: false,
-    //   children: [
-    //     {
-    //       title: '折扣商品',
-    //       url: '/goods-manager/money',
-    //       isRouter: true,
-    //       isLight: false
-    //     },
-    //     {
-    //       title: '播豆商品',
-    //       url: '/goods-manager/credits',
-    //       isRouter: true,
-    //       isLight: false
-    //     }
-    //   ]
-    // },
-    // {
-    //   title: '订单管理',
-    //   icon: require('./icon-indent@2x.png'),
-    //   iconSelected: require('./icon-indent_select@2x.png'),
-    //   url: '/order-manager',
-    //   childrenIndex: 0,
-    //   children: [
-    //     {
-    //       title: '用户订单',
-    //       url: '/order-manager/user',
-    //       isRouter: true,
-    //       isLight: false
-    //     },
-    //     {
-    //       title: '商家订单',
-    //       url: '/order-manager/merchant',
-    //       isRouter: true,
-    //       isLight: false
-    //     }
-    //   ]
-    // },
-    // {
-    //   title: '大礼包',
-    //   icon: require('./icon-gifts@2x.png'),
-    //   iconSelected: require('./icon-gifts_select@2x.png'),
-    //   url: '/gifts',
-    //   childrenIndex: 0,
-    //   isRouter: false,
-    //   isLight: false,
-    //   children: [
-    //     {
-    //       title: '用户礼包',
-    //       url: '/gifts/user-gifts',
-    //       isRouter: true,
-    //       isLight: false
-    //     },
-    //     {
-    //       title: '商家礼包',
-    //       url: '/gifts/business-gifts',
-    //       isRouter: true,
-    //       isLight: false
-    //     }
-    //   ]
-    // },
-    // {
-    //   title: '内容管理',
-    //   url: '/content-manager',
-    //   icon: require('./icon-text@2x.png'),
-    //   iconSelected: require('./icon-text_select@2x.png'),
-    //   childrenIndex: 0,
-    //   isRouter: true, // 是否跳转
-    //   isLight: false, // 是否亮灯
-    //   children: []
-    // }
+    }
+  // {
+  //   title: '商品管理',
+  //   url: '/goods-manager',
+  //   icon: require('./icon-goods@2x.png'),
+  //   iconSelected: require('./icon-goods_select@2x.png'),
+  //   childrenIndex: 0,
+  //   isRouter: false,
+  //   isLight: false,
+  //   children: [
+  //     {
+  //       title: '折扣商品',
+  //       url: '/goods-manager/money',
+  //       isRouter: true,
+  //       isLight: false
+  //     },
+  //     {
+  //       title: '播豆商品',
+  //       url: '/goods-manager/credits',
+  //       isRouter: true,
+  //       isLight: false
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: '订单管理',
+  //   icon: require('./icon-indent@2x.png'),
+  //   iconSelected: require('./icon-indent_select@2x.png'),
+  //   url: '/order-manager',
+  //   childrenIndex: 0,
+  //   children: [
+  //     {
+  //       title: '用户订单',
+  //       url: '/order-manager/user',
+  //       isRouter: true,
+  //       isLight: false
+  //     },
+  //     {
+  //       title: '商家订单',
+  //       url: '/order-manager/merchant',
+  //       isRouter: true,
+  //       isLight: false
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: '大礼包',
+  //   icon: require('./icon-gifts@2x.png'),
+  //   iconSelected: require('./icon-gifts_select@2x.png'),
+  //   url: '/gifts',
+  //   childrenIndex: 0,
+  //   isRouter: false,
+  //   isLight: false,
+  //   children: [
+  //     {
+  //       title: '用户礼包',
+  //       url: '/gifts/user-gifts',
+  //       isRouter: true,
+  //       isLight: false
+  //     },
+  //     {
+  //       title: '商家礼包',
+  //       url: '/gifts/business-gifts',
+  //       isRouter: true,
+  //       isLight: false
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: '内容管理',
+  //   url: '/content-manager',
+  //   icon: require('./icon-text@2x.png'),
+  //   iconSelected: require('./icon-text_select@2x.png'),
+  //   childrenIndex: 0,
+  //   isRouter: true, // 是否跳转
+  //   isLight: false, // 是否亮灯
+  //   children: []
+  // }
   ]
   const NAV_STR = JSON.stringify(NAV_LIST)
   export default {

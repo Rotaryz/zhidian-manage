@@ -7,5 +7,5 @@ export default {
   upload: 'https://zhidian-api.jkweixin.com' + version,
   mall: 'https://exchange-mall-api.jkweixin.com' + version,
   oauthURI: 'https://zhidian-api.jkweixin.com',
-  imRecord: 'https://data-analysis-api.jkweixin.com' + versionIm,
+  imRecord: 'https://data-analysis-api.jkweixin.com' + versionIm
 }

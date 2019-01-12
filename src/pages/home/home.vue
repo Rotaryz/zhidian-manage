@@ -20,9 +20,9 @@
   const PAGE_NAME = 'HOME'
   // const PANEL_CNAME = ['container-default', 'container-data', 'container-order']
   const PANEL_CNAME = {
-    'default': 'container-default',
-    '/home/data-overview' : 'container-data',
-    '/home/order-manger' : 'container-order'
+    default: 'container-default',
+    '/home/data-overview': 'container-data',
+    '/home/order-form-manage': 'container-order'
   }
 
   export default {
@@ -89,5 +89,9 @@
       user-select: text
       margin :22px
     .container-order
-      // todo
+      display: flex
+      flex: 1
+      margin: 65px 22px 22px
+      user-select: text
+      card-box-style()
 </style>

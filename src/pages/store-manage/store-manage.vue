@@ -112,10 +112,9 @@
         },
         handleIndex: 0,
         headClass: {
-          class2: '',
-          class3: '',
           class4: '',
-          class5: ''
+          class5: '',
+          class6: ''
         },
         pageDetail: {
           total: 1,
@@ -318,10 +317,10 @@
           .item-box
             overflow: hidden
             no-wrap()
+            padding-right: 10px
           .item
             flex: 1
             line-height: 18px
-            padding-right: 20px
           .head
             display: flex
             align-items: center

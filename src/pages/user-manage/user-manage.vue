@@ -77,7 +77,7 @@
             num: '22',
             money: '122.50',
             source: '某某公司',
-            date: '2019.1.11',
+            date: '2019.1.11'
           }
         ],
         requestData: {
@@ -240,10 +240,10 @@
           text-align: left
           .item-box
             no-wrap()
+            padding-right: 10px
           .item
             flex: 1
             line-height: 18px
-            padding-right: 20px
           .head
             display: flex
             align-items: center

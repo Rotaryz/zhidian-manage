@@ -7,7 +7,7 @@ const path = require('path')
 // 应用类型
 const APP = {
   me: 'me',
-  platform: 'platform',
+  platform: 'platform'
 }
 // 环境环境文件路径(要统一名称)
 const ENV = {
@@ -18,13 +18,13 @@ const ENV = {
 // git版本的分支对应路径
 // key值对应分支名
 const GIT = {
-  'me-release': path.join(__dirname,'' + APP.me, '' + ENV.release),
-  'me-master': path.join(__dirname,'' + APP.me, '' + ENV.production),
-  'release': path.join(__dirname,'' + APP.platform, '' + ENV.release),
-  'master': path.join(__dirname,'' + APP.platform, '' + ENV.production),
-  'me': path.join(__dirname, '' + APP.me),
-  'default': path.join(__dirname, '' + APP.platform),
-  'dev_version' : ''
+  'me-release': path.join(__dirname, '' + APP.me, '' + ENV.release),
+  'me-master': path.join(__dirname, '' + APP.me, '' + ENV.production),
+  release: path.join(__dirname, '' + APP.platform, '' + ENV.release),
+  master: path.join(__dirname, '' + APP.platform, '' + ENV.production),
+  me: path.join(__dirname, '' + APP.me),
+  default: path.join(__dirname, '' + APP.platform),
+  dev_version: ''
 }
 // 版本号
 const VERSION = _createVersion()
@@ -43,7 +43,7 @@ function _createVersion(length = 6) {
   let version = {}
   new Array(length).fill(1).forEach((item, index) => {
     let code = index + 1
-    version[`v${code}`]  = `/v${code}`
+    version[`v${code}`] = `/v${code}`
   })
   return version
 }
@@ -52,7 +52,7 @@ function _createVersionIm(length = 6) {
   let version = {}
   new Array(length).fill(1).forEach((item, index) => {
     let code = index + 1
-    version[`im-v${code}`]  = `/v${code}`
+    version[`im-v${code}`] = `/v${code}`
   })
   return version
 }

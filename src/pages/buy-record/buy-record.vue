@@ -47,7 +47,7 @@
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
   const TAB_LIST = [
-    {name: '订单号', width: '1', value: 'code', class: 'item head'},
+    {name: '订单号', width: '1', value: 'code', class: 'item'},
     {name: '交易号', width: '1', value: 'orderCode', class: 'item'},
     {name: '交易金额', width: '1', value: 'orderMoney', class: 'item'},
     {name: '交易类型', width: '1', value: 'orderType', class: 'item'},
@@ -72,7 +72,7 @@
             orderMoney: '100',
             orderType: '支付',
             person: '啦啦啦',
-            date: '2019.1.11 10:20:00',
+            date: '2019.1.11 10:20:00'
           }
         ],
         requestData: {
@@ -107,13 +107,19 @@
       }
     },
     methods: {
+      getRecordList() {
+        let accessToken = `access_token=${this.$storage.get('aiToken')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
+      },
       timeChange(time, type) {
         let date = ''
         if (type) {
-          let startTime = time[0].toLocaleDateString()
+          let startTime = time[0]
+            .toLocaleDateString()
             .replace(/\//g, '-')
             .replace(/\b\d\b/g, '0$&')
-          let endTime = time[1].toLocaleDateString()
+          let endTime = time[1]
+            .toLocaleDateString()
             .replace(/\//g, '-')
             .replace(/\b\d\b/g, '0$&')
           date = [startTime, endTime]
@@ -121,10 +127,6 @@
           date = time
         }
         console.log(date, type)
-      },
-      getBrandList() {
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
       search(inputTxt) {
         this.requestData.keyword = inputTxt
@@ -134,7 +136,7 @@
           this.headClass[val] = ''
         }
         this.requestData.sort_type = ''
-        this.getMemberList()
+        this.getRecordList()
       },
       setValue(item) {
         this.typeId = item.id
@@ -148,7 +150,7 @@
       },
       addPage(num) {
         this.requestData.page = num
-        this.getMemberList()
+        this.getRecordList()
       }
     }
   }
@@ -209,10 +211,10 @@
           text-align: left
           .item-box
             no-wrap()
+            padding-right: 10px
           .item
             flex: 1
             line-height: 18px
-            padding-right: 20px
           .head
             display: flex
             align-items: center
