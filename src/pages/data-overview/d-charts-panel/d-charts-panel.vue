@@ -47,7 +47,7 @@
       chartType: {
         type: String,
         default: ''
-      }
+      },
     },
     data() {
       return {
@@ -55,7 +55,7 @@
         dateType: DEFAULT_STATUS,
         startDate: '',
         endDate: '',
-        myChart: null
+        myChart: null,
       }
     },
     computed:{
@@ -63,8 +63,10 @@
         return CHATS_CONFIG[this.chartType]
       }
     },
+    created() {
+    },
     mounted() {
-      // this._getTotalChart()
+      this.myChart = this.$echarts.init(this.$refs.chartItem)
       setTimeout(() => {
         this._getTotalChart()
       }, this.CHATS_CONFIG.timeout)
@@ -104,8 +106,10 @@
           xAxisData = xAxisData || this.CHATS_CONFIG.xAxisData
           xBetweenData = xBetweenData || this.CHATS_CONFIG.xBetweenData
           seriesData = seriesData || this.CHATS_CONFIG.seriesData
+          // xAxisData = this.CHATS_CONFIG.xAxisData
+          // xBetweenData = this.CHATS_CONFIG.xBetweenData
+          // seriesData = this.CHATS_CONFIG.seriesData
           // let myChart = this.$echarts.init(this.$refs.chartItem)
-          this.myChart = this.$echarts.init(this.$refs.chartItem)
           this[this.CHATS_CONFIG.drawFn](_this, xAxisData, xBetweenData, seriesData, this.myChart)
         })
       },
@@ -319,7 +323,7 @@
             }
           }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawAmount(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -454,7 +458,7 @@
             }
           }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawOpenShop(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -589,7 +593,7 @@
             }
           }]
         })
-        myChart.resize()
+        // myChart.resize()
       },
       _drawCustomer(_this, xAxisData, xBetweenData, seriesData, myChart) {
         myChart.setOption({
@@ -693,7 +697,7 @@
             }
           ]
         })
-        myChart.resize()
+        // myChart.resize()
       },
     }
   }

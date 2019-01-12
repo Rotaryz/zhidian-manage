@@ -13,12 +13,13 @@ export const CHATS_DATA_TYPE = {
 }
 const _X = ['2:00', '4:00', '06:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00']
 const _XB = ['0:00 ~ 2:00', '2:00 ~ 4:00', '4:00 ~ 6:00', '6:00 ~ 8:00', '8:00 ~ 10:00', '10:00 ~ 12:00', '12:00 ~ 14:00', '14:00 ~ 16:00', '16:00 ~ 18:00', '18:00 ~ 20:00', '20:00 ~ 22:00', '22:00 ~ 24:00']
-const PRO = 0.3
+const _SD = new Array(12).fill(0)
+const PRO = 0.2
 export const CHATS_CONFIG = {
   [CHATS_DATA_TYPE.user]: {
     xAxisData: _X,
     xBetweenData: _XB,
-    seriesData: {potential_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], consume_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    seriesData: {potential_num: _SD, consume_num: _SD},
     formatter: _userFormatter,
     drawFn: '_drawCustomer',
     chartType: 1,
@@ -27,7 +28,7 @@ export const CHATS_CONFIG = {
   [CHATS_DATA_TYPE.shop]: {
     xAxisData: _X,
     xBetweenData: _XB,
-    seriesData: {pay_amount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    seriesData: {shop_num: _SD},
     formatter: '',
     drawFn: '_drawOpenShop',
     chartType: 2,
@@ -36,7 +37,7 @@ export const CHATS_CONFIG = {
   [CHATS_DATA_TYPE.order]: {
     xAxisData: _X,
     xBetweenData: _XB,
-    seriesData: {refund_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], pay_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], submit_num: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    seriesData: {refund_num: _SD, pay_num: _SD, submit_num: _SD},
     formatter: '',
     drawFn: '_drawOrder',
     chartType: 3,
@@ -45,7 +46,7 @@ export const CHATS_CONFIG = {
   [CHATS_DATA_TYPE.amount]: {
     xAxisData: _X,
     xBetweenData: _XB,
-    seriesData: {pay_amount: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+    seriesData: {pay_amount: _SD},
     formatter: '',
     drawFn: '_drawAmount',
     chartType: 4,
