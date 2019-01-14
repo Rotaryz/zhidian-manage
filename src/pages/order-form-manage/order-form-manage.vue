@@ -18,7 +18,7 @@
       <div class="content-top">
         <div class="left">
           <div class="status">
-            <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
+            <sizer-group ref="sizer" @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
           </div>
           <base-search placeHolder="请输入订单号" @search="search"></base-search>
         </div>
@@ -103,7 +103,7 @@
           order_type: '',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         },
@@ -117,7 +117,7 @@
         excelUrl: '',
         tabInd: 0,
         tabIdx: 0,
-        defaultIndex: 0
+        defaultIndex: 4
       }
     },
     created() {
@@ -154,22 +154,25 @@
         this.getList()
       },
       changeType(index, item) {
+        if (index === this.tabInd) return
         this.requestData = {
           order_sn: '',
           status: '',
           order_type: this.orderType[index],
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         }
+        this.$refs.sizer._setTabIndex(4)
         this.$refs.pageDetail.beginPage()
         this.tabIdx = 0
         this.tabInd = index
         this.getList()
       },
       changeTab(index, item) {
+        if (index === this.tabIdx) return
         this.requestData.status = this.status[index]
         this.tabIdx = index
         this.getList()

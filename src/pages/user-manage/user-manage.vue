@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
         </div>
         <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
       </div>
@@ -72,7 +72,7 @@
           keyword: '',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         },
@@ -80,7 +80,8 @@
           total: 1,
           per_page: 10,
           total_page: 1
-        }
+        },
+        defaultIndex: 4
       }
     },
     created() {

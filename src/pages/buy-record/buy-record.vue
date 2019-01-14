@@ -6,7 +6,7 @@
           <sizer-group @change="checkTime"></sizer-group>
         </div>
         <div class="status">
-          <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
+          <base-drop-down :select="dispatchSelect" :defaultIndex="defaultIndex" @setValue="setValue"></base-drop-down>
         </div>
         <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
@@ -73,7 +73,7 @@
           is_refund: '-1',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         },
@@ -89,7 +89,8 @@
           per_page: 10,
           total_page: 1
         },
-        excelUrl: ''
+        excelUrl: '',
+        defaultIndex: 4
       }
     },
     created() {

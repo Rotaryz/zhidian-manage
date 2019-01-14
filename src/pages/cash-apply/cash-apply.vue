@@ -6,7 +6,7 @@
           <sizer-group @change="checkTime"></sizer-group>
         </div>
         <div class="status">
-          <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
+          <base-drop-down :select="dispatchSelect" :defaultIndex="defaultIndex" @setValue="setValue"></base-drop-down>
         </div>
         <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
@@ -31,9 +31,12 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <div v-if="val.class === 'item status'" class="item status">
+            <div v-if="val.class === 'item status'" class="item status" @mouseenter="showText(index)" @mouseleave="hideText">
               <span class="txt-content">{{item.status}}</span>
-              <span class="icon"></span>
+              <span v-if="item.status === '审核不通过'" class="icon"></span>
+              <transition name="fade">
+                <div class="tip-text" v-show="item.status === '审核不通过' && enterIndex * 1 === index">{{item.note || '未查到原因'}}</div>
+              </transition>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
               <span class="handle-item" @click="openPop(item)">审核</span>
@@ -92,7 +95,7 @@
           status: '-1',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         },
@@ -112,7 +115,9 @@
         showActive: false,
         popName: '',
         merchant_id: '',
-        showPopContent: ''
+        showPopContent: '',
+        enterIndex: '',
+        defaultIndex: 4
       }
     },
     created() {
@@ -155,6 +160,12 @@
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
         this.getList()
+      },
+      showText(index) {
+        this.enterIndex = index
+      },
+      hideText() {
+        this.enterIndex = ''
       },
       openPop(item) {
         // 打开弹窗
@@ -248,19 +259,54 @@
               height: 14px
               margin-left: 4px
               icon-image(icon-help)
-          .list-handle
-            color: $color-main
-            white-space: nowrap
-            .handle-item
-              padding: 0 7px
-              border-left: 0.5px solid #B5B5B5
-              cursor: pointer
-              height: 14px
-              line-height: 14px
-              display: inline-block
-              &:first-child
-                border-left: 0
-                padding-left: 0
+            .tip-text
+              position: absolute
+              font-size: $font-size-medium14
+              color: $color-text33
+              font-family: $fontFamilyRegular
+              min-width: 182px
+              padding: 0 5px
+              background: #fff
+              min-height: 26px
+              line-height: 26px
+              text-align: center
+              border-radius: 3px
+              word-break: break-all
+              bottom: 20px
+              left: -77px
+              z-index: 11
+              margin: auto
+              box-shadow: 0 1px 4px 0 rgba(12, 6, 14, 0.20)
+              &:after
+                content: ''
+                position: absolute
+                height: 0
+                left: 0
+                right: 23px
+                margin: auto
+                width: 0
+                bottom: -6px
+                border: 3px solid #fff
+                border-bottom: 3px solid transparent
+                border-left: 3px solid transparent
+                border-right: 3px solid transparent
+              &.fade-enter, &.fade-leave-to
+                opacity: 0
+              &.fade-enter-to, &.fade-leave-to
+                transition: all .4s ease-in-out
+    .list-handle
+      color: $color-main
+      white-space: nowrap
+      .handle-item
+        padding: 0 7px
+        border-left: 0.5px solid #B5B5B5
+        cursor: pointer
+        height: 14px
+        line-height: 14px
+        display: inline-block
+      &:first-child
+        border-left: 0
+        padding-left: 0
     .bot-page
       height: 60px
       display: flex

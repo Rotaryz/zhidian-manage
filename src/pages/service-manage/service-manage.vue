@@ -3,9 +3,9 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
         </div>
-        <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
+        <base-search placeHolder="请输入名称" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -78,7 +78,7 @@
           title: '',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           sort_type: '',
           sort: '',
           page: 1,
@@ -96,7 +96,8 @@
           per_page: 10,
           total_page: 1
         },
-        excelUrl: '' // 表格地址
+        excelUrl: '', // 表格地址
+        defaultIndex: 4
       }
     },
     created() {

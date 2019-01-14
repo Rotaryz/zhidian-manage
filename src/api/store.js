@@ -48,7 +48,7 @@ function _changeData(res) {
       code: item.paied_order_num,
       money: item.paied_order_amount,
       date: item.open_time,
-      url: item.logo
+      url: item.logo && item.logo.url
     }
   })
   let obj = {

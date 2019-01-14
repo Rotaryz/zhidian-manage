@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
         </div>
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
@@ -81,7 +81,7 @@
           rule_id: '',
           start_date: '',
           end_date: '',
-          date_type: 'today',
+          date_type: '',
           page: 1,
           limit: 10
         },
@@ -97,7 +97,8 @@
           per_page: 10,
           total_page: 1
         },
-        excelUrl: ''
+        excelUrl: '',
+        defaultIndex: 4
       }
     },
     created() {
