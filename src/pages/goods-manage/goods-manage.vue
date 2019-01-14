@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
+          <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
         <base-search placeHolder="请输入名称" @search="search"></base-search>
       </div>
@@ -73,9 +73,11 @@
     data() {
       return {
         headerList: TAB_LIST,
-        data: [ // 页面数据数组
+        data: [
+        // 页面数据数组
         ],
-        requestData: { // 请求数据
+        requestData: {
+          // 请求数据
           title: '',
           start_date: '',
           end_date: '',
@@ -93,7 +95,8 @@
           class3: ''
         },
         handleIndex: 0, // 点击排序
-        pageDetail: { // 翻页
+        pageDetail: {
+          // 翻页
           total: 2,
           per_page: 10,
           total_page: 1
@@ -108,11 +111,10 @@
     methods: {
       // 获取列表
       getServiceList() {
-        API.Service.getServiceList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.Service.getServiceList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址

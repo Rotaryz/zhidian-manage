@@ -99,11 +99,10 @@
     methods: {
       // 获取列表
       getList() {
-        API.BuyRecord.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.BuyRecord.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址

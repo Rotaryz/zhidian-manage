@@ -36,7 +36,7 @@
               <span class="txt-content">{{item.status}}</span>
               <span v-if="item.status === '审核不通过'" class="icon"></span>
               <transition name="fade">
-                <div class="tip-text" v-show="item.status === '审核不通过' && enterIndex === index">{{item.note || '未查到原因'}}</div>
+                <div v-show="item.status === '审核不通过' && enterIndex === index" class="tip-text">{{item.note || '未查到原因'}}</div>
               </transition>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -116,7 +116,14 @@
           show: false,
           content: '处理状态',
           type: 'default',
-          data: [{name: '全部', id: ''}, {name: '待审核', id: 0}, {name: '微信受理成功', id: 1}, {name: '审核不通过', id: 2}, {name: '微信打款成功', id: 3}, {name: '微信打款失败', id: 4}]
+          data: [
+            {name: '全部', id: ''},
+            {name: '待审核', id: 0},
+            {name: '微信受理成功', id: 1},
+            {name: '审核不通过', id: 2},
+            {name: '微信打款成功', id: 3},
+            {name: '微信打款失败', id: 4}
+          ]
         },
         pageDetail: {
           total: 1,
@@ -137,11 +144,10 @@
     methods: {
       // 获取列表
       getList() {
-        API.CashApply.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.CashApply.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
       },
       // 搜索功能
       search(inputTxt) {
@@ -197,7 +203,7 @@
           note: this.popTxt
         }
         API.CashApply.withdrawal(data)
-          .then(res => {
+          .then((res) => {
             this.$emit('showToast', '提交成功')
             this.getList()
             this.showActive = false
@@ -206,7 +212,7 @@
               this.showPop = false
             }, 200)
           })
-          .catch(res => {
+          .catch((res) => {
             this.showActive = false
             this.getList()
             setTimeout(() => {

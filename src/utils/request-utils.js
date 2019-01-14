@@ -50,7 +50,7 @@ export function defaultMiddleWare(res, ...args) {
     throw new Error('' + res)
   }
   // toast处理
-  if (_this.$ERR_OK !== res.error  || res.data == null) {
+  if (_this.$ERR_OK !== res.error || res.data == null) {
     toast && _toastShow(res.message)
     throw new Error(res.message)
   }

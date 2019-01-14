@@ -18,7 +18,7 @@
       <div class="content-top">
         <div class="left">
           <div class="status">
-            <sizer-group ref="sizer" @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
+            <sizer-group ref="sizer" :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
           </div>
           <base-search placeHolder="请输入订单号" @search="search"></base-search>
         </div>
@@ -127,11 +127,10 @@
     methods: {
       // 获取列表
       getList() {
-        API.OrderForm.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.OrderForm.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址

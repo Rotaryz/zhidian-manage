@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
+          <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
@@ -107,11 +107,10 @@
     methods: {
       // 获取列表
       getList() {
-        API.Activity.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.Activity.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址
