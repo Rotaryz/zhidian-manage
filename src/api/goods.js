@@ -3,28 +3,19 @@ import {API_DEFAULT_MIDDLE_FN} from '@utils/constant'
 
 export default {
   /**
-   * 品牌列表
+   * 服务列表
    * @returns {*}
    */
-  getList(data, loading = true, toast = true) {
-    let url = 'api/admin/merchants'
+  getServiceList(data, loading = true, toast = true) {
+    let url = 'api/admin/goods'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _changeData)
   },
   /**
-   * 开通
+   * 导出列表
    * @returns {*}
    */
-  open(id, loading = true, toast = true) {
-    let url = `api/admin/merchants/${id}/upgrade`
-    return request.post(url, {}, loading, toast, API_DEFAULT_MIDDLE_FN)
-  },
-
-  /**
-   * 店铺列表
-   * @returns {*}
-   */
-  login(data, loading = true, toast = true) {
-    let url = 'api/admin/stores'
+  exportList(data, loading = false, toast = true) {
+    let url = 'api/admin/goods/export'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }
@@ -33,15 +24,14 @@ function _changeData(res) {
   let arr = []
   arr = res.data.map(item => {
     return {
-      storeName: item.name,
-      name: item.nickname,
-      phone: item.agent_mobile,
-      num: item.store_num,
-      actived: item.actived,
+      title: item.title,
+      price: item.platform_price,
+      num: item.browse_count,
+      stock: item.sale_count,
+      status: item.is_online,
+      source: item.source,
       date: item.created_at,
-      type: item.type,
-      url: item.logo.url,
-      id: item.id
+      url: item.image_url
       // 需要增加的字段在后面加不能在前面加
     }
   })

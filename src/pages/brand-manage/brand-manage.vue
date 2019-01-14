@@ -27,9 +27,10 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已激活' : '未激活'}}</span>
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <div v-else class="img"></div>
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -70,8 +71,8 @@
     {name: '手机', width: '1', value: 'phone', class: 'item'},
     {name: '门店', width: '1', value: 'num', class: 'item'},
     {name: '状态', width: '1', value: 'actived', class: 'item status'},
-    {name: '开通时间', width: '1', value: 'date', class: 'item'},
-    {name: '操作', width: '1', value: 'status', class: 'item handle'}
+    {name: '开通时间', width: '1.3', value: 'date', class: 'item'},
+    {name: '操作', width: '1', value: 'type', class: 'item handle'}
   ]
   export default {
     name: PAGE_NAME,
@@ -160,6 +161,7 @@
         API.Brand.open(this.openItem.id)
           .then(res => {
             this.$toast.show('开通成功')
+            this.getList()
           })
       },
       closePop() {
@@ -219,6 +221,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
       .list-content
@@ -247,6 +250,7 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1
@@ -269,6 +273,7 @@
             white-space: nowrap
             .handle-item
               cursor: pointer
+              user-select: none
             .grey
               color: #999
     .bot-page

@@ -41,9 +41,9 @@ function _changeData(res) {
   arr = res.data.map(item => {
     return {
       storeName: item.name,
-      name: item.employee.nickname,
-      phone: item.employee.mobile,
-      brand: item.merchant.name,
+      name: (item.employee&&item.employee.nickname) || '',
+      phone: (item.employee&&item.employee.mobile) || '',
+      brand: (item.merchant&&item.merchant.name) || '',
       business: item.visited_num,
       code: item.paied_order_num,
       money: item.paied_order_amount,

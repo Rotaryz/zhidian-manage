@@ -105,8 +105,6 @@
             this.data = res.arr
           })
         this.getExcelUrl()
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
       // 导出地址
       getExcelUrl() {
@@ -116,8 +114,8 @@
             query += `&${item}=${this.requestData[item]}`
           }
         }
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/pay-trade/export?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -196,6 +194,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
       .list-content

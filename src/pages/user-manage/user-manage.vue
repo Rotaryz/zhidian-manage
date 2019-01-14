@@ -7,6 +7,7 @@
         </div>
         <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
       </div>
+      <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
     <div class="content-list">
       <div class="list-header">
@@ -27,8 +28,10 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <div v-else class="head item">
-              <img :src="item[val.value]" class="img" alt="">
+            <span v-if="val.class === 'item sex'" :class="val.class">{{+item[val.value] === 1 ? '男' : item[val.value] === 2 ? '女' : '未知'}}</span>
+            <div v-if="val.class === 'item head'" class="head item">
+              <img v-if="item[val.value]" :src="item[val.value]" class="img" alt="">
+              <div v-else class="img"></div>
             </div>
           </div>
         </div>
@@ -41,6 +44,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {BASE_URL} from '@utils/config'
   import SizerGroup from '@components/sizer-group/sizer-group'
   import API from '@api'
   const PAGE_NAME = 'USER_MANAGE'
@@ -48,12 +52,12 @@
   const TAB_LIST = [
     {name: '头像', width: '1', value: 'head', class: 'item head'},
     {name: '昵称', width: '1', value: 'name', class: 'item'},
-    {name: '性别', width: '1', value: 'sex', class: 'item'},
+    {name: '性别', width: '1', value: 'sex', class: 'item sex'},
     {name: '地区', width: '1', value: 'addr', class: 'item'},
     {name: '手机号', width: '1', value: 'phone', class: 'item'},
     {name: '交易订单', width: '1', value: 'num', class: 'item'},
     {name: '总消费', width: '1', value: 'money', class: 'item'},
-    {name: '注册时间', width: '1', value: 'date', class: 'item'}
+    {name: '注册时间', width: '1.2', value: 'date', class: 'item'}
   ]
   export default {
     name: PAGE_NAME,
@@ -80,7 +84,8 @@
           per_page: 10,
           total_page: 1
         },
-        defaultIndex: 4
+        defaultIndex: 4,
+        excelUrl: ''
       }
     },
     created() {
@@ -93,6 +98,18 @@
             this.pageDetail = res.obj
             this.data = res.arr
           })
+        this.getExcelUrl()
+      },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/customers/report?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -164,6 +181,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
       .list-content
@@ -192,6 +210,7 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
     .bot-page
       height: 60px
       display: flex

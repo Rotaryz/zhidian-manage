@@ -26,7 +26,8 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <div v-else class="img"></div>
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -49,7 +50,7 @@
         <div v-if="showPopContent === 1 || showPopContent === 2" class="pop-main">
           <div v-if="showPopContent === 1" class="input-box-big">
             <span class="after"></span>
-            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <textarea v-model="popTxt" class="popTxt" maxlength="100" placeholder="备注原因"></textarea>
             <span class="before"></span>
           </div>
           <div v-if="showPopContent === 2" class="reasonTxt">冻结原因：{{reasonTxt}}</div>
@@ -80,7 +81,7 @@
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'money', class: 'item'},
-    {name: '开通时间', width: '1', value: 'date', class: 'item'},
+    {name: '开通时间', width: '1.5', value: 'date', class: 'item'},
     {name: '操作', width: '1', value: '', class: 'item handle'}
   ]
   export default {
@@ -247,7 +248,7 @@
           this.$refs.toast.show('请填写冻结原因')
           return
         }
-        API.Store.freeze({switch: 0, remark: this.popTxt, id: this.merchant_id})
+        API.Store.freeze({switch: 0, reason: this.popTxt, id: this.merchant_id})
           .then((res) => {
             this.$toast.show(res.message)
             this.getList()
@@ -255,7 +256,7 @@
         this.closePop()
       },
       unFrozenStore() {
-        API.Store.freeze({switch: 1, remark: this.reasonTxt, id: this.merchant_id})
+        API.Store.freeze({switch: 1, reason: this.reasonTxt, id: this.merchant_id})
           .then(res => {
             this.$toast.show(res.message)
             this.getList()
@@ -318,6 +319,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
         .handle
@@ -373,12 +375,14 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1
           .list-handle
             color: $color-main
             white-space: nowrap
+            user-select: none
             .handle-item
               padding: 0 7px
               border-left: 0.5px solid #B5B5B5
@@ -516,4 +520,5 @@
         height: 260px
         justify-content: center
         align-items: center
+        user-select: none
 </style>

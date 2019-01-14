@@ -40,7 +40,7 @@
               </transition>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
-              <span v-if="item.status === '待审核'" class="handle-item" @click="openPop(item)">审核</span>
+              <span class="handle-item" :class="{'grey': item.status !== '待审核'}" @click="openPop(item)">审核</span>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
         <div class="pop-main">
           <div class="input-box-big">
             <span class="after"></span>
-            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <textarea v-model="popTxt" class="popTxt" maxlength="100" placeholder="备注原因"></textarea>
             <span class="before"></span>
           </div>
           <div class="model-btn">
@@ -179,6 +179,7 @@
         this.enterIndex = ''
       },
       openPop(item) {
+        if (item.status !== '待审核') return
         // 打开弹窗
         this.$modal.showShade()
         this.showPop = true
@@ -272,6 +273,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
       .list-content
@@ -318,7 +320,7 @@
               word-break: break-all
               white-space: normal
               bottom: 20px
-              right: -13px
+              right: -12px
               z-index: 11
               margin: auto
               box-shadow: 0 1px 4px 0 rgba(12, 6, 14, 0.20)
@@ -348,6 +350,9 @@
               height: 14px
               line-height: 14px
               display: inline-block
+              user-select: none
+            .grey
+              color: #999
     .bot-page
       height: 60px
       display: flex
