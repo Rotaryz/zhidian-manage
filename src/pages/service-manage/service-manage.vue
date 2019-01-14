@@ -78,7 +78,7 @@
           title: '',
           start_date: '',
           end_date: '',
-          date_type: '',
+          date_type: 'today',
           sort_type: '',
           sort: '',
           page: 1,

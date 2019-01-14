@@ -18,7 +18,7 @@
       <div class="content-top">
         <div class="left">
           <div class="status">
-            <sizer-group @change="checkTime"></sizer-group>
+            <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
           </div>
           <base-search placeHolder="请输入订单号" @search="search"></base-search>
         </div>
@@ -103,7 +103,7 @@
           order_type: '',
           start_date: '',
           end_date: '',
-          date_type: '',
+          date_type: 'today',
           page: 1,
           limit: 10
         },
@@ -116,7 +116,8 @@
         },
         excelUrl: '',
         tabInd: 0,
-        tabIdx: 0
+        tabIdx: 0,
+        defaultIndex: 0
       }
     },
     created() {
@@ -159,7 +160,7 @@
           order_type: this.orderType[index],
           start_date: '',
           end_date: '',
-          date_type: '',
+          date_type: 'today',
           page: 1,
           limit: 10
         }

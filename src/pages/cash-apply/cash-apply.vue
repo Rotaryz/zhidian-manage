@@ -92,7 +92,7 @@
           status: '-1',
           start_date: '',
           end_date: '',
-          date_type: '',
+          date_type: 'today',
           page: 1,
           limit: 10
         },

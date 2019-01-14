@@ -42,7 +42,7 @@ export function formatDateTime(time) {
   const month = date.getMonth() + 1
   const day = date.getDate()
 
-  return [year, month, day].join('/')
+  return [year, month, day].join('-')
 }
 
 export function formatTime(time) {
