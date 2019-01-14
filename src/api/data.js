@@ -72,7 +72,7 @@ function _DEFAULT_NUM(num) {
 function _resolveGetTotalModeData(res) {
   let resData = res.data
   let newCustomer = resData.new_customer || {}
-  let formalShop = resData.formal_shop || {}
+  let formalShop = resData.store || {}
   let successOrder = resData.success_order || {}
   let successOrderAmount = resData.success_order_amount || {}
   let data = OVERVIEW

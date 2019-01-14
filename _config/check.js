@@ -26,12 +26,12 @@ function _readApi(url) {
     .match(/api:.*,/)[0]
     .split(/('|"|`)/)[2]
     .trim()
-  let version = content.match(/version.*/)
-    ? content
-        .match(/version.*/)[0]
-        .split('=')[1]
-        .replace(/('|"|`)/g, '')
-        .trim()
-    : ''
-  return api + version
+  // let version = content.match(/version.*/)
+  //   ? content
+  //       .match(/version.*/)[0]
+  //       .split('=')[1]
+  //       .replace(/('|"|`)/g, '')
+  //       .trim()
+  //   : ''
+  return api
 }
