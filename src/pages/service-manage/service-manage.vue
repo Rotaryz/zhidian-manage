@@ -3,9 +3,9 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
         </div>
-        <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
+        <base-search placeHolder="请输入名称" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -32,7 +32,8 @@
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <div v-else class="img"></div>
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
 
@@ -81,6 +82,7 @@
           date_type: '',
           sort_type: '',
           sort: '',
+          type: 3, // 1商品 2虚拟 3服务
           page: 1,
           limit: 10
         },
@@ -96,7 +98,8 @@
           per_page: 10,
           total_page: 1
         },
-        excelUrl: '' // 表格地址
+        excelUrl: '', // 表格地址
+        defaultIndex: 4
       }
     },
     created() {
@@ -111,8 +114,6 @@
             this.data = res.arr
           })
         this.getExcelUrl()
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
       // 导出地址
       getExcelUrl() {
@@ -122,8 +123,8 @@
             query += `&${item}=${this.requestData[item]}`
           }
         }
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/goods/export?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -138,6 +139,7 @@
           date_type: this.requestData.date_type,
           sort_type: '',
           sort: '',
+          type: 3,
           page: 1,
           limit: 10
         }
@@ -246,6 +248,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
         .handle
@@ -300,6 +303,7 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1

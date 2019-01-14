@@ -63,6 +63,9 @@
       _clearActive() {
         this.tabIndex = -1
       },
+      _setTabIndex(num) {
+        this.tabIndex = num
+      },
       dateChange(time, type) {
         let date = []
         date.push(time[0].toLocaleDateString().replace(/\//g, '-').replace(/\b\d\b/g, '0$&'))

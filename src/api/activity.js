@@ -32,6 +32,7 @@ function _changeData(res) {
       source: item.source,
       date: item.created_at,
       url: item.image_url_thumb
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

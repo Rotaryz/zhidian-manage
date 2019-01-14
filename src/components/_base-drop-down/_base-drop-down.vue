@@ -149,7 +149,7 @@
         background: $color-white
         z-index: 300
         position: absolute
-        width: 100%
+        min-width: 100%
         border-radius: 3px
         box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.20)
         margin-top: 10px

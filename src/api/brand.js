@@ -33,14 +33,16 @@ function _changeData(res) {
   let arr = []
   arr = res.data.map(item => {
     return {
-      storeName: item.industry_name,
+      storeName: item.name,
       name: item.nickname,
       phone: item.agent_mobile,
       num: item.store_num,
       actived: item.actived,
-      date: item.open_time,
-      status: item.status,
-      url: item.logo.url
+      date: item.created_at,
+      type: item.type,
+      url: item.logo.url,
+      id: item.id
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

@@ -79,6 +79,12 @@
       isLight: false,
       children: [
         {
+          title: '商品管理',
+          url: '/home/content-manage/goods-manage',
+          isRouter: true,
+          isLight: false
+        },
+        {
           title: '服务管理',
           url: '/home/content-manage/service-manage',
           isRouter: true,
@@ -246,6 +252,7 @@
     },
     methods: {
       navHandle(item, index, father) {
+        this.$modal.hideShade()
         if (Date.now() - this.nowTime < 50) {
           return
         }
@@ -310,12 +317,13 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  $tab-height = 60px
+  $tab-height = 72px
   $color-menu-tag = #FF533C
   $color-menu-text = #6E748B
   $color-menu-text-active = #fff
   $color-menu-bg-active = rgba(255, 255, 255, 0.1)
   $color-menu-bg = rgba(255, 255, 255, 0)
+  $color-menu-child-bg = #1B2029
   $color-white = #fff
   $menu-width=200px
   @import "~@design"
@@ -371,14 +379,16 @@
           background :$color-main
           transition :all 0.3s
           &.active
-            height :20px
+            height :72px
             &.no-border
               height :0
         &:hover
           background: $color-menu-bg-active
         &.active
           //border-left: 5px solid $color-main
-          background: $color-menu-bg-active
+          //background: $color-menu-bg-active
+          color: #E2F0F5
+          background: $color-menu-child-bg
           &.no-border
             border-color: transparent
           & > p
@@ -387,6 +397,8 @@
             icon-image('icon-pressed_select')
             &.rotate
               transform: rotate(90deg)
+        &.no-border
+          background: $color-menu-bg
         p
           flex: 1
           overflow: hidden
@@ -414,13 +426,12 @@
         .child
           width: 100%
           layout()
-          background: $color-menu-bg
+          background: $color-menu-child-bg
           align-items: center
           justify-content: center
           flex: 1
           box-sizing :border-box
           border-left: 0px solid transparent
-          margin: 5px 0
           transition: all .2s
           position :relative
           .flag
@@ -439,6 +450,6 @@
             background: $color-menu-bg-active
           &.active
             //border-left: 0px solid $color-main
-            background: $color-menu-bg-active
-            color: $color-white
+            //background: $color-menu-bg-active
+            color: #E2F0F5
 </style>

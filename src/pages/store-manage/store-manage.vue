@@ -10,10 +10,8 @@
       <div class="list-header">
         <div v-for="(item, index) in headerList"
              :key="index"
-             :class="{'handle': index === 4 || index === 5 || index === 6}"
              class="header-key"
              :style="{flex: item.width}"
-             @click="handleClick(index)"
         >
           <span class="contxt" :class="`${headClass[`class${index}`]}`">{{item.name}}</span>
         </div>
@@ -28,12 +26,13 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <div v-else class="img"></div>
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
               <span class="handle-item" @click="openPop('look', item)">查看</span>
-              <span class="handle-item" @click="openPop('freeze', item)">{{item.is_freeze_str === '正常' ? '冻结' : '解冻'}}</span>
+              <span class="handle-item" @click="openPop('freeze', item)">{{+item.status === 3 ? '解冻' : '冻结'}}</span>
             </div>
           </div>
         </div>
@@ -45,13 +44,13 @@
     <div v-show="showPop" class="pop-box">
       <div class="pop-content" :class="showActive ? 'model-active' : 'model-noactive'">
         <header class="title">
-          <span>圣诞节分开了圣诞节</span>
+          <span>{{popName}}</span>
           <span class="closePop" @click="closePop"></span>
         </header>
         <div v-if="showPopContent === 1 || showPopContent === 2" class="pop-main">
           <div v-if="showPopContent === 1" class="input-box-big">
             <span class="after"></span>
-            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <textarea v-model="popTxt" class="popTxt" maxlength="100" placeholder="备注原因"></textarea>
             <span class="before"></span>
           </div>
           <div v-if="showPopContent === 2" class="reasonTxt">冻结原因：{{reasonTxt}}</div>
@@ -82,7 +81,7 @@
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'money', class: 'item'},
-    {name: '开通时间', width: '1', value: 'date', class: 'item'},
+    {name: '开通时间', width: '1.5', value: 'date', class: 'item'},
     {name: '操作', width: '1', value: '', class: 'item handle'}
   ]
   export default {
@@ -118,7 +117,9 @@
         showPopContent: '',
         loadImg: false,
         codeUrl: '',
-        reasonTxt: ''
+        popTxt: '',
+        reasonTxt: '',
+        merchant_id: ''
       }
     },
     created() {
@@ -132,8 +133,6 @@
             this.data = res.arr
           })
         this.getExcelUrl()
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
       // 导出地址
       getExcelUrl() {
@@ -143,8 +142,8 @@
             query += `&${item}=${this.requestData[item]}`
           }
         }
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/stores/report?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -209,27 +208,60 @@
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
-        this.popName = item.name
         this.merchant_id = item.id
         switch (type) {
         case 'freeze':
-          if (item.is_freeze_str === '正常') {
-            this.showPopContent = 1
-          } else {
+          if (+item.status === 3) {
+            this.popName = `解冻${item.storeName}店铺`
+            this.reasonTxt = item.reason
             this.showPopContent = 2
+          } else {
+            this.popName = `冻结${item.storeName}店铺`
+            this.showPopContent = 1
           }
           break
         case 'look':
+          this.viewQrcode()
+          this.popName = '查看"'+item.storeName+'"店铺'
           this.showPopContent = 3
           break
         }
       },
+      viewQrcode() {
+        this.loadImg = true
+        API.Store.getQrcode(this.merchant_id)
+          .then((res) => {
+            this.loadImg = false
+            this.codeUrl = res.data.image_url
+          })
+      },
       operate() {
+        // 1冻结  2解冻
         if (this.showPopContent === 1) {
-          this.closePop()
+          this.frozenStore()
         } else {
-          this.closePop()
+          this.unFrozenStore()
         }
+      },
+      frozenStore() {
+        if (!this.popTxt || this.popTxt.replace(/^\s+|\s+$/g, '') === '') {
+          this.$refs.toast.show('请填写冻结原因')
+          return
+        }
+        API.Store.freeze({switch: 0, reason: this.popTxt, id: this.merchant_id})
+          .then((res) => {
+            this.$toast.show(res.message)
+            this.getList()
+          })
+        this.closePop()
+      },
+      unFrozenStore() {
+        API.Store.freeze({switch: 1, reason: this.reasonTxt, id: this.merchant_id})
+          .then(res => {
+            this.$toast.show(res.message)
+            this.getList()
+          })
+        this.closePop()
       },
       closePop() {
         // 关闭弹窗
@@ -287,6 +319,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
         .handle
@@ -342,12 +375,14 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1
           .list-handle
             color: $color-main
             white-space: nowrap
+            user-select: none
             .handle-item
               padding: 0 7px
               border-left: 0.5px solid #B5B5B5
@@ -398,7 +433,7 @@
         padding: 20px 30px
         text-align: left
         .input-box-big
-          input-animate(#999, 0px, 471px, 91px)
+          textarea-animate(471px, 91px, 0px, #999)
         .popTxt
           padding: 8px
           resize: none
@@ -485,4 +520,5 @@
         height: 260px
         justify-content: center
         align-items: center
+        user-select: none
 </style>

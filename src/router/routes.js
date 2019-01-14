@@ -34,6 +34,13 @@ export default [
         title: '用户管理',
         component: () => lazyLoadView(import('@pages/user-manage/user-manage'))
       },
+      // 商品管理
+      {
+        path: 'content-manage/goods-manage',
+        name: 'goods-manage',
+        title: '商品管理',
+        component: () => lazyLoadView(import('@pages/goods-manage/goods-manage'))
+      },
       // 服务管理
       {
         path: 'content-manage/service-manage',

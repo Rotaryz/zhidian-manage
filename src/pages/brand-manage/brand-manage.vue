@@ -27,13 +27,14 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已激活' : '未激活'}}</span>
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <div v-else class="img"></div>
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
-              <span class="handle-item" :class="{'grey': +item[val.value] !== 0}" @click="openPop(item)">开通</span>
+              <span class="handle-item" :class="{'grey': +item.type !== 0}" @click="openPop(item)">开通</span>
             </div>
           </div>
         </div>
@@ -45,25 +46,11 @@
     <div v-show="showPop" class="pop-box">
       <div class="pop-content" :class="showActive ? 'model-active' : 'model-noactive'">
         <header class="title">
-          <span>圣诞节分开了圣诞节</span>
+          <span>开通</span>
           <span class="closePop" @click="closePop"></span>
         </header>
         <div class="pop-main">
-          <p class="end-time">
-            <span class="type">到期时间: </span>
-            {{endTime}}
-          </p>
-          <p class="add-time">
-            <span class="type">延迟至</span>
-            <el-date-picker
-              v-model="addTime"
-              type="date"
-              placeholder="选择日期"
-              size="mini"
-              style="width:180px"
-            >
-            </el-date-picker>
-          </p>
+          <p class="tip-txt">确定开通“{{openItem.storeName}}”品牌的多店功能吗？</p>
           <div class="content-btn">
             <div class="btn" @click="closePop">取消</div>
             <div class="btn active" @click="openBusiness">确定</div>
@@ -84,8 +71,8 @@
     {name: '手机', width: '1', value: 'phone', class: 'item'},
     {name: '门店', width: '1', value: 'num', class: 'item'},
     {name: '状态', width: '1', value: 'actived', class: 'item status'},
-    {name: '开通时间', width: '1', value: 'date', class: 'item'},
-    {name: '操作', width: '1', value: 'status', class: 'item handle'}
+    {name: '开通时间', width: '1.3', value: 'date', class: 'item'},
+    {name: '操作', width: '1', value: 'type', class: 'item handle'}
   ]
   export default {
     name: PAGE_NAME,
@@ -107,7 +94,7 @@
           show: false,
           content: '品牌类型',
           type: 'default',
-          data: [{name: '单店', id: 0}, {name: '多店', id: 1}]
+          data: [{name: '全部', id: ''}, {name: '单店', id: 0}, {name: '多店', id: 1}]
         },
         pageDetail: {
           total: 1,
@@ -118,7 +105,6 @@
         endTime: '',
         showPop: false,
         showActive: false,
-        popName: '',
         openItem: {}
       }
     },
@@ -163,28 +149,20 @@
         this.getList()
       },
       openPop(item) {
+        if (+item.type !== 0) return
         // 打开弹窗
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
-        this.popName = item.name
         this.openItem = item
       },
       openBusiness() {
-        if (!this.addTime) {
-          this.$toast.show('请选择延迟日期')
-          return
-        }
-        if (new Date(this.expire_time) < new Date(this.endTime)) {
-          this.$toast.show('选择日期应大于到期日期')
-          return
-        }
         this.closePop()
-        API.Brand.open(this.openItem.store_id)
+        API.Brand.open(this.openItem.id)
           .then(res => {
             this.$toast.show('开通成功')
+            this.getList()
           })
-
       },
       closePop() {
         // 关闭弹窗
@@ -243,6 +221,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 10px
           &:last-child
             flex: 1.5
       .list-content
@@ -271,6 +250,7 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1
@@ -293,6 +273,7 @@
             white-space: nowrap
             .handle-item
               cursor: pointer
+              user-select: none
             .grey
               color: #999
     .bot-page
@@ -334,8 +315,13 @@
       .pop-main
         padding: 20px 30px
         text-align: left
-        .input-box-big
-          input-animate(#999, 0px, 471px, 91px)
+        .tip-txt
+          margin-top: 20px
+          padding-bottom: 30px
+          display: flex
+          align-items: center
+          font-size: $font-size-16
+          color: $color-text-main
         .content-btn
           display: flex
           justify-content: flex-end
@@ -352,14 +338,13 @@
             line-height: 40px
             font-size: 16px
             color: $color-text-main
-            transition: all 0.4s ease-out
+            transition: all 0.3s ease-out
             &.active
               background: #4985FC
               color: #FFF
               border: 0
               margin-left: 20px
             &:hover
-              transition: all 0.4s ease-out
               font-size: 17px
         .type
           display: inline-block

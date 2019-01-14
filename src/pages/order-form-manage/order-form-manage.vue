@@ -18,7 +18,7 @@
       <div class="content-top">
         <div class="left">
           <div class="status">
-            <sizer-group @change="checkTime"></sizer-group>
+            <sizer-group ref="sizer" @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
           </div>
           <base-search placeHolder="请输入订单号" @search="search"></base-search>
         </div>
@@ -54,7 +54,8 @@
               :style="{flex: val.width}"
               class="item-box"
             >
-              <span :class="val.class">{{item[val.value] + '' || '---'}}</span>
+              <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+              <span v-else :class="val.class">x{{item[val.value] + '' || '0'}}</span>
             </div>
           </div>
         </div>
@@ -73,14 +74,14 @@
   const PAGE_NAME = 'ORDER_FORM'
   const TITLE = '订单管理'
   const TAB_LIST = [
-    {name: '订单号', width: '1', value: 'code', class: 'item'},
-    {name: '商品信息', width: '1', value: 'title', class: 'item'},
+    {name: '订单号', width: '1.4', value: 'code', class: 'item'},
+    {name: '商品信息', width: '1.8', value: 'title', class: 'item'},
     {name: '单价', width: '1', value: 'price', class: 'item'},
-    {name: '数量', width: '1', value: 'num', class: 'item'},
+    {name: '数量', width: '1', value: 'num', class: 'item count'},
     {name: '实付金额', width: '1', value: 'total', class: 'item'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '下单用户', width: '1', value: 'customer', class: 'item'},
-    {name: '下单时间', width: '1', value: 'date', class: 'item'},
+    {name: '下单时间', width: '1.4', value: 'date', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item'}
   ]
   export default {
@@ -108,7 +109,7 @@
           limit: 10
         },
         orderType: ['', 1, 4, 7], // 业务类型 1服务 4团购 7砍价
-        status: ['', 'waiting_received', 'payment', 'finish', 'close', 'waiting_groupon', 'refund'], // 全部，待使用|待结算，待付款，已完成，已关闭，待成团，已退款
+        status: ['', 'payment', 'waiting_received', 'finish', 'close', 'waiting_groupon', 'refund'], // 全部，待付款，待使用|待结算，已完成，已关闭，待成团，已退款
         pageDetail: {
           total: 1,
           per_page: 10,
@@ -116,7 +117,8 @@
         },
         excelUrl: '',
         tabInd: 0,
-        tabIdx: 0
+        tabIdx: 0,
+        defaultIndex: 4
       }
     },
     created() {
@@ -131,8 +133,6 @@
             this.data = res.arr
           })
         this.getExcelUrl()
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}`
       },
       // 导出地址
       getExcelUrl() {
@@ -142,8 +142,8 @@
             query += `&${item}=${this.requestData[item]}`
           }
         }
-        let accessToken = `access_token=${this.$storage.get('aiToken')}`
-        this.excelUrl = `${BASE_URL.api}/api/admin/merchant-list-export?${accessToken}&${query}`
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/order/export?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -153,6 +153,7 @@
         this.getList()
       },
       changeType(index, item) {
+        if (index === this.tabInd) return
         this.requestData = {
           order_sn: '',
           status: '',
@@ -163,12 +164,14 @@
           page: 1,
           limit: 10
         }
+        this.$refs.sizer._setTabIndex(4)
         this.$refs.pageDetail.beginPage()
         this.tabIdx = 0
         this.tabInd = index
         this.getList()
       },
       changeTab(index, item) {
+        if (index === this.tabIdx) return
         this.requestData.status = this.status[index]
         this.tabIdx = index
         this.getList()
@@ -264,7 +267,7 @@
       .status
         margin-right: 10px
     .status-tab
-      border-bottom: 1px solid $color-line
+      border-bottom: 1px solid #E1E1E1
       width: 100%
       height: 45px
       display: flex
@@ -346,6 +349,7 @@
         .header-key
           flex: 1
           overflow: hidden
+          padding-right: 20px
           &:last-child
             flex: 1.5
       .list-content
@@ -361,7 +365,7 @@
           text-align: left
           .item-box
             no-wrap()
-            padding-right: 10px
+            padding-right: 20px
           .item
             flex: 1
             line-height: 18px

@@ -17,6 +17,14 @@ export default {
   exportList(data, loading = false, toast = true) {
     let url = 'api/admin/withdrawal/export'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+  },
+  /**
+   * 审核
+   * @returns {*}
+   */
+  withdrawal(data, loading = false, toast = false) {
+    let url = `api/admin/withdrawal/check/${data.id}`
+    return request.post(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }
 
@@ -33,7 +41,10 @@ function _changeData(res) {
       nickName: item.info.name,
       cardType: item.info.bank,
       cardNum: item.info.withdrawal_card,
-      status: item.status_str
+      status: item.status_str,
+      note: item.note,
+      id: item.id
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {
