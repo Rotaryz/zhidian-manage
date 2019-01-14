@@ -113,11 +113,10 @@
     },
     methods: {
       getList() {
-        API.Brand.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.Brand.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
       },
       // 搜索功能
       search(inputTxt) {
@@ -158,11 +157,10 @@
       },
       openBusiness() {
         this.closePop()
-        API.Brand.open(this.openItem.id)
-          .then(res => {
-            this.$toast.show('开通成功')
-            this.getList()
-          })
+        API.Brand.open(this.openItem.id).then((res) => {
+          this.$toast.show('开通成功')
+          this.getList()
+        })
       },
       closePop() {
         // 关闭弹窗

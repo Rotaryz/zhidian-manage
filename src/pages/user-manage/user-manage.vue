@@ -3,7 +3,7 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime" :defaultIndex="defaultIndex"></sizer-group>
+          <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
         <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
       </div>
@@ -93,11 +93,10 @@
     },
     methods: {
       getList() {
-        API.User.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.User.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址

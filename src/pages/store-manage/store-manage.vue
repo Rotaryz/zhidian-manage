@@ -127,11 +127,10 @@
     },
     methods: {
       getList() {
-        API.Store.getList(this.requestData)
-          .then(res => {
-            this.pageDetail = res.obj
-            this.data = res.arr
-          })
+        API.Store.getList(this.requestData).then((res) => {
+          this.pageDetail = res.obj
+          this.data = res.arr
+        })
         this.getExcelUrl()
       },
       // 导出地址
@@ -222,18 +221,17 @@
           break
         case 'look':
           this.viewQrcode()
-          this.popName = '查看"'+item.storeName+'"店铺'
+          this.popName = '查看"' + item.storeName + '"店铺'
           this.showPopContent = 3
           break
         }
       },
       viewQrcode() {
         this.loadImg = true
-        API.Store.getQrcode(this.merchant_id)
-          .then((res) => {
-            this.loadImg = false
-            this.codeUrl = res.data.image_url
-          })
+        API.Store.getQrcode(this.merchant_id).then((res) => {
+          this.loadImg = false
+          this.codeUrl = res.data.image_url
+        })
       },
       operate() {
         // 1冻结  2解冻
@@ -248,19 +246,17 @@
           this.$refs.toast.show('请填写冻结原因')
           return
         }
-        API.Store.freeze({switch: 0, reason: this.popTxt, id: this.merchant_id})
-          .then((res) => {
-            this.$toast.show(res.message)
-            this.getList()
-          })
+        API.Store.freeze({switch: 0, reason: this.popTxt, id: this.merchant_id}).then((res) => {
+          this.$toast.show(res.message)
+          this.getList()
+        })
         this.closePop()
       },
       unFrozenStore() {
-        API.Store.freeze({switch: 1, reason: this.reasonTxt, id: this.merchant_id})
-          .then(res => {
-            this.$toast.show(res.message)
-            this.getList()
-          })
+        API.Store.freeze({switch: 1, reason: this.reasonTxt, id: this.merchant_id}).then((res) => {
+          this.$toast.show(res.message)
+          this.getList()
+        })
         this.closePop()
       },
       closePop() {

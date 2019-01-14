@@ -68,8 +68,18 @@
       },
       dateChange(time, type) {
         let date = []
-        date.push(time[0].toLocaleDateString().replace(/\//g, '-').replace(/\b\d\b/g, '0$&'))
-        date.push(time[1].toLocaleDateString().replace(/\//g, '-').replace(/\b\d\b/g, '0$&'))
+        date.push(
+          time[0]
+            .toLocaleDateString()
+            .replace(/\//g, '-')
+            .replace(/\b\d\b/g, '0$&')
+        )
+        date.push(
+          time[1]
+            .toLocaleDateString()
+            .replace(/\//g, '-')
+            .replace(/\b\d\b/g, '0$&')
+        )
         this.$emit('change', date, type)
       },
       checkTab(item, index) {
