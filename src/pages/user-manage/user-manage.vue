@@ -53,7 +53,6 @@
     {name: '手机号', width: '1', value: 'phone', class: 'item'},
     {name: '交易订单', width: '1', value: 'num', class: 'item'},
     {name: '总消费', width: '1', value: 'money', class: 'item'},
-    {name: '来源', width: '1', value: 'source', class: 'item'},
     {name: '注册时间', width: '1', value: 'date', class: 'item'}
   ]
   export default {

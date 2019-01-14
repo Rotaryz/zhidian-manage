@@ -27,12 +27,12 @@ function _changeData(res) {
       head: item.avatar,
       name: item.nickname,
       sex: item.sex,
-      addr: item.paied_order_amount + item.city,
+      addr: item.country + item.province + item.city,
       phone: item.mobile,
       num: item.paied_order_num,
       money: item.paied_order_amount,
-      source: item.source,
-      date: item.open_time
+      date: item.created_at
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

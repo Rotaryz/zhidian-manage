@@ -3,10 +3,10 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
         <div class="status">
-          <base-drop-down :select="dispatchSelect" :defaultIndex="defaultIndex" @setValue="setValue"></base-drop-down>
+          <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         </div>
         <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
@@ -27,19 +27,20 @@
           <div
             v-for="(val, ind) in headerList"
             :key="ind"
+            :class="{'noOver':val.name === '提现状态'}"
             :style="{flex: val.width}"
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <div v-if="val.class === 'item status'" class="item status" @mouseenter="showText(index)" @mouseleave="hideText">
+            <div v-if="val.class === 'item status'" class="item status hand" @mouseenter="showText(index)" @mouseleave="hideText">
               <span class="txt-content">{{item.status}}</span>
               <span v-if="item.status === '审核不通过'" class="icon"></span>
               <transition name="fade">
-                <div class="tip-text" v-show="item.status === '审核不通过' && enterIndex * 1 === index">{{item.note || '未查到原因'}}</div>
+                <div class="tip-text" v-show="item.status === '审核不通过' && enterIndex === index">{{item.note || '未查到原因'}}</div>
               </transition>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
-              <span class="handle-item" @click="openPop(item)">审核</span>
+              <span v-if="item.status === '待审核'" class="handle-item" @click="openPop(item)">审核</span>
             </div>
           </div>
         </div>
@@ -52,9 +53,20 @@
     <div v-show="showPop" class="pop-box">
       <div class="pop-content" :class="showActive ? 'model-active' : 'model-noactive'">
         <header class="title">
-          <span>监考老师的积分</span>
+          <span>审核</span>
           <span class="closePop" @click="closePop"></span>
         </header>
+        <div class="pop-main">
+          <div class="input-box-big">
+            <span class="after"></span>
+            <textarea v-model="popTxt" class="popTxt" placeholder="备注原因"></textarea>
+            <span class="before"></span>
+          </div>
+          <div class="model-btn">
+            <div class="btn" @click="upWithdrawAudit(1)">审核通过</div>
+            <div class="btn" @click="upWithdrawAudit(2)">审核不通过</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -104,7 +116,7 @@
           show: false,
           content: '处理状态',
           type: 'default',
-          data: [{name: '待审核', id: 0}, {name: '微信受理成功', id: 1}, {name: '审核不通过', id: 2}, {name: '微信打款成功', id: 3}, {name: '微信打款失败', id: 4}]
+          data: [{name: '全部', id: ''}, {name: '待审核', id: 0}, {name: '微信受理成功', id: 1}, {name: '审核不通过', id: 2}, {name: '微信打款成功', id: 3}, {name: '微信打款失败', id: 4}]
         },
         pageDetail: {
           total: 1,
@@ -113,11 +125,10 @@
         },
         showPop: false,
         showActive: false,
-        popName: '',
-        merchant_id: '',
-        showPopContent: '',
+        withId: '',
         enterIndex: '',
-        defaultIndex: 4
+        defaultIndex: 4,
+        popTxt: ''
       }
     },
     created() {
@@ -172,8 +183,37 @@
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
-        this.popName = item.name
-        this.merchant_id = item.id
+        this.withId = item.id
+      },
+      upWithdrawAudit(index) {
+        if (this.popTxt.length === 0 && index * 1 === 2) {
+          this.$toast.show('请填写审核原因')
+          return
+        }
+        let data = {
+          status: index, // 1同意 2拒绝
+          id: this.withId,
+          note: this.popTxt
+        }
+        API.CashApply.withdrawal(data)
+          .then(res => {
+            this.$emit('showToast', '提交成功')
+            this.getList()
+            this.showActive = false
+            setTimeout(() => {
+              this.$modal.hideShade()
+              this.showPop = false
+            }, 200)
+          })
+          .catch(res => {
+            this.showActive = false
+            this.getList()
+            setTimeout(() => {
+              this.$modal.hideShade()
+              this.showPop = false
+              this.$toast.show(res.message)
+            }, 200)
+          })
       },
       closePop() {
         // 关闭弹窗
@@ -248,12 +288,16 @@
           .item-box
             no-wrap()
             padding-right: 10px
+          .noOver
+            overflow: visible
           .item
             flex: 1
             line-height: 18px
           .status
             display: flex
+            overflow: visible
             align-items: center
+            position: relative
             .icon
               width: 14px
               height: 14px
@@ -261,9 +305,9 @@
               icon-image(icon-help)
             .tip-text
               position: absolute
-              font-size: $font-size-medium14
-              color: $color-text33
-              font-family: $fontFamilyRegular
+              font-size: $font-size-14
+              color: $color-text-main
+              font-family: $font-family-regular
               min-width: 182px
               padding: 0 5px
               background: #fff
@@ -272,8 +316,9 @@
               text-align: center
               border-radius: 3px
               word-break: break-all
+              white-space: normal
               bottom: 20px
-              left: -77px
+              right: -13px
               z-index: 11
               margin: auto
               box-shadow: 0 1px 4px 0 rgba(12, 6, 14, 0.20)
@@ -294,19 +339,15 @@
                 opacity: 0
               &.fade-enter-to, &.fade-leave-to
                 transition: all .4s ease-in-out
-    .list-handle
-      color: $color-main
-      white-space: nowrap
-      .handle-item
-        padding: 0 7px
-        border-left: 0.5px solid #B5B5B5
-        cursor: pointer
-        height: 14px
-        line-height: 14px
-        display: inline-block
-      &:first-child
-        border-left: 0
-        padding-left: 0
+          .list-handle
+            color: $color-main
+            white-space: nowrap
+            .handle-item
+              padding: 0 7px
+              cursor: pointer
+              height: 14px
+              line-height: 14px
+              display: inline-block
     .bot-page
       height: 60px
       display: flex
@@ -347,7 +388,7 @@
           padding: 20px 30px
           text-align: left
           .input-box-big
-            input-animate(#999, 0px, 471px, 91px)
+            textarea-animate(471px, 91px, 0px, #999)
           .popTxt
             padding: 8px
             resize: none
@@ -359,79 +400,28 @@
             border: 0.5px solid $color-line
             &::-webkit-input-placeholder
               color: #CCC
-          .reasonTxt
-            padding: 8px
-            resize: none
-            font-size: 14px
-            width: 100%
-            height: 90px
-            box-sizing: border-box
-            border: 0.5px solid $color-line
-            color: $color-text-main
-            background: #f5f7fb
-          .content-btn
-            display: flex
-            justify-content: flex-end
-            margin-top: 27px
+          .model-btn
+            layout(row)
+            align-items: center
+            justify-content: center
+            margin-top: 20px
             .btn
-              width: 96px
+              width: 94px
               height: 40px
-              cursor: pointer
-              border: 0.5px solid #ccc
-              border-radius: 3px
-              text-align: center
-              box-sizing: border-box
-              font-family: $font-family-regular
               line-height: 40px
-              font-size: 16px
-              color: $color-text-main
+              background: $color-main
+              border-radius: 3px
+              margin: 0 27px
+              font-family: $font-family-medium
+              font-size: $font-size-16
+              color: #FFF
+              cursor: pointer
+              text-align: center
               transition: all 0.4s ease-out
-              &.active
-                background: #4985FC
-                color: #FFF
-                border: 0
-                margin-left: 20px
+              &:nth-child(2)
+                background: #EF705D
               &:hover
                 transition: all 0.4s ease-out
                 font-size: 17px
-          .type
-            display: inline-block
-            width: 70px
-          .end-time
-            margin-top: 17px
-          .add-time
-            margin-top: 20px
-          .content-btn
-            margin-top: 40px
-          .xcx-img
-            width: 238px
-            height: @width
-          .load-img
-            width: 40px
-            height: 40px
-          .add-call
-            margin-top: 20px
-            padding-bottom: 30px
-            display: flex
-            align-items: center
-            .phone-box
-              margin-left: 10px
-              input-animate(#999, 3px, 181px, 31px, -1px, -1px, -1px)
-            .phone-num
-              width: 180px
-              height: 30px
-              outline: none
-              line-height: 30px
-              border: 0.5px solid $color-line
-              border-radius: 3px
-              padding: 0 5px
-              box-sizing: border-box
-          .cancelPower
-            margin-top: 20px
-            padding-bottom: 40px
-        .code
-          display: flex
-          height: 260px
-          justify-content: center
-          align-items: center
+
 </style>

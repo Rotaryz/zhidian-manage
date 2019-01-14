@@ -22,17 +22,17 @@ export default {
    * 冻结/解冻
    * @returns {*}
    */
-  freeze(id, loading = false, toast = true) {
-    let url = `api/admin/stores/${id}/freeze`
-    return request.post(url, {}, loading, toast, API_DEFAULT_MIDDLE_FN)
+  freeze(data, loading = false, toast = true) {
+    let url = `api/admin/stores/${data.id}/freeze`
+    return request.post(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
   /**
    * 获取二维码
    * @returns {*}
    */
-  getQrcode(data, id, loading = false, toast = true) {
+  getQrcode(id, loading = false, toast = true) {
     let url = `api/admin/stores/${id}/qrcode`
-    return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+    return request.get(url, {}, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }
 
@@ -40,15 +40,18 @@ function _changeData(res) {
   let arr = []
   arr = res.data.map(item => {
     return {
-      storeName: item.industry_name,
+      storeName: item.name,
       name: item.employee.nickname,
       phone: item.employee.mobile,
       brand: item.merchant.name,
       business: item.visited_num,
       code: item.paied_order_num,
       money: item.paied_order_amount,
-      date: item.open_time,
-      url: item.logo && item.logo.url
+      date: item.created_at,
+      url: item.logo && item.logo.url,
+      id: item.id,
+      status: item.status
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

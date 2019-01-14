@@ -56,7 +56,7 @@
   const PAGE_NAME = 'ACTIVITY_MANAGE'
   const TITLE = '活动管理'
   const TAB_LIST = [
-    {name: '服务', width: '2', value: 'title', class: 'item head'},
+    {name: '活动', width: '2', value: 'title', class: 'item head'},
     {name: '价格', width: '1', value: 'price', class: 'item'},
     {name: '类型', width: '1', value: 'type', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item status'},
@@ -90,7 +90,7 @@
           show: false,
           content: '活动类型',
           type: 'default',
-          data: [{name: '拼团', id: '1'}, {name: '砍价', id: '3'}]
+          data: [{name: '全部', id: ''}, {name: '拼团', id: '1'}, {name: '砍价', id: '3'}]
         },
         pageDetail: {
           total: 1,

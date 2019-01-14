@@ -26,12 +26,13 @@ function _changeData(res) {
     return {
       title: item.title,
       price: item.platform_price,
-      num: item.platform_price,
+      num: item.browse_count,
       stock: item.sale_count,
       status: item.is_online,
       source: item.source,
       date: item.created_at,
       url: item.image_url
+      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

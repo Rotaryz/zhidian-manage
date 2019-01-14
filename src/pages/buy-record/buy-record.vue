@@ -3,10 +3,10 @@
     <div class="content-top">
       <div class="left">
         <div class="status">
-          <sizer-group @change="checkTime"></sizer-group>
+          <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
         <div class="status">
-          <base-drop-down :select="dispatchSelect" :defaultIndex="defaultIndex" @setValue="setValue"></base-drop-down>
+          <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         </div>
         <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
@@ -82,7 +82,7 @@
           show: false,
           content: '交易类型',
           type: 'default',
-          data: [{name: '退款', id: 1}, {name: '支付', id: 0}]
+          data: [{name: '全部', id: ''}, {name: '退款', id: 1}, {name: '支付', id: 0}]
         },
         pageDetail: {
           total: 1,

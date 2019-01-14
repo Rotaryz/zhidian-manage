@@ -246,6 +246,7 @@
     },
     methods: {
       navHandle(item, index, father) {
+        this.$modal.hideShade()
         if (Date.now() - this.nowTime < 50) {
           return
         }
