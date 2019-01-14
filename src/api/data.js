@@ -44,7 +44,7 @@ function _resolveGetTotalChartData(res) {
     xBetweenData.push(item.at_between) // x 轴 间隔的值
     seriesData.potential_num.push(_DEFAULT_NUM(item.potential_num))
     seriesData.consume_num.push(_DEFAULT_NUM(item.consume_num))
-    seriesData.shop_num.push(_DEFAULT_NUM(item.invite_num))
+    seriesData.shop_num.push(_DEFAULT_NUM(item.store_num))
     seriesData.submit_num.push(_DEFAULT_NUM(item.submit_num))
     seriesData.pay_num.push(_DEFAULT_NUM(item.pay_num))
     seriesData.refund_num.push(_DEFAULT_NUM(item.refund_num))
