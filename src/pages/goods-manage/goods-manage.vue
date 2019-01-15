@@ -106,12 +106,12 @@
       }
     },
     created() {
-      this.getServiceList()
+      this.getList()
     },
     methods: {
       // 获取列表
-      getServiceList() {
-        API.Service.getServiceList(this.requestData).then((res) => {
+      getList() {
+        API.Goods.getList(this.requestData).then((res) => {
           this.pageDetail = res.obj
           this.data = res.arr
         })
@@ -145,7 +145,7 @@
           page: 1,
           limit: 10
         }
-        this.getServiceList()
+        this.getList()
       },
       // 排序方式选择
       handleClick(num) {
@@ -184,7 +184,7 @@
         }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        this.getServiceList()
+        this.getList()
       },
       // 自定义日期选择
       checkTime(status) {
@@ -199,12 +199,12 @@
         }
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
-        this.getServiceList()
+        this.getList()
       },
       // 翻页
       addPage(num) {
         this.requestData.page = num
-        this.getServiceList()
+        this.getList()
       }
     }
   }

@@ -10,6 +10,7 @@
         </div>
         <base-search placeHolder="请输入订单号" @search="search"></base-search>
       </div>
+      <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
     <div class="content-list">
       <div class="list-header">
@@ -74,6 +75,7 @@
 
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
+  import {BASE_URL} from '@utils/config'
   import API from '@api'
   const PAGE_NAME = 'CASH_APPLY'
   const TITLE = '提现记录'
@@ -117,7 +119,7 @@
           content: '处理状态',
           type: 'default',
           data: [
-            {name: '全部', id: ''},
+            {name: '全部', id: '-1'},
             {name: '待审核', id: 0},
             {name: '微信受理成功', id: 1},
             {name: '审核不通过', id: 2},
@@ -135,7 +137,8 @@
         withId: '',
         enterIndex: '',
         defaultIndex: 4,
-        popTxt: ''
+        popTxt: '',
+        excelUrl: ''
       }
     },
     created() {
@@ -148,6 +151,18 @@
           this.pageDetail = res.obj
           this.data = res.arr
         })
+        this.getExcelUrl()
+      },
+      // 导出地址
+      getExcelUrl() {
+        let query = ''
+        for (let item in this.requestData) {
+          if (item !== 'limit' && item !== 'page') {
+            query += `&${item}=${this.requestData[item]}`
+          }
+        }
+        let accessToken = `access_token=${this.$storage.get('token')}`
+        this.excelUrl = `${BASE_URL.api}/api/admin/withdrawal/export?${accessToken}&${query}`
       },
       // 搜索功能
       search(inputTxt) {
@@ -326,7 +341,7 @@
               word-break: break-all
               white-space: normal
               bottom: 20px
-              right: -12px
+              right: 0
               z-index: 11
               margin: auto
               box-shadow: 0 1px 4px 0 rgba(12, 6, 14, 0.20)
@@ -335,7 +350,7 @@
                 position: absolute
                 height: 0
                 left: 0
-                right: 23px
+                right: 0
                 margin: auto
                 width: 0
                 bottom: -6px

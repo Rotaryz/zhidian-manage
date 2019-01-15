@@ -8,7 +8,7 @@
         <div class="status">
           <base-drop-down :select="dispatchSelect" @setValue="setValue"></base-drop-down>
         </div>
-        <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
+        <base-search placeHolder="请输入名称" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
