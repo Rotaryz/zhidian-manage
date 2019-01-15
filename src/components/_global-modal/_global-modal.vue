@@ -1,14 +1,22 @@
 <template>
-  <transition name="fade">
-    <div v-show="isShade" class="base-model">
-      <!-- 弹窗-->
-      <div class="shade-win">
-        <div class="shade-detail" @click.stop>
-          <slot name="shade-box"></slot>
+  <div class="modal">
+    <transition name="fade">
+      <div v-show="isShade" class="base-model">
+        <!-- 弹窗-->
+        <div class="shade-win">
+          <div class="shade-detail" @click.stop>
+            <slot name="shade-box"></slot>
+          </div>
         </div>
       </div>
+    </transition>
+    <div class="content-base">
+      <div v-if="showNull" class="blank">
+        <div class="blank-icon"></div>
+        <div class="blank-title">暂无相关数据</div>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -18,7 +26,8 @@
     props: {},
     data() {
       return {
-        isShade: false
+        isShade: false,
+        showNull: false
       }
     },
     methods: {
@@ -27,6 +36,12 @@
       },
       hideShade() {
         this.isShade = false
+      },
+      showNoData() {
+        this.showNull = true
+      },
+      hideNoData() {
+        this.showNull = false
       }
     }
   }
@@ -62,4 +77,27 @@
       border-radius: 3px
       background: $color-white
       width: 534px
+
+  .content-base
+    padding: 1.5vw
+    flex: 1
+    display: flex
+    flex-direction: column
+    box-sizing: border-box
+    .blank
+      row-center()
+      top: 55%
+      text-align: center
+      z-index: 1
+      &.fade-enter, &.fade-leave-to
+        opacity: 0
+      &.fade-enter-to, &.fade-leave-to
+        transition: opacity .2s ease-in-out
+      .blank-icon
+        icon-image('icon-null')
+        width: 140px
+        height: 89px
+        margin-bottom: 30px
+      .blank-title
+        color: $color-text99
 </style>
