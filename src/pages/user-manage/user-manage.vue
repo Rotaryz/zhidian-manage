@@ -31,7 +31,7 @@
             <span v-if="val.class === 'item sex'" :class="val.class">{{+item[val.value] === 1 ? '男' : item[val.value] === 2 ? '女' : '未知'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item[val.value]" :src="item[val.value]" class="img" alt="">
-              <div v-else class="img"></div>
+              <img v-else :src="defaultUrl" class="img">
             </div>
           </div>
         </div>
@@ -45,6 +45,7 @@
 
 <script type="text/ecmascript-6">
   import {BASE_URL} from '@utils/config'
+  import {HEAD_IMAGE} from '@utils/constant'
   import SizerGroup from '@components/sizer-group/sizer-group'
   import API from '@api'
   const PAGE_NAME = 'USER_MANAGE'
@@ -85,7 +86,8 @@
           total_page: 1
         },
         defaultIndex: 4,
-        excelUrl: ''
+        excelUrl: '',
+        defaultUrl: HEAD_IMAGE
       }
     },
     created() {

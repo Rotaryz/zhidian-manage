@@ -32,7 +32,7 @@ function _changeData(res) {
   let arr = []
   arr = res.data.map(item => {
     return {
-      orderCode: item.created_at,
+      orderCode: item.withdraw_sn,
       date: item.created_at,
       account: item.account,
       canCashMoney: item.remaining,

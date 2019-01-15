@@ -27,7 +27,7 @@
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
-              <div v-else class="img"></div>
+              <img v-else :src="defaultUrl" class="img">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -60,8 +60,8 @@
           </div>
         </div>
         <div v-if="showPopContent === 3" class="pop-main code">
-          <img v-if="!loadImg" key="1" :src="codeUrl" alt="" class="xcx-img">
-          <img v-if="loadImg" key="2" src="./loading.gif" alt="" class="load-img">
+          <img v-if="selectItem.codeUrl" key="1" :src="selectItem.codeUrl" alt="" class="xcx-img">
+          <img v-else key="2" src="./loading.gif" alt="" class="load-img">
         </div>
       </div>
     </div>
@@ -70,6 +70,7 @@
 
 <script type="text/ecmascript-6">
   import {BASE_URL} from '@utils/config'
+  import {HEAD_IMAGE} from '@utils/constant'
   import API from '@api'
   const PAGE_NAME = 'STORE_MANGE'
   const TITLE = '店铺管理'
@@ -117,10 +118,11 @@
         popName: '',
         showPopContent: '',
         loadImg: false,
-        codeUrl: '',
         popTxt: '',
         reasonTxt: '',
-        merchant_id: ''
+        merchant_id: '',
+        selectItem: '',
+        defaultUrl: HEAD_IMAGE
       }
     },
     created() {
@@ -214,6 +216,7 @@
         this.$modal.showShade()
         this.showPop = true
         this.showActive = true
+        this.selectItem = item
         this.merchant_id = item.id
         switch (type) {
         case 'freeze':
@@ -227,17 +230,23 @@
           }
           break
         case 'look':
-          this.viewQrcode()
+          if (!item.codeUrl) {
+            this.viewQrcode()
+          }
           this.popName = '查看"' + item.storeName + '"店铺'
           this.showPopContent = 3
           break
         }
       },
       viewQrcode() {
-        this.loadImg = true
         API.Store.getQrcode(this.merchant_id).then((res) => {
-          this.loadImg = false
-          this.codeUrl = res.data.image_url
+          this.selectItem.codeUrl = res.data.image_url
+          this.data = this.data.map(item => {
+            if (item.id === this.selectItem.id) {
+              item.codeUrl = res.data.image_url
+            }
+            return item
+          })
         })
       },
       operate() {

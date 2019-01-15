@@ -35,7 +35,8 @@
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
-              <img :src="item.url" class="img" alt="">
+              <img v-if="item.url" :src="item.url" class="img" alt="">
+              <img v-else :src="defaultUrl" class="img" alt="">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
 
@@ -51,6 +52,7 @@
 
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
+  import {HEAD_IMAGE} from '@utils/constant'
   import {BASE_URL} from '@utils/config'
   import API from '@api'
   const PAGE_NAME = 'ACTIVITY_MANAGE'
@@ -98,7 +100,8 @@
           total_page: 1
         },
         excelUrl: '',
-        defaultIndex: 4
+        defaultIndex: 4,
+        defaultUrl: HEAD_IMAGE
       }
     },
     created() {
@@ -263,6 +266,7 @@
               height: 40px
               object-fit: cover
               background: #f5f5f5
+              border: 1px solid #D9D9D9
             .txt
               no-wrap()
               flex: 1
