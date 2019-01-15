@@ -33,7 +33,7 @@
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
-              <div v-else class="img"></div>
+              <img v-else :src="defaultUrl" class="img">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
 
@@ -50,6 +50,7 @@
 <script type="text/ecmascript-6">
   import SizerGroup from '@components/sizer-group/sizer-group'
   import {BASE_URL} from '@utils/config'
+  import {HEAD_IMAGE} from '@utils/constant'
   import API from '@api'
   const PAGE_NAME = 'SERVICE_MANAGE'
   const TITLE = '商品管理'
@@ -102,7 +103,8 @@
           total_page: 1
         },
         excelUrl: '', // 表格地址
-        defaultIndex: 4
+        defaultIndex: 4,
+        defaultUrl: HEAD_IMAGE
       }
     },
     created() {

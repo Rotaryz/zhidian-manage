@@ -25,7 +25,7 @@ function _changeData(res) {
   arr = res.data.map(item => {
     return {
       code: item.order_sn,
-      orderCode: item.order_sn,
+      orderCode: item.trade_sn,
       orderMoney: item.total,
       orderType: item.order_type,
       isRefund: item.is_refund,

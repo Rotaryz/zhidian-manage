@@ -30,7 +30,7 @@
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
-              <div v-else class="img"></div>
+              <img v-else :src="defaultUrl" class="img">
               <span class="txt">{{item[val.value] + '' || '---'}}</span>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -62,6 +62,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {HEAD_IMAGE} from '@utils/constant'
   import API from '@api'
   const PAGE_NAME = 'BRAND_MANAGE'
   const TITLE = '品牌管理'
@@ -105,7 +106,8 @@
         endTime: '',
         showPop: false,
         showActive: false,
-        openItem: {}
+        openItem: {},
+        defaultUrl: HEAD_IMAGE
       }
     },
     created() {
@@ -164,8 +166,13 @@
       openBusiness() {
         this.closePop()
         API.Brand.open(this.openItem.id).then((res) => {
-          this.$toast.show('开通成功')
-          this.getList()
+          this.$toast.show('开通2成功')
+          this.data = this.data.map(item => {
+            if (item.id === this.openItem.id) {
+              item.type = 1
+            }
+            return item
+          })
         })
       },
       closePop() {

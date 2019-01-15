@@ -50,10 +50,13 @@ export function defaultMiddleWare(res, ...args) {
     throw new Error('' + res)
   }
   // toast处理
-  if (_this.$ERR_OK !== res.error || res.data == null) {
+  if (_this.$ERR_OK !== res.error) {
     toast && _toastShow(res.message)
     throw new Error(res.message)
   }
+  // if (res.data == null) {
+  //   throw new Error(res.message)
+  // }
   // 自定义函数处理
   if (typeof fn === 'function') {
     res = fn(res)

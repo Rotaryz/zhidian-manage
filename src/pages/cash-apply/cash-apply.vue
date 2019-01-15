@@ -80,16 +80,16 @@
   const PAGE_NAME = 'CASH_APPLY'
   const TITLE = '提现记录'
   const TAB_LIST = [
-    {name: '订单号', width: '1.3', value: 'orderCode', class: 'item'},
-    {name: '提交时间', width: '1.2', value: 'date', class: 'item'},
+    {name: '订单号', width: '1.4', value: 'orderCode', class: 'item'},
+    {name: '提交时间', width: '1.4', value: 'date', class: 'item'},
     {name: '帐号', width: '1', value: 'account', class: 'item'},
     {name: '可提现金额', width: '1', value: 'canCashMoney', class: 'item'},
     {name: '冻结金额', width: '1', value: 'freezeMoney', class: 'item'},
     {name: '提现金额', width: '1', value: 'cashMoney', class: 'item'},
     {name: '真实姓名', width: '1', value: 'nickName', class: 'item'},
     {name: '银行类型', width: '1', value: 'cardType', class: 'item'},
-    {name: '银行卡号', width: '1', value: 'cardNum', class: 'item'},
-    {name: '提现状态', width: '1.4', value: 'status', class: 'item status'},
+    {name: '银行卡号', width: '1.4', value: 'cardNum', class: 'item'},
+    {name: '提现状态', width: '1', value: 'status', class: 'item status'},
     {name: '操作', width: '0.7', value: '', class: 'item handle'}
   ]
   export default {
@@ -372,7 +372,6 @@
             color: $color-main
             white-space: nowrap
             .handle-item
-              padding: 0 7px
               cursor: pointer
               height: 14px
               line-height: 14px
