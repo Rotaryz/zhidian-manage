@@ -44,7 +44,7 @@ function _changeData(res) {
       status: item.status_str,
       note: item.note,
       id: item.id
-      // 需要增加的字段在后面加不能在前面加
+
     }
   })
   let obj = {

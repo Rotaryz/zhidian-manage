@@ -51,7 +51,7 @@ function _changeData(res) {
       url: item.logo && item.logo.url,
       id: item.id,
       status: item.status
-      // 需要增加的字段在后面加不能在前面加
+
     }
   })
   let obj = {

@@ -42,7 +42,7 @@ function _changeData(res) {
       type: item.type,
       url: item.logo.url,
       id: item.id
-      // 需要增加的字段在后面加不能在前面加
+
     }
   })
   let obj = {
