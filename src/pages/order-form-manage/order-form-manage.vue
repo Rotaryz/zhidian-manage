@@ -123,6 +123,7 @@
     },
     created() {
       this.getList()
+      this.$modal.hideNoData()
     },
     methods: {
       // 获取列表
@@ -130,6 +131,11 @@
         API.OrderForm.getList(this.requestData).then((res) => {
           this.pageDetail = res.obj
           this.data = res.arr
+          if (res.arr.length === 0) {
+            this.$modal.showNoData()
+          } else {
+            this.$modal.hideNoData()
+          }
         })
         this.getExcelUrl()
       },

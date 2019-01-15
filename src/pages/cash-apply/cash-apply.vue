@@ -33,7 +33,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <div v-if="val.class === 'item status'" class="item status hand" @mouseenter="showText(index)" @mouseleave="hideText">
+            <div v-if="val.class === 'item status'" class="item status" :class="{'hand':item.status === '审核不通过'}" @mouseenter="showText(index)" @mouseleave="hideText">
               <span class="txt-content">{{item.status}}</span>
               <span v-if="item.status === '审核不通过'" class="icon"></span>
               <transition name="fade">
@@ -143,6 +143,7 @@
     },
     created() {
       this.getList()
+      this.$modal.hideNoData()
     },
     methods: {
       // 获取列表
@@ -150,6 +151,11 @@
         API.CashApply.getList(this.requestData).then((res) => {
           this.pageDetail = res.obj
           this.data = res.arr
+          if (res.arr.length === 0) {
+            this.$modal.showNoData()
+          } else {
+            this.$modal.hideNoData()
+          }
         })
         this.getExcelUrl()
       },
@@ -374,6 +380,7 @@
               user-select: none
             .grey
               color: #999
+              cursor: auto
     .bot-page
       height: 60px
       display: flex

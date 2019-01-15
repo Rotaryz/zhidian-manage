@@ -109,6 +109,7 @@
       }
     },
     created() {
+      this.$modal.hideNoData()
       this.getList()
     },
     methods: {
@@ -116,6 +117,11 @@
         API.Brand.getList(this.requestData).then((res) => {
           this.pageDetail = res.obj
           this.data = res.arr
+          if (res.arr.length === 0) {
+            this.$modal.showNoData()
+          } else {
+            this.$modal.hideNoData()
+          }
         })
       },
       // 搜索功能
