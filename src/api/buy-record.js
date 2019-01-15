@@ -31,7 +31,7 @@ function _changeData(res) {
       isRefund: item.is_refund,
       person: item.pay_customer,
       date: item.created_at
-      // 需要增加的字段在后面加不能在前面加
+
     }
   })
   let obj = {

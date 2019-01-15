@@ -33,7 +33,6 @@ function _changeData(res) {
       customer: item.customer,
       date: item.created_at,
       status: item.status
-      // 需要增加的字段在后面加不能在前面加
     }
   })
   let obj = {

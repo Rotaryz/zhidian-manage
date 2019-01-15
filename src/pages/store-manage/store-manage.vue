@@ -271,7 +271,7 @@
       // 翻页
       addPage(num) {
         this.requestData.page = num
-        this.getServiceList()
+        this.getList()
       }
     }
   }

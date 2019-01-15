@@ -6,7 +6,7 @@ export default {
    * 服务列表
    * @returns {*}
    */
-  getServiceList(data, loading = true, toast = true) {
+  getList(data, loading = true, toast = true) {
     let url = 'api/admin/goods'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _changeData)
   },
@@ -32,7 +32,7 @@ function _changeData(res) {
       source: item.source,
       date: item.created_at,
       url: item.image_url
-      // 需要增加的字段在后面加不能在前面加
+
     }
   })
   let obj = {
