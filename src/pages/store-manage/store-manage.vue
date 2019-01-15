@@ -127,7 +127,7 @@
     },
     created() {
       this.getList()
-      this.$modal.hideNoData()
+      this.$emit('hideNoData')
     },
     methods: {
       getList() {
@@ -135,9 +135,9 @@
           this.pageDetail = res.obj
           this.data = res.arr
           if (res.arr.length === 0) {
-            this.$modal.showNoData()
+            this.$emit('showNoData')
           } else {
-            this.$modal.hideNoData()
+            this.$emit('hideNoData')
           }
         })
         this.getExcelUrl()

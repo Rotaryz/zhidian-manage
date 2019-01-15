@@ -143,7 +143,7 @@
     },
     created() {
       this.getList()
-      this.$modal.hideNoData()
+      this.$emit('hideNoData')
     },
     methods: {
       // 获取列表
@@ -152,9 +152,9 @@
           this.pageDetail = res.obj
           this.data = res.arr
           if (res.arr.length === 0) {
-            this.$modal.showNoData()
+            this.$emit('showNoData')
           } else {
-            this.$modal.hideNoData()
+            this.$emit('hideNoData')
           }
         })
         this.getExcelUrl()
