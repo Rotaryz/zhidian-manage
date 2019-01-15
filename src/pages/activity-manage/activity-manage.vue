@@ -33,6 +33,7 @@
             @click="handleClick(index)"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
@@ -59,7 +60,7 @@
   const TITLE = '活动管理'
   const TAB_LIST = [
     {name: '活动', width: '2', value: 'title', class: 'item head'},
-    {name: '价格', width: '1', value: 'price', class: 'item'},
+    {name: '价格', width: '1', value: 'price', class: 'item money'},
     {name: '类型', width: '1', value: 'type', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item status'},
     {name: '关联', width: '1.4', value: 'link', class: 'item'},

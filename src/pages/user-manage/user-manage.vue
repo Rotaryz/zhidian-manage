@@ -29,6 +29,7 @@
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item sex'" :class="val.class">{{+item[val.value] === 1 ? '男' : item[val.value] === 2 ? '女' : '未知'}}</span>
+            <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item[val.value]" :src="item[val.value]" class="img" alt="">
               <img v-else :src="defaultUrl" class="img">
@@ -57,7 +58,7 @@
     {name: '地区', width: '1', value: 'addr', class: 'item'},
     {name: '手机号', width: '1', value: 'phone', class: 'item'},
     {name: '交易订单', width: '1', value: 'num', class: 'item'},
-    {name: '总消费', width: '1', value: 'money', class: 'item'},
+    {name: '总消费', width: '1', value: 'money', class: 'item money'},
     {name: '注册时间', width: '1.2', value: 'date', class: 'item'}
   ]
   export default {
