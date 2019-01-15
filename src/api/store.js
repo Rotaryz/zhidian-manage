@@ -50,8 +50,8 @@ function _changeData(res) {
       date: item.created_at,
       url: item.logo && item.logo.url,
       id: item.id,
-      status: item.status
-
+      status: item.status,
+      reason: item.freeze_reason
     }
   })
   let obj = {

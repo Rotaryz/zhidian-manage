@@ -274,6 +274,7 @@
               user-select: none
             .grey
               color: #999
+              cursor: auto
     .bot-page
       height: 60px
       display: flex

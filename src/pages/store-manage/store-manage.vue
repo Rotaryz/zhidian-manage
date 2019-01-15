@@ -73,6 +73,7 @@
   import API from '@api'
   const PAGE_NAME = 'STORE_MANGE'
   const TITLE = '店铺管理'
+  const SWITCH = [0, 1]
   const TAB_LIST = [
     {name: '店铺名称', width: '1.8', value: 'storeName', class: 'item head'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
@@ -242,20 +243,32 @@
         }
       },
       frozenStore() {
-        if (!this.popTxt || this.popTxt.replace(/^\s+|\s+$/g, '') === '') {
-          this.$refs.toast.show('请填写冻结原因')
-          return
-        }
-        API.Store.freeze({switch: 0, reason: this.popTxt, id: this.merchant_id}).then((res) => {
-          this.$toast.show(res.message)
-          this.getList()
+        // if (!this.popTxt || this.popTxt.replace(/^\s+|\s+$/g, '') === '') {
+        //   this.$toast.show('请填写冻结原因')
+        //   return
+        // }
+        API.Store.freeze({switch: SWITCH[1], reason: this.popTxt, id: this.merchant_id}).then((res) => {
+          this.$toast.show('操作成功')
+          this.data = this.data.map(item => {
+            if (item.id === res.data.id) {
+              item.reason = res.data.freeze_reason
+              item.status = res.data.status
+            }
+            return item
+          })
         })
         this.closePop()
       },
       unFrozenStore() {
-        API.Store.freeze({switch: 1, reason: this.reasonTxt, id: this.merchant_id}).then((res) => {
-          this.$toast.show(res.message)
-          this.getList()
+        API.Store.freeze({switch: SWITCH[0], reason: this.reasonTxt, id: this.merchant_id}).then((res) => {
+          this.$toast.show('操作成功')
+          this.data = this.data.map(item => {
+            if (item.id === res.data.id) {
+              item.reason = res.data.freeze_reason
+              item.status = res.data.status
+            }
+            return item
+          })
         })
         this.closePop()
       },

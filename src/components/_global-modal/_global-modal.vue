@@ -34,7 +34,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
   .base-model
-    left: 100px
+    left: 0
     right: 0
     top: 0
     bottom: 0

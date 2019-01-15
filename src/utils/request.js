@@ -83,18 +83,27 @@ function requestException(res) {
 // http请求
 const methodArr = ['get', 'post', 'put', 'delete']
 const HTTP = {}
-methodArr.forEach((item) => {
+methodArr.forEach((item, index) => {
   let method = item.toUpperCase()
   HTTP[item] = (...args) => {
     // 路径 数据 loading toast 中间件方法名称 自定义的方法...
     const [url, data, loading = false, , middleFnName] = args
     Utils.showLoading(loading)
-    return http({
-      method,
-      url,
-      data,
-      params: data
-    })
+    let httpData = {}
+    if (index === 0) {
+      httpData = {
+        method,
+        url,
+        params: data
+      }
+    } else {
+      httpData = {
+        method,
+        url,
+        data
+      }
+    }
+    return http(httpData)
       .then((response) => {
         return checkStatus(response)
       })
