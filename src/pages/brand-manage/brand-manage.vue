@@ -111,7 +111,7 @@
       }
     },
     created() {
-      this.$modal.hideNoData()
+      this.$emit('hideNoData')
       this.getList()
     },
     methods: {
@@ -120,9 +120,9 @@
           this.pageDetail = res.obj
           this.data = res.arr
           if (res.arr.length === 0) {
-            this.$modal.showNoData()
+            this.$emit('showNoData')
           } else {
-            this.$modal.hideNoData()
+            this.$emit('hideNoData')
           }
         })
       },

@@ -5,7 +5,13 @@
       <section class="home">
         <top-bar></top-bar>
         <div :class="panelStyle">
-          <router-view :key="$route.fullPath"></router-view>
+          <router-view :key="$route.fullPath" @showNoData="showNoData" @hideNoData="hideNoData"></router-view>
+          <div class="no-data">
+            <div v-if="showNull" class="blank">
+              <div class="blank-icon"></div>
+              <div class="blank-title">暂无相关数据</div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -36,6 +42,7 @@
     },
     data() {
       return {
+        showNull: false
       // title: ''
       }
     },
@@ -52,7 +59,13 @@
     // this.title = this.currentTitles.length ? this.currentTitles[this.currentTitles.length - 1] : ''
     },
     methods: {
-      ...globalMethods
+      ...globalMethods,
+      showNoData() {
+        this.showNull = true
+      },
+      hideNoData() {
+        this.showNull = false
+      }
     }
   }
 </script>
@@ -83,15 +96,40 @@
       margin: 22px
       user-select: text
       card-box-style()
+      position :relative
     .container-data
       display :flex
       flex:1
       user-select: text
       margin :22px
+      position :relative
     .container-order
       display: flex
       flex: 1
       margin: 65px 22px 22px
       user-select: text
       card-box-style()
+      position :relative
+
+    .no-data
+      all-center()
+      display: flex
+      flex-direction: column
+      box-sizing: border-box
+      .blank
+        row-center()
+        top: 55%
+        text-align: center
+        z-index: 1
+        &.fade-enter, &.fade-leave-to
+          opacity: 0
+        &.fade-enter-to, &.fade-leave-to
+          transition: opacity .2s ease-in-out
+        .blank-icon
+          icon-image('icon-null')
+          width: 140px
+          height: 89px
+          margin-bottom: 30px
+        .blank-title
+          color: #999
 </style>
