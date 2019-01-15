@@ -23,6 +23,7 @@
   const COMPONENT_NAME = 'D_CHARTS_PANEL'
   const NAV = [{title: '昨天', status: 'yesterday'}, {title: '7天', status: 'week'}, {title: '30天', status: 'month'}]
   const DEFAULT_STATUS = 'month'
+  const smooth = 0.5
   export default {
     name: COMPONENT_NAME,
     components: {
@@ -220,6 +221,7 @@
               name: '提交订单',
               data: seriesData.submit_num,
               type: 'line',
+              smooth,
               areaStyle: {
                 color: {
                   type: 'linear',
@@ -260,6 +262,7 @@
               name: '支付订单',
               data: seriesData.pay_num,
               type: 'line',
+              smooth,
               areaStyle: {
                 color: {
                   type: 'linear',
@@ -300,6 +303,7 @@
               name: '退款订单',
               data: seriesData.refund_num,
               type: 'line',
+              smooth,
               areaStyle: {
                 color: {
                   type: 'linear',
@@ -437,6 +441,7 @@
               name: '交易金额',
               data: seriesData.pay_amount,
               type: 'line',
+              smooth,
               // smooth: true,
               // showSymbol: false,
               // symbol: 'circle',
@@ -579,6 +584,7 @@
               name: '店铺数量',
               data: seriesData.shop_num,
               type: 'line',
+              smooth,
               // smooth: true,
               // showSymbol: false,
               // symbol: 'circle',
