@@ -78,7 +78,7 @@
     min-height: 100vh
     padding-left: 200px
     box-sizing: border-box
-    background: $color-background
+    background: #F6FAFC
     &::-webkit-scrollbar
       width: 8px
       height: 10px

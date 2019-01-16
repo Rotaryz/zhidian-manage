@@ -2,10 +2,10 @@
   <div class="navigation">
     <header>
       <img src="./pic-logo@2x.png" class="icon">
-      <p>赞播智店</p>
+      <img src="./logo.png" alt="" class="logo">
     </header>
     <dl v-for="(item, index) in navList" :key="index">
-      <dt :class="item | isActive" @click="navHandle(item, index)">
+      <dt :class="item | isActive" @click="navHandle(item, index)" @mouseenter="navEnter(index)" @mouseLeave="navLeave(index)">
         <img :src="item.isLight ? item.iconSelected : item.icon" alt="">
         <p>{{item.title}}</p>
         <i :class="item.children.length ? 'rotate' : ''"></i>
@@ -24,7 +24,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  const HEIGHT = 60 + 10
+  const HEIGHT = 52
   const NAV_LIST = [
     {
       title: '数据管理',
@@ -311,13 +311,19 @@
         if (index !== -1 && current.children && current.children.length) {
           return this._resetNavLight(current.children, path)
         }
+      },
+      navEnter(index) {
+        // this.navList[index].isLight = true
+      },
+      navLeave(index) {
+        // this.navList[index].isLight = true
       }
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  $tab-height = 72px
+  $tab-height = 46px
   $color-menu-tag = #FF533C
   $color-menu-text = #6E748B
   $color-menu-text-active = #fff
@@ -325,6 +331,7 @@
   $color-menu-bg = rgba(255, 255, 255, 0)
   $color-menu-child-bg = #1B2029
   $color-white = #fff
+  $color-text-active = #E2F0F5
   $menu-width=200px
   @import "~@design"
 
@@ -333,7 +340,7 @@
     position: fixed
     top: 0
     left: 0
-    background: #222742
+    background: #232633
     box-shadow: 3px 0 4px 0 rgba(0, 8, 39, 0.30)
     width: $menu-width
     min-height: 100vh
@@ -341,14 +348,18 @@
     overflow-y: auto
     header
       layout(row)
-      height: 80px
+      height: 77px
       align-items: center
+      background:  #1B2029
       justify-content: center
       border-bottom: 1px solid $color-menu-line
       img
-        height: 24px
-        width: @height
-        margin-right: 12.6px
+        height: 33px
+        width: 30px
+        margin-right: 8px
+      .logo
+        width: 107px
+        height: 30px
       p
         font-size: 20px
         color: #fff
@@ -379,15 +390,21 @@
           background :$color-main
           transition :all 0.3s
           &.active
-            height :72px
+            height : $tab-height
             &.no-border
               height :0
         &:hover
-          background: $color-menu-bg-active
+          color:  $color-text-active
+          &.no-border
+            border-color: transparent
+          & > p
+            color: $color-white
+          & > i
+            icon-image('icon-pressed_select')
         &.active
           //border-left: 5px solid $color-main
           //background: $color-menu-bg-active
-          color: #E2F0F5
+          color: $color-text-active
           background: $color-menu-child-bg
           &.no-border
             border-color: transparent
@@ -447,9 +464,7 @@
               &.no-border
                 height :0
           &:hover
-            background: $color-menu-bg-active
+            color: $color-text-active
           &.active
-            //border-left: 0px solid $color-main
-            //background: $color-menu-bg-active
-            color: #E2F0F5
+            color: $color-text-active
 </style>
