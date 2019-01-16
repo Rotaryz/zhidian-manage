@@ -341,6 +341,7 @@
       text-align: left
       flex: 1
       font-size: 14px
+      margin-top: 30px
       color: $color-text-main
       .list-header
         flex: 1
