@@ -170,7 +170,7 @@
     background: $color-white
     border-radius: 5px
     box-shadow: 0 1px 6px 0 rgba(0, 8, 39, 0.10)
-    padding: 0 1.5vw
+    padding: 0 30px
     box-sizing: border-box
     font-family: $font-family-regular
     .content-top
@@ -195,7 +195,7 @@
         font-family: $font-family-medium
         display: flex
         justify-content: space-between
-        padding-left: 2vw
+        padding-left: 40px
         border-bottom: 0.5px solid $color-line
         .header-key
           flex: 1
@@ -205,12 +205,12 @@
             flex: 1.5
       .list-content
         .list-item
-          height: 60px
+          height: 70px
           flex: 1
           display: flex
           align-items: center
           justify-content: space-between
-          padding-left: 2vw
+          padding-left: 40px
           box-sizing: border-box
           border-bottom: 0.5px solid $color-line
           text-align: left
@@ -230,7 +230,6 @@
               object-fit: cover
               background: #f5f5f5
     .bot-page
-      height: 60px
-      display: flex
-      align-items: center
+      padding-top: 40px
+      padding-bottom: 30px
 </style>

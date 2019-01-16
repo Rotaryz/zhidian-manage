@@ -6,7 +6,7 @@ export default {
    * 服务列表
    * @returns {*}
    */
-  getServiceList(data, loading = true, toast = true) {
+  getServiceList(data, loading, toast = true) {
     let url = 'api/admin/goods'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _changeData)
   },
@@ -14,7 +14,7 @@ export default {
    * 导出列表
    * @returns {*}
    */
-  exportList(data, loading = false, toast = true) {
+  exportList(data, loading, toast = true) {
     let url = 'api/admin/goods/export'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }

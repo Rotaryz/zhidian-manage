@@ -6,7 +6,7 @@ export default {
    * 获取列表
    * @returns {*}
    */
-  getList(data, loading = true, toast = true) {
+  getList(data, loading, toast = true) {
     let url = 'api/admin/customers'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _changeData)
   },
@@ -14,7 +14,7 @@ export default {
    * 导出列表
    * @returns {*}
    */
-  exportList(data, loading = false, toast = true) {
+  exportList(data, loading, toast = true) {
     let url = 'api/admin/customers/report'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
