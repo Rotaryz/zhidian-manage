@@ -68,6 +68,10 @@
       },
       dateChange(time, type) {
         let date = []
+        if (!time) {
+          this.$emit('change', '', type)
+          return
+        }
         date.push(
           time[0]
             .toLocaleDateString()
