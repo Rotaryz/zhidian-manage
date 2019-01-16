@@ -65,16 +65,23 @@
       height: $common-height
       padding-right: 12px
       border-bottom: 1px solid $color-line
+      .avatar-wrapper
+        width :43px
+        height :@width
+        border: 3px solid #FFFFFF;
+        border-radius :50%
+        box-shadow: 0 2px 4px 0 rgba(51,51,51,0.10);
       .name
+        font-family :$font-family-regular
         margin-left: 10px
-        font-size: $font-size-16
-        color: $color-text-sub
+        font-size: $font-size-14
+        color: #3D4E60
       .log-out
         cursor: pointer
         width: 44px
         height: 44px
-        margin-left: 8px
-        bg-image('./icon-quit')
+        margin-left: 23px
+        bg-image('./icon-signout')
         background-repeat: no-repeat
         background-size: 20px 20px
         background-position: center

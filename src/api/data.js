@@ -25,9 +25,9 @@ export default {
 
 // 解析图标数据
 function _resolveGetTotalChartData(res) {
-  // if (!res.data.length) {
-  //   throw new Error('系统异常.')
-  // }
+  if (!res.data.length) {
+    throw new Error('')
+  }
   let xAxisData = []
   let xBetweenData = []
   let seriesData = {

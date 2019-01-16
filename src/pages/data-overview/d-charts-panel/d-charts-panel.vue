@@ -273,11 +273,11 @@
                   colorStops: [
                     {
                       offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
+                      color: 'rgba(77,90,255, 0.55)'
                     },
                     {
                       offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
+                      color: 'rgba(77,90,255, 0.05)'
                     }
                   ],
                   globalCoord: false
@@ -285,7 +285,7 @@
               },
               itemStyle: {
                 normal: {
-                  color: 'rgba(73,133,252,1)',
+                  color: '#4D5AFF',
                   borderWidth: 1,
                   // borderColor: '#fff',
                   // shadowColor: 'rgba(73,133,252,1)',
@@ -293,7 +293,7 @@
                   // shadowOffsetX: 0,
                   // shadowBlur: 10,
                   lineStyle: {
-                    color: 'rgba(73,133,252,1)',
+                    color: '#4D5AFF',
                     width: 3
                   }
                 }
@@ -457,11 +457,11 @@
                   colorStops: [
                     {
                       offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
+                      color: 'rgba(77,90,255, 0.55)'
                     },
                     {
                       offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
+                      color: 'rgba(77,90,255, 0.05)'
                     }
                   ],
                   globalCoord: false
@@ -469,7 +469,7 @@
               },
               itemStyle: {
                 normal: {
-                  color: 'rgba(73,133,252,1)',
+                  color: '#4D5AFF',
                   borderWidth: 1,
                   // borderColor: '#fff',
                   // shadowColor: 'rgba(73,133,252,1)',
@@ -477,7 +477,7 @@
                   // shadowOffsetX: 0,
                   // shadowBlur: 10,
                   lineStyle: {
-                    color: 'rgba(73,133,252,1)',
+                    color: '#4D5AFF',
                     width: 3
                   }
                 }
@@ -600,11 +600,11 @@
                   colorStops: [
                     {
                       offset: 0,
-                      color: 'rgba(73,133,252, 0.55)'
+                      color: 'rgba(77,90,255,0.55)'
                     },
                     {
                       offset: 1,
-                      color: 'rgba(73,133,252, 0.05)'
+                      color: 'rgba(77,90,255, 0.05)'
                     }
                   ],
                   globalCoord: false
@@ -612,7 +612,7 @@
               },
               itemStyle: {
                 normal: {
-                  color: 'rgba(73,133,252,1)',
+                  color: '#4D5AFF',
                   borderWidth: 1,
                   // borderColor: '#fff',
                   // shadowColor: 'rgba(73,133,252,1)',
@@ -620,7 +620,7 @@
                   // shadowOffsetX: 0,
                   // shadowBlur: 10,
                   lineStyle: {
-                    color: 'rgba(73,133,252,1)',
+                    color: '#4D5AFF',
                     width: 3
                   }
                 }
@@ -717,13 +717,13 @@
               stack: '开店统计',
               data: seriesData.potential_num,
               barWidth: 16,
-              color: '#2D4692'
+              color: '#464DA9'
             },
             {
               name: '消费用户',
               type: 'bar',
               stack: '开店统计',
-              color: '#6ED1F5',
+              color: '#60A7F7',
               barWidth: 16,
               data: seriesData.consume_num
             }
