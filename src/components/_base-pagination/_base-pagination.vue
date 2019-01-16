@@ -39,6 +39,8 @@
       <div class="input-box">
         跳至
         <div class="input-box-big">
+          <span class="before"></span>
+          <span class="after"></span>
           <input v-model.number="pageInput" type="number" class="border-page" @mousewheel.native.prevent @keydown="_runPage">
         </div>
         页
@@ -331,8 +333,7 @@
         position: relative
         margin: 0
         transition: all 0.2s
-        &:hover
-          border-color: #ACACAC
+        border-animate(#999, 3px, #333)
         .page-tap
           position: absolute
           right: 0
@@ -385,16 +386,49 @@
         transition: all 0.4s ease-out
         input.border-page
           position: relative
-          z-index: 10
-          height: 26px
-          width: 46px
+          height: 27px
+          width: 47px
           margin: 0
           text-align: center
           transition: all 0.4s ease-out
-          &:hover
-            border: 1px solid #ACACAC
           &::-webkit-inner-spin-button
             appearance: none
+        .after
+          border-top: 0.5px solid transparent
+          border-bottom: 0.5px solid transparent
+          position: absolute
+          z-index: 5
+          height: 27px
+          width: 0
+          right: 0
+          top: 0
+          box-sizing: content-box
+          border-radius 3px
+          transition: all 0.4s ease-out
+        .before
+          border-right: 0.5px solid transparent
+          border-left: 0.5px solid transparent
+          position: absolute
+          z-index: 5
+          height: 0
+          width: 47px
+          bottom: 0
+          left: 0
+          box-sizing: content-box
+          border-radius 3px
+          transition: all 0.4s ease-out
+        &:hover
+          .border-page
+            transition: all 0.4s ease-out
+            border: 0.5px solid transparent
+          .after
+            border-color: #999
+            transition: all 0.4s ease-out
+            width: 47px
+          .before
+            border-color: #999
+            transition: all 0.4s ease-out
+            height: 27px
 
       .input-box
         font-size: $font-size-12

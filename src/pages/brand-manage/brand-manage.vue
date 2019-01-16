@@ -209,7 +209,8 @@
       display: flex
       justify-content: space-between
       align-items: center
-      min-height: 88px
+      padding-top: 37px
+      padding-bottom: 30px
       .left
         display: flex
       .status

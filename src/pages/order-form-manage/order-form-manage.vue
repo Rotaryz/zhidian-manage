@@ -238,7 +238,10 @@
         cursor: pointer
         border-radius: 4px 4px 0 0
         box-shadow: 0 1px 6px 0 rgba(0,8,39,0.10)
-        transition: font-size 0.2s
+        transition-duration: 0.4s
+        transition-property: font-size,background
+        &:hover
+          background: #FFF
       .active
         background: #FFF
         font-size: $font-size-16
@@ -267,13 +270,15 @@
         float: left
         margin-top: 3px
         margin-right: 4px
+        transition: all 0.2s
       .active
         margin-top: 0
     .content-top
       display: flex
       justify-content: space-between
       align-items: center
-      min-height: 88px
+      padding-top: 37px
+      padding-bottom: 30px
       .left
         display: flex
       .status
