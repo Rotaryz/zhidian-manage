@@ -75,6 +75,8 @@
   }
 </script>
 
+
+
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~@design"
   .home
@@ -96,12 +98,12 @@
       box-shadow: inset 0 0 6px rgba(0, 0, 0, .15)
       border-radius: 10px
     .container-default
+      position :relative
       display: flex
       flex: 1
       margin: 22px
       user-select: text
       card-box-style()
-      position :relative
     .container-data
       display :flex
       flex:1
