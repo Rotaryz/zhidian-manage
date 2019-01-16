@@ -6,7 +6,7 @@ export default {
    * 品牌列表
    * @returns {*}
    */
-  getList(data, loading = true, toast = true) {
+  getList(data, loading, toast = true) {
     let url = 'api/admin/merchants'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _changeData)
   },
@@ -14,7 +14,7 @@ export default {
    * 开通
    * @returns {*}
    */
-  open(id, loading = true, toast = true) {
+  open(id, loading, toast = true) {
     let url = `api/admin/merchants/${id}/upgrade`
     return request.post(url, {}, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
@@ -23,7 +23,7 @@ export default {
    * 店铺列表
    * @returns {*}
    */
-  login(data, loading = true, toast = true) {
+  login(data, loading, toast = true) {
     let url = 'api/admin/stores'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
