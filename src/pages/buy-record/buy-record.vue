@@ -49,13 +49,13 @@
   const PAGE_NAME = 'BUY_RECORD'
   const TITLE = '交易记录'
   const TAB_LIST = [
-    {name: '订单号', width: '1', value: 'code', class: 'item'},
-    {name: '交易号', width: '1', value: 'orderCode', class: 'item'},
+    {name: '订单号', width: '1.3', value: 'code', class: 'item'},
+    {name: '交易号', width: '1.3', value: 'orderCode', class: 'item'},
     {name: '交易金额', width: '1', value: 'orderMoney', class: 'item money'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '交易类型', width: '1', value: 'isRefund', class: 'item'},
     {name: '付款人', width: '1', value: 'person', class: 'item'},
-    {name: '支付时间', width: '1', value: 'date', class: 'item'}
+    {name: '支付时间', width: '1.3', value: 'date', class: 'item'}
   ]
   export default {
     name: PAGE_NAME,

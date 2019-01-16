@@ -95,7 +95,7 @@
     {name: '提现金额', width: '1', value: 'cashMoney', class: 'item money'},
     {name: '真实姓名', width: '1', value: 'nickName', class: 'item'},
     {name: '银行类型', width: '1', value: 'cardType', class: 'item'},
-    {name: '银行卡号', width: '1.4', value: 'cardNum', class: 'item card'},
+    {name: '银行卡号', width: '1', value: 'cardNum', class: 'item card'},
     {name: '提现状态', width: '1', value: 'status', class: 'item status'},
     {name: '操作', width: '0.7', value: '', class: 'item handle'}
   ]

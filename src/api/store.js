@@ -47,6 +47,7 @@ function _changeData(res) {
       business: item.visited_num,
       code: item.paied_order_num,
       money: item.paied_order_amount,
+      refund: item.refund_order_amount,
       date: item.created_at,
       url: item.logo && item.logo.url,
       id: item.id,
