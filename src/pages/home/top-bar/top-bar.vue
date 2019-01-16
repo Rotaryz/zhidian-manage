@@ -68,9 +68,10 @@
       .avatar-wrapper
         width :43px
         height :@width
-        border: 3px solid #FFFFFF;
+        overflow :hidden
+        border: 3px solid #FFFFFF
         border-radius :50%
-        box-shadow: 0 2px 4px 0 rgba(51,51,51,0.10);
+        box-shadow: 0 2px 4px 0 rgba(51,51,51,0.10)
       .name
         font-family :$font-family-regular
         margin-left: 10px
