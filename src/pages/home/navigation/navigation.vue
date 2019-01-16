@@ -295,7 +295,6 @@
       background:  #1B2029
       justify-content: center
       border-bottom: 1px solid $color-menu-line
-      padding-bottom :8px
       img
         height: 33px
         width: 30px
