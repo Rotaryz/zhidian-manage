@@ -2,7 +2,8 @@
   <div class="base-search">
     <div class="search">
       <input v-model="searchText" type="text" class="search-input" :placeholder="placeHolder"
-             @keydown="_enter">
+             @keydown="_enter"
+      >
       <span class="before"></span>
       <span class="after"></span>
     </div>

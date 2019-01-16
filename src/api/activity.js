@@ -22,7 +22,7 @@ export default {
 
 function _changeData(res) {
   let arr = []
-  arr = res.data.map(item => {
+  arr = res.data.map((item) => {
     return {
       title: item.activity_name,
       price: item.price,
@@ -32,7 +32,6 @@ function _changeData(res) {
       source: item.source,
       date: item.created_at,
       url: item.image_url_thumb
-
     }
   })
   let obj = {

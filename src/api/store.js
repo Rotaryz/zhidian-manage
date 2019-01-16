@@ -38,12 +38,12 @@ export default {
 
 function _changeData(res) {
   let arr = []
-  arr = res.data.map(item => {
+  arr = res.data.map((item) => {
     return {
       storeName: item.name,
-      name: (item.employee&&item.employee.nickname) || '',
-      phone: (item.employee&&item.employee.mobile) || '',
-      brand: (item.merchant&&item.merchant.name) || '',
+      name: (item.employee && item.employee.nickname) || '',
+      phone: (item.employee && item.employee.mobile) || '',
+      brand: (item.merchant && item.merchant.name) || '',
       business: item.visited_num,
       code: item.paied_order_num,
       money: item.paied_order_amount,

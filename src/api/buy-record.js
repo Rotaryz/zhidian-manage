@@ -22,7 +22,7 @@ export default {
 
 function _changeData(res) {
   let arr = []
-  arr = res.data.map(item => {
+  arr = res.data.map((item) => {
     return {
       code: item.order_sn,
       orderCode: item.trade_sn,
@@ -31,7 +31,6 @@ function _changeData(res) {
       isRefund: item.is_refund,
       person: item.pay_customer,
       date: item.created_at
-
     }
   })
   let obj = {

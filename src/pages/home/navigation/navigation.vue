@@ -56,14 +56,14 @@
           url: '/home/business-manage/brand-manage',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         },
         {
           title: '店铺管理',
           url: '/home/business-manage/store-manage',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         }
       ]
     },
@@ -93,21 +93,21 @@
           url: '/home/content-manage/goods-manage',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         },
         {
           title: '服务管理',
           url: '/home/content-manage/service-manage',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         },
         {
           title: '活动管理',
           url: '/home/content-manage/activity-manage',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         }
       ]
     },
@@ -137,14 +137,14 @@
           url: '/home/finance-manage/buy-record',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         },
         {
           title: '提现申请',
           url: '/home/finance-manage/cash-apply',
           isRouter: true,
           isLight: false,
-          isEnter: false,
+          isEnter: false
         }
       ]
     }
@@ -264,7 +264,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  $tab-height = 64px
+  $tab-height = 46px
   $color-menu-tag = #FF533C
   $color-menu-text = #6E748B
   $color-menu-text-active = #fff
@@ -275,6 +275,7 @@
   $color-text-active = #E2F0F5
   $menu-width=200px
   @import "~@design"
+
 
   .navigation
     user-select: none
@@ -294,6 +295,7 @@
       background:  #1B2029
       justify-content: center
       border-bottom: 1px solid $color-menu-line
+      padding-bottom :8px
       img
         height: 33px
         width: 30px
@@ -318,10 +320,10 @@
         height: $tab-height
         overflow: hidden
         background: $color-menu-bg
-        box-sizing: border-box
         border-left: 0px solid transparent
         transition: all .2s
         position :relative
+        margin : 8px 0
         .flag
           width :5px
           height :0

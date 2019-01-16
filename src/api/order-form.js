@@ -22,7 +22,7 @@ export default {
 
 function _changeData(res) {
   let arr = []
-  arr = res.data.map(item => {
+  arr = res.data.map((item) => {
     return {
       code: item.order_sn,
       title: item.title,

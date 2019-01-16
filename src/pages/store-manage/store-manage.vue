@@ -242,7 +242,7 @@
       viewQrcode() {
         API.Store.getQrcode(this.merchant_id).then((res) => {
           this.selectItem.codeUrl = res.data.image_url
-          this.data = this.data.map(item => {
+          this.data = this.data.map((item) => {
             if (item.id === this.selectItem.id) {
               item.codeUrl = res.data.image_url
             }
@@ -265,7 +265,7 @@
         // }
         API.Store.freeze({switch: SWITCH[1], reason: this.popTxt, id: this.merchant_id}).then((res) => {
           this.$toast.show('操作成功')
-          this.data = this.data.map(item => {
+          this.data = this.data.map((item) => {
             if (item.id === res.data.id) {
               item.reason = res.data.freeze_reason
               item.status = res.data.status
@@ -278,7 +278,7 @@
       unFrozenStore() {
         API.Store.freeze({switch: SWITCH[0], reason: this.reasonTxt, id: this.merchant_id}).then((res) => {
           this.$toast.show('操作成功')
-          this.data = this.data.map(item => {
+          this.data = this.data.map((item) => {
             if (item.id === res.data.id) {
               item.reason = res.data.freeze_reason
               item.status = res.data.status

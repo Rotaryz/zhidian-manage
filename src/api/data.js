@@ -20,7 +20,7 @@ export default {
   getTotalChart(data, loading, toast = true) {
     let url = '/api/admin/history-stats'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN, _resolveGetTotalChartData)
-  },
+  }
 }
 
 // 解析图标数据
@@ -37,7 +37,7 @@ function _resolveGetTotalChartData(res) {
     pay_amount: [], // 交易金额
     submit_num: [], // 提交订单
     pay_num: [], // 支付订单
-    refund_num: [], // 退款订单
+    refund_num: [] // 退款订单
   }
   res.data.forEach((item) => {
     xAxisData.push(item.at) // x 轴每个点对应y轴的值
