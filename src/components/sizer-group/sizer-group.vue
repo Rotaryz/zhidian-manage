@@ -153,7 +153,7 @@
       height: 0
       width: 100%
       bottom: 0
-      left: 0
+      left: -0.5px
       box-sizing: content-box
       transition: all 0.3s ease-out
 
