@@ -1,7 +1,8 @@
 <template>
   <div class="base-search">
     <div class="search">
-      <input v-model="searchText" type="text" class="search-input" :placeholder="placeHolder" @keydown="_enter">
+      <input v-model="searchText" type="text" class="search-input" :placeholder="placeHolder"
+             @keydown="_enter">
       <span class="before"></span>
       <span class="after"></span>
     </div>
@@ -29,6 +30,13 @@
     data() {
       return {
         searchText: this.infoText
+      }
+    },
+    watch: {
+      searchText(cur, pre) {
+        if (cur.trim() === '') {
+          this.$emit('search', '')
+        }
       }
     },
     methods: {
