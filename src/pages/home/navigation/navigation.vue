@@ -276,7 +276,6 @@
   $menu-width=200px
   @import "~@design"
 
-
   .navigation
     user-select: none
     position: fixed
@@ -295,13 +294,12 @@
       background:  #1B2029
       justify-content: center
       border-bottom: 1px solid $color-menu-line
-      img
+      .icon
         height: 33px
         width: 30px
         margin-right: 8px
       .logo
         width: 107px
-        height: 30px
       p
         font-size: 20px
         color: #fff
