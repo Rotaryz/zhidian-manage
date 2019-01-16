@@ -183,8 +183,9 @@
       },
       changeTab(index, item) {
         if (index === this.tabIdx) return
-        console.log(index, this.statusTab)
         this.requestData.status = this.status[index]
+        this.requestData.page = 1
+        this.$refs.pageDetail.beginPage()
         this.tabIdx = index
         this.getList()
       },
