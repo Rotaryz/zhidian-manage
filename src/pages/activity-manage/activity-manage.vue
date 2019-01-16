@@ -279,8 +279,8 @@
             col-center()
             left: 0
             content: ''
-            width: 6px
-            height: 6px
+            width: 8px
+            height: 8px
             border-radius: 10px
             background: #F6262D
           .green:before

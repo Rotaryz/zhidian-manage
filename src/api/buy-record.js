@@ -39,7 +39,6 @@ function _changeData(res) {
     total_page: res.meta.last_page,
     total: res.meta.total
   }
-  console.log(obj)
   let data = {
     arr,
     obj

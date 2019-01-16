@@ -25,6 +25,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
               <img v-else :src="defaultUrl" class="img">
@@ -82,7 +83,7 @@
     {name: '品牌', width: '1.8', value: 'brand', class: 'item'},
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
-    {name: '交易金额', width: '1', value: 'money', class: 'item'},
+    {name: '交易金额', width: '1', value: 'money', class: 'item money'},
     {name: '开通时间', width: '1.5', value: 'date', class: 'item'},
     {name: '操作', width: '1', value: '', class: 'item handle'}
   ]

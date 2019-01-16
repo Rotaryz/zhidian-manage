@@ -30,7 +30,8 @@
             :style="{flex: val.width}"
             class="item-box"
           >
-            <span :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
           </div>
         </div>
       </div>
@@ -50,7 +51,7 @@
   const TAB_LIST = [
     {name: '订单号', width: '1', value: 'code', class: 'item'},
     {name: '交易号', width: '1', value: 'orderCode', class: 'item'},
-    {name: '交易金额', width: '1', value: 'orderMoney', class: 'item'},
+    {name: '交易金额', width: '1', value: 'orderMoney', class: 'item money'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '交易类型', width: '1', value: 'isRefund', class: 'item'},
     {name: '付款人', width: '1', value: 'person', class: 'item'},
@@ -82,7 +83,7 @@
           show: false,
           content: '交易类型',
           type: 'default',
-          data: [{name: '全部', id: ''}, {name: '退款', id: 1}, {name: '支付', id: 0}]
+          data: [{name: '全部', id: '-1'}, {name: '退款', id: 1}, {name: '支付', id: 0}]
         },
         pageDetail: {
           total: 1,

@@ -55,7 +55,8 @@
               class="item-box"
             >
               <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-              <span v-else :class="val.class">x{{item[val.value] + '' || '0'}}</span>
+              <span v-if="val.class === 'item count'" :class="val.class">x{{item[val.value] + '' || '0'}}</span>
+              <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             </div>
           </div>
         </div>
@@ -76,9 +77,9 @@
   const TAB_LIST = [
     {name: '订单号', width: '1.4', value: 'code', class: 'item'},
     {name: '商品信息', width: '1.8', value: 'title', class: 'item'},
-    {name: '单价', width: '1', value: 'price', class: 'item'},
+    {name: '单价', width: '1', value: 'price', class: 'item money'},
     {name: '数量', width: '1', value: 'num', class: 'item count'},
-    {name: '实付金额', width: '1', value: 'total', class: 'item'},
+    {name: '实付金额', width: '1', value: 'total', class: 'item money'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '下单用户', width: '1', value: 'customer', class: 'item'},
     {name: '下单时间', width: '1.4', value: 'date', class: 'item'},
