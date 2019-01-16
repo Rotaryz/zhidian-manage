@@ -498,7 +498,7 @@
             color: $color-text-main
             transition: all 0.4s ease-out
             &.active
-              background: #4985FC
+              background: #4D5AFF
               color: #FFF
               border: 0
               margin-left: 20px

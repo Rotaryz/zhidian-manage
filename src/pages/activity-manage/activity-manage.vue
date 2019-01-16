@@ -283,9 +283,9 @@
             width: 8px
             height: 8px
             border-radius: 10px
-            background: #F6262D
+            background: #FD6347
           .green:before
-            background: #26BD26
+            background: #01CAA9
           .list-handle
             color: $color-main
             white-space: nowrap

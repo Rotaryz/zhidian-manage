@@ -245,7 +245,6 @@
           background: #FFF
       .active
         background: #FFF
-        font-size: $font-size-16
         font-family: $font-family-medium
   .brand-manage
     display: flex

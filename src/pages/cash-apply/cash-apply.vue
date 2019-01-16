@@ -65,8 +65,8 @@
             <span class="before"></span>
           </div>
           <div class="model-btn">
-            <div class="btn" @click="upWithdrawAudit(1)">审核通过</div>
             <div class="btn" @click="upWithdrawAudit(2)">审核不通过</div>
+            <div class="btn" @click="upWithdrawAudit(1)">审核通过</div>
           </div>
         </div>
       </div>
@@ -436,23 +436,26 @@
           .model-btn
             layout(row)
             align-items: center
-            justify-content: center
-            margin-top: 20px
+            justify-content: flex-end
+            margin-top: 30px
             .btn
               width: 94px
               height: 40px
               line-height: 40px
               background: $color-main
               border-radius: 3px
-              margin: 0 27px
+              margin-left: 20px
               font-family: $font-family-medium
               font-size: $font-size-16
               color: #FFF
               cursor: pointer
               text-align: center
+              box-sizing: border-box
               transition: all 0.4s ease-out
-              &:nth-child(2)
-                background: #EF705D
+              &:nth-child(1)
+                color: $color-main
+                border: 1px solid $color-main
+                background: #FFF
               &:hover
                 transition: all 0.4s ease-out
                 font-size: 17px

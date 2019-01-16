@@ -436,7 +436,6 @@
         display: flex
         height: 29px
         align-items: center
-        margin-right: 8px
       .page-box
         min-width: 64px
         height: 26px
