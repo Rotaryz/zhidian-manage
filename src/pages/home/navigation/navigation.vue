@@ -31,7 +31,7 @@
   const HEIGHT = 52
   const NAV_LIST = [
     {
-      title: '数据管理',
+      title: '数据概览',
       url: '/home/data-overview',
       icon: require('./icon-data@2x.png'),
       iconSelected: require('./icon-data_select@2x.png'),
