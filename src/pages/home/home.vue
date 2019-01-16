@@ -53,6 +53,11 @@
         return cname
       }
     },
+    watch: {
+      $route() {
+        this.$modal.hideShade()
+      }
+    },
     created() {
     // console.log(this.$route)
     // console.log(this.$store.dispatch('auth/validate'))

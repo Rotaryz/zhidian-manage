@@ -5,15 +5,19 @@
       <img src="./logo.png" alt="" class="logo">
     </header>
     <dl v-for="(item, index) in navList" :key="index">
-      <dt :class="item | isActive" @click="navHandle(item, index)" @mouseenter="navEnter(index)" @mouseLeave="navLeave(index)">
-        <img :src="item.isLight ? item.iconSelected : item.icon" alt="">
+      <dt :class="item | isActive" @click="navHandle(item, index)" @mouseenter="navEnter(item, index)" @mouseleave="navLeave(item,index)">
+        <img :src="item.isLight || item.isEnter ? item.iconSelected : item.icon" alt="">
         <p>{{item.title}}</p>
         <i :class="item.children.length ? 'rotate' : ''"></i>
         <em :class="item | isActive" class="flag"></em>
       </dt>
       <dd :style="item | childrenActive">
         <template v-for="(child, idx) in item.children">
-          <div :key="idx" :class="child | isActive" class="child" @click="navHandle(child, idx, item)">
+          <div :key="idx" :class="child | isActive" class="child"
+               @click="navHandle(child, idx, item)"
+               @mouseenter="navEnter(item, index)"
+               @mouseleave="navLeave(item,index)"
+          >
             {{child.title}}
             <em :class="child | isActive" class="flag"></em>
           </div>
@@ -34,6 +38,7 @@
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
+      isEnter: false,
       children: []
     },
     {
@@ -44,18 +49,21 @@
       childrenIndex: 0,
       isRouter: false,
       isLight: false,
+      isEnter: false,
       children: [
         {
           title: '品牌管理',
           url: '/home/business-manage/brand-manage',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         },
         {
           title: '店铺管理',
           url: '/home/business-manage/store-manage',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         }
       ]
     },
@@ -67,6 +75,7 @@
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
+      isEnter: false,
       children: []
     },
     {
@@ -77,24 +86,28 @@
       childrenIndex: 0,
       isRouter: false,
       isLight: false,
+      isEnter: false,
       children: [
         {
           title: '商品管理',
           url: '/home/content-manage/goods-manage',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         },
         {
           title: '服务管理',
           url: '/home/content-manage/service-manage',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         },
         {
           title: '活动管理',
           url: '/home/content-manage/activity-manage',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         }
       ]
     },
@@ -106,6 +119,7 @@
       childrenIndex: 0,
       isRouter: true, // 是否跳转
       isLight: false, // 是否亮灯
+      isEnter: false,
       children: []
     },
     {
@@ -116,98 +130,24 @@
       childrenIndex: 0,
       isRouter: false,
       isLight: false,
+      isEnter: false,
       children: [
         {
           title: '交易记录',
           url: '/home/finance-manage/buy-record',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         },
         {
           title: '提现申请',
           url: '/home/finance-manage/cash-apply',
           isRouter: true,
-          isLight: false
+          isLight: false,
+          isEnter: false,
         }
       ]
     }
-  // {
-  //   title: '商品管理',
-  //   url: '/goods-manager',
-  //   icon: require('./icon-goods@2x.png'),
-  //   iconSelected: require('./icon-goods_select@2x.png'),
-  //   childrenIndex: 0,
-  //   isRouter: false,
-  //   isLight: false,
-  //   children: [
-  //     {
-  //       title: '折扣商品',
-  //       url: '/goods-manager/money',
-  //       isRouter: true,
-  //       isLight: false
-  //     },
-  //     {
-  //       title: '播豆商品',
-  //       url: '/goods-manager/credits',
-  //       isRouter: true,
-  //       isLight: false
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: '订单管理',
-  //   icon: require('./icon-indent@2x.png'),
-  //   iconSelected: require('./icon-indent_select@2x.png'),
-  //   url: '/order-manager',
-  //   childrenIndex: 0,
-  //   children: [
-  //     {
-  //       title: '用户订单',
-  //       url: '/order-manager/user',
-  //       isRouter: true,
-  //       isLight: false
-  //     },
-  //     {
-  //       title: '商家订单',
-  //       url: '/order-manager/merchant',
-  //       isRouter: true,
-  //       isLight: false
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: '大礼包',
-  //   icon: require('./icon-gifts@2x.png'),
-  //   iconSelected: require('./icon-gifts_select@2x.png'),
-  //   url: '/gifts',
-  //   childrenIndex: 0,
-  //   isRouter: false,
-  //   isLight: false,
-  //   children: [
-  //     {
-  //       title: '用户礼包',
-  //       url: '/gifts/user-gifts',
-  //       isRouter: true,
-  //       isLight: false
-  //     },
-  //     {
-  //       title: '商家礼包',
-  //       url: '/gifts/business-gifts',
-  //       isRouter: true,
-  //       isLight: false
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: '内容管理',
-  //   url: '/content-manager',
-  //   icon: require('./icon-text@2x.png'),
-  //   iconSelected: require('./icon-text_select@2x.png'),
-  //   childrenIndex: 0,
-  //   isRouter: true, // 是否跳转
-  //   isLight: false, // 是否亮灯
-  //   children: []
-  // }
   ]
   const NAV_STR = JSON.stringify(NAV_LIST)
   export default {
@@ -236,7 +176,8 @@
     data() {
       return {
         navList: JSON.parse(NAV_STR),
-        nowTime: Date.now()
+        nowTime: Date.now(),
+        lastItem: {}
       }
     },
     watch: {
@@ -252,7 +193,6 @@
     },
     methods: {
       navHandle(item, index, father) {
-        this.$modal.hideShade()
         if (Date.now() - this.nowTime < 50) {
           return
         }
@@ -312,11 +252,12 @@
           return this._resetNavLight(current.children, path)
         }
       },
-      navEnter(index) {
-        // this.navList[index].isLight = true
+      // hover 样式修改
+      navEnter(item) {
+        item.isEnter = true
       },
-      navLeave(index) {
-        // this.navList[index].isLight = true
+      navLeave(item) {
+        item.isEnter = false
       }
     }
   }
