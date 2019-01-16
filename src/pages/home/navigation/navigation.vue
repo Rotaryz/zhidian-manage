@@ -264,7 +264,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-  $tab-height = 46px
+  $tab-height = 64px
   $color-menu-tag = #FF533C
   $color-menu-text = #6E748B
   $color-menu-text-active = #fff
