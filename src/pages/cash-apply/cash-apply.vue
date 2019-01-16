@@ -28,17 +28,23 @@
           <div
             v-for="(val, ind) in headerList"
             :key="ind"
-            :class="{'noOver':val.name === '提现状态'}"
+            :class="{'noOver': (val.name === '提现状态' || val.name === '银行卡号')}"
             :style="{flex: val.width}"
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
-            <div v-if="val.class === 'item status'" class="item status" :class="{'hand':item.status === '审核不通过'}" @mouseenter="showText(index)" @mouseleave="hideText">
+            <div v-if="val.class === 'item card'" class="item card" @mouseenter="showText('card', index)" @mouseleave="hideText">
+              <span class="txt-content">******</span>
+              <transition name="fade">
+                <div v-show="type === 'card' && enterIndex === index" class="tip-text">{{item.cardNum}}</div>
+              </transition>
+            </div>
+            <div v-if="val.class === 'item status'" class="item status" :class="{'hand':item.status === '审核不通过'}" @mouseenter="showText('status', index)" @mouseleave="hideText">
               <span class="txt-content">{{item.status}}</span>
               <span v-if="item.status === '审核不通过'" class="icon"></span>
               <transition name="fade">
-                <div v-show="item.status === '审核不通过' && enterIndex === index" class="tip-text">{{item.note || '未查到原因'}}</div>
+                <div v-show="item.status === '审核不通过' && type === 'status' && enterIndex === index" class="tip-text">{{item.note || '未查到原因'}}</div>
               </transition>
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
@@ -89,7 +95,7 @@
     {name: '提现金额', width: '1', value: 'cashMoney', class: 'item money'},
     {name: '真实姓名', width: '1', value: 'nickName', class: 'item'},
     {name: '银行类型', width: '1', value: 'cardType', class: 'item'},
-    {name: '银行卡号', width: '1.4', value: 'cardNum', class: 'item'},
+    {name: '银行卡号', width: '1.4', value: 'cardNum', class: 'item card'},
     {name: '提现状态', width: '1', value: 'status', class: 'item status'},
     {name: '操作', width: '0.7', value: '', class: 'item handle'}
   ]
@@ -139,7 +145,8 @@
         enterIndex: '',
         defaultIndex: 4,
         popTxt: '',
-        excelUrl: ''
+        excelUrl: '',
+        type: ''
       }
     },
     created() {
@@ -200,7 +207,8 @@
         this.$refs.pageDetail.beginPage()
         this.getList()
       },
-      showText(index) {
+      showText(type, index) {
+        this.type = type
         this.enterIndex = index
       },
       hideText() {
@@ -324,7 +332,7 @@
           .item
             flex: 1
             line-height: 18px
-          .status
+          .status,.card
             display: flex
             overflow: visible
             align-items: center
@@ -348,10 +356,11 @@
               border-radius: 3px
               word-break: break-all
               white-space: normal
-              bottom: 20px
-              right: 0
+              bottom: 22px
+              left: -16px
               z-index: 11
               margin: auto
+              cursor: text
               box-shadow: 0 1px 4px 0 rgba(12, 6, 14, 0.20)
               &:after
                 content: ''
@@ -370,6 +379,8 @@
                 opacity: 0
               &.fade-enter-to, &.fade-leave-to
                 transition: all .4s ease-in-out
+          .card>.tip-text
+            left: -77px
           .list-handle
             color: $color-main
             white-space: nowrap

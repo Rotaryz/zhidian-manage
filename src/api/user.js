@@ -31,7 +31,7 @@ function _changeData(res) {
       phone: item.mobile,
       num: item.paied_order_num,
       money: item.paied_order_amount,
-      date: item.created_at
+      date: item.created_at && item.created_at.split(' ')[0]
     }
   })
   let obj = {

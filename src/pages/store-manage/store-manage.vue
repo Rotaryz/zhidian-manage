@@ -222,11 +222,11 @@
         switch (type) {
         case 'freeze':
           if (+item.status === 3) {
-            this.popName = `解冻${item.storeName}店铺`
+            this.popName = `解冻“${item.storeName}”店铺`
             this.reasonTxt = item.reason
             this.showPopContent = 2
           } else {
-            this.popName = `冻结${item.storeName}店铺`
+            this.popName = `冻结“${item.storeName}”店铺`
             this.showPopContent = 1
           }
           break
@@ -234,7 +234,7 @@
           if (!item.codeUrl) {
             this.viewQrcode()
           }
-          this.popName = '查看"' + item.storeName + '"店铺'
+          this.popName = '查看“' + item.storeName + '”店铺'
           this.showPopContent = 3
           break
         }
