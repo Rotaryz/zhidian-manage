@@ -31,7 +31,7 @@ function _changeData(res) {
       status: item.is_online,
       source: item.source,
       date: item.created_at,
-      url: item.image_url
+      url: item.image_url_thumb
     }
   })
   let obj = {
