@@ -98,7 +98,7 @@
       return {
         headerList: TAB_LIST,
         data: [],
-        topTab: ['全部', '服务', '拼团', '砍价'],
+        topTab: ['全部', '商品', '服务', '拼团', '砍价'],
         statusTab: ['全部', '待付款', '待结算', '已完成', '已关闭'],
         requestData: {
           order_sn: '',
@@ -110,7 +110,7 @@
           page: 1,
           limit: 10
         },
-        orderType: ['', 1, 4, 7], // 业务类型 1服务 4团购 7砍价
+        orderType: ['', 8, 1, 4, 7], // 业务类型 3商品 1服务 4团购 7砍价
         status: ['', 'payment', 'waiting_received', 'finish', 'close', 'waiting_groupon', 'refund'], // 全部，待付款，待使用|待结算，已完成，已关闭，待成团，已退款
         pageDetail: {
           total: 1,

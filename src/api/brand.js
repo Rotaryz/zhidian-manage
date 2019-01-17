@@ -18,13 +18,20 @@ export default {
     let url = `api/admin/merchants/${id}/upgrade`
     return request.post(url, {}, loading, toast, API_DEFAULT_MIDDLE_FN)
   },
-
   /**
    * 店铺列表
    * @returns {*}
    */
   login(data, loading, toast = true) {
     let url = 'api/admin/stores'
+    return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
+  },
+  /**
+   * 生成验证码
+   * @returns {*}
+   */
+  getCode(data, loading, toast = true) {
+    let url = 'api/admin/merchants/generate-code'
     return request.get(url, data, loading, toast, API_DEFAULT_MIDDLE_FN)
   }
 }

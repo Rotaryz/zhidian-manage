@@ -35,6 +35,7 @@
             </div>
             <div v-if="val.class === 'item handle'" class="list-handle item">
               <span class="handle-item" :class="{'grey': +item.type !== 0}" @click="openPop(item)">开通</span>
+              <span class="handle-item" @click="showPower(item)">越权</span>
             </div>
           </div>
         </div>
@@ -56,6 +57,13 @@
             <div class="btn active" @click="openBusiness">确定</div>
           </div>
         </div>
+      </div>
+    </div>
+    <div v-show="powerShow" class="over-power">
+      <div class="power-content" :class="showActive ? 'model-active' : 'model-noactive'">
+        <span class="close" @click="hidePower"></span>
+        <p class="mobile txt">手机号：{{powerItem.phone}}</p>
+        <p class="txt">越权验证码：{{code}}</p>
       </div>
     </div>
   </div>
@@ -107,7 +115,11 @@
         showPop: false,
         showActive: false,
         openItem: {},
-        defaultUrl: HEAD_IMAGE
+        defaultUrl: HEAD_IMAGE,
+        powerShow: false,
+        powerItem: {},
+        code: '',
+        codeUsed: ''
       }
     },
     created() {
@@ -182,7 +194,25 @@
           this.showPop = false
         }, 200)
         this.showActive = false
-        this.expire_time = ''
+      },
+      showPower(item) {
+        API.Brand.getCode({mobile: item.phone})
+          .then(res => {
+            this.$modal.showShade()
+            this.powerShow = true
+            this.powerItem = item
+            this.code = res.data.code
+            this.codeUsed = res.data.sss
+            this.showActive = true
+          })
+
+      },
+      hidePower() {
+        this.$modal.hideShade()
+        setTimeout(() => {
+          this.powerShow = false
+        }, 200)
+        this.showActive = false
       },
       addPage(num) {
         this.requestData.page = num
@@ -286,13 +316,20 @@
             .handle-item
               cursor: pointer
               user-select: none
+              padding: 0 10px
+              display: inline-block
+              line-height: 14px
+              border-left: 1px solid #D9D9D9
+              &:nth-of-type(1)
+                border-left: 0
+                padding-left: 0
             .grey
               color: #999
               cursor: auto
     .bot-page
       padding-top: 40px
       padding-bottom: 30px
-  .pop-box
+  .pop-box,.over-power
     z-index: 1001
     position: fixed
     top: 0
@@ -393,4 +430,32 @@
         .cancelPower
           margin-top: 20px
           padding-bottom: 40px
+    .power-content
+      width: 400px
+      height: 200px
+      background: #FFF
+      border-radius: 3px
+      box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.6)
+      position: relative
+      .close
+        bg-image('./icon-del2')
+        width: 16px
+        height: 16px
+        cursor: pointer
+        position: absolute
+        right: 15px
+        top: 15px
+        background-size: 100% 100%
+      .txt
+        text-align: center
+        color: $color-text-main
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        line-height: 30px
+      .mobile
+        margin-top: 70px
+      .grey
+        color: #999
+        fonts-size: $font-size-12
+
 </style>
