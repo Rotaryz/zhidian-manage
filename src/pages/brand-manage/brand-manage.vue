@@ -118,7 +118,8 @@
         defaultUrl: HEAD_IMAGE,
         powerShow: false,
         powerItem: {},
-        code: ''
+        code: '',
+        codeUsed: ''
       }
     },
     created() {
@@ -201,6 +202,7 @@
             this.powerShow = true
             this.powerItem = item
             this.code = res.data.code
+            this.codeUsed = res.data.sss
             this.showActive = true
           })
 
@@ -452,6 +454,8 @@
         line-height: 30px
       .mobile
         margin-top: 70px
-
+      .grey
+        color: #999
+        fonts-size: $font-size-12
 
 </style>
