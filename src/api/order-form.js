@@ -32,7 +32,8 @@ function _changeData(res) {
       orderType: item.order_type,
       customer: item.customer,
       date: item.created_at,
-      status: item.status
+      status: item.status,
+      shopName: item.shop_name
     }
   })
   let obj = {
