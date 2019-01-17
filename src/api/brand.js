@@ -35,7 +35,7 @@ function _changeData(res) {
     return {
       storeName: item.name,
       name: item.nickname,
-      phone: item.agent_mobile,
+      phone: item.mobile,
       num: item.store_num,
       actived: item.actived,
       date: item.created_at,
