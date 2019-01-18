@@ -178,7 +178,7 @@
       openBusiness() {
         this.closePop()
         API.Brand.open(this.openItem.id).then((res) => {
-          this.$toast.show('开通2成功')
+          this.$toast.show('开通成功')
           this.data = this.data.map((item) => {
             if (item.id === this.openItem.id) {
               item.type = 1
