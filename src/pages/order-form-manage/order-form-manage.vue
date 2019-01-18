@@ -171,7 +171,7 @@
           page: 1,
           limit: 10
         }
-        if (index === 2) {
+        if (index === 3) {
           this.statusTab = this.statusTab.concat(['待成团', '已退款'])
         } else {
           this.statusTab.splice(4, 2)
