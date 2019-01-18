@@ -174,7 +174,7 @@
         if (index === 3) {
           this.statusTab = this.statusTab.concat(['待成团', '已退款'])
         } else {
-          this.statusTab.splice(4, 2)
+          this.statusTab.splice(5, 2)
         }
         this.$refs.sizer._setTabIndex(4)
         this.$refs.pageDetail.beginPage()
