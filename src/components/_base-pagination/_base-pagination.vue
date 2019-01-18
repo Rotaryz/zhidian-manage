@@ -391,6 +391,7 @@
           margin: 0
           text-align: center
           transition: all 0.4s ease-out
+          z-index: 10
           &::-webkit-inner-spin-button
             appearance: none
         .after
@@ -398,10 +399,10 @@
           border-bottom: 0.5px solid transparent
           position: absolute
           z-index: 5
-          height: 27px
+          height: 29px
           width: 0
           right: 0
-          top: 0
+          top: -1px
           box-sizing: content-box
           border-radius 3px
           transition: all 0.4s ease-out
@@ -411,9 +412,9 @@
           position: absolute
           z-index: 5
           height: 0
-          width: 47px
+          width: 49px
           bottom: 0
-          left: 0
+          left: -1px
           box-sizing: content-box
           border-radius 3px
           transition: all 0.4s ease-out
@@ -424,11 +425,11 @@
           .after
             border-color: #999
             transition: all 0.4s ease-out
-            width: 47px
+            width: 49px
           .before
             border-color: #999
             transition: all 0.4s ease-out
-            height: 27px
+            height: 29px
 
       .input-box
         font-size: $font-size-12
