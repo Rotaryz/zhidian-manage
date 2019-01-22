@@ -10,7 +10,7 @@
         <d-charts-panel title="用户统计" :chartType="CHATS_DATA_TYPE.user"></d-charts-panel>
       </div>
       <div class="c-item">
-        <d-charts-panel title="店铺统计" :chartType="CHATS_DATA_TYPE.shop"></d-charts-panel>
+        <d-charts-panel title="门店统计" :chartType="CHATS_DATA_TYPE.shop"></d-charts-panel>
       </div>
     </section>
     <section class="charts-wrapper">

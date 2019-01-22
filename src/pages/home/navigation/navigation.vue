@@ -59,7 +59,7 @@
           isEnter: false
         },
         {
-          title: '店铺管理',
+          title: '门店管理',
           url: '/home/business-manage/store-manage',
           isRouter: true,
           isLight: false,
