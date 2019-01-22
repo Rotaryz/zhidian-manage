@@ -27,7 +27,9 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>
+            <span v-if="val.class === 'item num'" class="hand" :class="val.class" @click="toStore(item)">{{item[val.value] + '' || '---'}}</span>
+            <!--<span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>-->
+            <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.type !== 0}">{{(+item.type !== 0) ? '已开通' : '未开通'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
               <img v-else :src="defaultUrl" class="img">
@@ -78,8 +80,8 @@
     {name: '品牌名称', width: '2', value: 'storeName', class: 'item head'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
-    {name: '门店', width: '1', value: 'num', class: 'item'},
-    {name: '状态', width: '1', value: 'actived', class: 'item status'},
+    {name: '门店数', width: '1', value: 'num', class: 'item num'},
+    {name: '开通品牌', width: '1', value: 'actived', class: 'item status'},
     {name: '开通时间', width: '1.3', value: 'date', class: 'item'},
     {name: '操作', width: '1', value: 'type', class: 'item handle'}
   ]
@@ -103,7 +105,7 @@
           show: false,
           content: '品牌类型',
           type: 'default',
-          data: [{name: '全部', id: ''}, {name: '单店', id: 0}, {name: '多店', id: 1}]
+          data: [{name: '全部', id: ''}, {name: '已开通', id: 1}, {name: '未开通', id: 0}]
         },
         pageDetail: {
           total: 1,
@@ -145,27 +147,18 @@
         this.requestData.page = 1
         this.getList()
       },
-      // 自定义日期选择
-      checkTime(status) {
-        if (status instanceof Array) {
-          this.requestData.start_date = status[0]
-          this.requestData.end_date = status[1]
-          this.requestData.date_type = 'custom'
-        } else {
-          this.requestData.date_type = status
-          this.requestData.start_date = ''
-          this.requestData.end_date = ''
-        }
-        this.requestData.page = 1
-        this.$refs.pageDetail.beginPage()
-        this.getList()
-      },
       // 选择品牌类型
       setValue(item) {
         this.requestData.type = item.id
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
         this.getList()
+      },
+      // 跳转到门店管理
+      toStore(item) {
+        let title = encodeURI(encodeURI(item.storeName))
+        this.$router.push(`/home/business-manage/store-manage?title=${title}`)
+
       },
       openPop(item) {
         if (+item.type !== 0) return
@@ -283,6 +276,8 @@
           .item
             flex: 1
             line-height: 18px
+          .num
+            color: $color-main
           .head
             display: flex
             align-items: center

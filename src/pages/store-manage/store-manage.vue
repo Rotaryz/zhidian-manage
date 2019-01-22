@@ -2,7 +2,7 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        <base-search placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
+        <base-search ref="search" placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -74,10 +74,10 @@
   import {HEAD_IMAGE} from '@utils/constant'
   import API from '@api'
   const PAGE_NAME = 'STORE_MANGE'
-  const TITLE = '店铺管理'
+  const TITLE = '门店管理'
   const SWITCH = [0, 1]
   const TAB_LIST = [
-    {name: '店铺名称', width: '1.8', value: 'storeName', class: 'item head'},
+    {name: '门店名称', width: '1.8', value: 'storeName', class: 'item head'},
     {name: '姓名', width: '1', value: 'name', class: 'item'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
     {name: '品牌', width: '1.8', value: 'brand', class: 'item'},
@@ -85,7 +85,7 @@
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'money', class: 'item money'},
     {name: '退款金额', width: '1', value: 'refund', class: 'item money'},
-    {name: '开通时间', width: '1.5', value: 'date', class: 'item'},
+    {name: '创建时间', width: '1.5', value: 'date', class: 'item'},
     {name: '操作', width: '1', value: '', class: 'item handle'}
   ]
   export default {
@@ -128,8 +128,16 @@
       }
     },
     created() {
+      let title = (this.$route.query && this.$route.query.title) || ''
+      if (title) {
+        this.requestData.keyword = decodeURI(title)
+      }
       this.getList()
       this.$emit('hideNoData')
+
+    },
+    mounted() {
+      this.setValue(this.requestData.keyword)
     },
     methods: {
       getList() {
@@ -143,6 +151,10 @@
           }
         })
         this.getExcelUrl()
+      },
+      // 设置搜索框内容
+      setValue(txt) {
+        this.$refs.search && this.$refs.search.setValue(txt)
       },
       // 导出地址
       getExcelUrl() {
@@ -223,11 +235,11 @@
         switch (type) {
         case 'freeze':
           if (+item.status === 3) {
-            this.popName = `解冻“${item.storeName}”店铺`
+            this.popName = `解冻“${item.storeName}”门店`
             this.reasonTxt = item.reason
             this.showPopContent = 2
           } else {
-            this.popName = `冻结“${item.storeName}”店铺`
+            this.popName = `冻结“${item.storeName}”门店`
             this.showPopContent = 1
           }
           break
@@ -235,7 +247,7 @@
           if (!item.codeUrl) {
             this.viewQrcode()
           }
-          this.popName = '查看“' + item.storeName + '”店铺'
+          this.popName = '查看“' + item.storeName + '”门店'
           this.showPopContent = 3
           break
         }
