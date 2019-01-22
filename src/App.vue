@@ -5,8 +5,7 @@
 </template>
 
 <script>
-  // import appConfig from '@src/app.config'
-  const appConfig = require('@src/app.config')
+  import appConfig from '@utils/app.config2'
 
   export default {
     page: {
