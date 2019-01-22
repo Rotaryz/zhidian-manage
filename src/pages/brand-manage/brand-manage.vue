@@ -105,7 +105,7 @@
         dispatchSelect: {
           check: false,
           show: false,
-          content: '品牌类型',
+          content: '全部',
           type: 'default',
           data: [{name: '全部', id: ''}, {name: '已开通', id: 1}, {name: '未开通', id: 0}]
         },
