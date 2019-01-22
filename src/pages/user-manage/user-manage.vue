@@ -5,7 +5,7 @@
         <div class="status">
           <sizer-group :defaultIndex="defaultIndex" @change="checkTime"></sizer-group>
         </div>
-        <base-search placeHolder="请输入昵称、手机号" @search="search"></base-search>
+        <base-search placeHolder="请输入昵称" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
