@@ -27,7 +27,9 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <span v-if="val.class === 'item num'" class="hand" :class="val.class" @click="toStore(item)">{{item[val.value] + '' || '---'}}</span>
+            <router-link v-if="val.class === 'item num'" tag="a" target="_blank" :to="encodeUrl(item.storeName)" :class="val.class"
+                         class="hand"
+            >{{item[val.value] + '' || '---'}}</router-link>
             <!--<span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>-->
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.type !== 0}">{{(+item.type !== 0) ? '已开通' : '未开通'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
@@ -155,10 +157,10 @@
         this.getList()
       },
       // 跳转到门店管理
-      toStore(item) {
-        let title = encodeURI(encodeURI(item.storeName))
-        this.$router.push(`/home/business-manage/store-manage?title=${title}`)
-
+      encodeUrl(name) {
+        let title = encodeURI(name)
+        let url = `/home/business-manage/store-manage?title=${title}`
+        return url
       },
       openPop(item) {
         if (+item.type !== 0) return
@@ -189,16 +191,14 @@
         this.showActive = false
       },
       showPower(item) {
-        API.Brand.getCode({mobile: item.phone})
-          .then(res => {
-            this.$modal.showShade()
-            this.powerShow = true
-            this.powerItem = item
-            this.code = res.data.code
-            this.codeUsed = res.data.sss
-            this.showActive = true
-          })
-
+        API.Brand.getCode({mobile: item.phone}).then((res) => {
+          this.$modal.showShade()
+          this.powerShow = true
+          this.powerItem = item
+          this.code = res.data.code
+          this.codeUsed = res.data.sss
+          this.showActive = true
+        })
       },
       hidePower() {
         this.$modal.hideShade()

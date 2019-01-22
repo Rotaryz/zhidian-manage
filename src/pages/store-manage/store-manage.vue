@@ -134,7 +134,6 @@
       }
       this.getList()
       this.$emit('hideNoData')
-
     },
     mounted() {
       this.setValue(this.requestData.keyword)
