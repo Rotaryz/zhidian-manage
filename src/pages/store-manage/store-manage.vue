@@ -260,10 +260,10 @@
         }
       },
       frozenStore() {
-        // if (!this.popTxt || this.popTxt.replace(/^\s+|\s+$/g, '') === '') {
-        //   this.$toast.show('请填写冻结原因')
-        //   return
-        // }
+        if (!this.popTxt || this.popTxt.replace(/^\s+|\s+$/g, '') === '') {
+          this.$toast.show('请填写冻结原因')
+          return
+        }
         API.Store.freeze({switch: SWITCH[1], reason: this.popTxt, id: this.merchant_id}).then((res) => {
           this.$toast.show('操作成功')
           this.data = this.data.map((item) => {
