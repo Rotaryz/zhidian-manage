@@ -2,7 +2,7 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        <base-search v-if="!hasStoreId" ref="search" placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
+        <base-search ref="search" placeHolder="请输入手机号/姓名/品牌/门店名称" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -25,6 +25,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value] || 0}}</span>
             <div v-if="val.class === 'item head'" class="head item">
               <img v-if="item.url" :src="item.url" class="img" alt="">
@@ -34,6 +35,7 @@
             <div v-if="val.class === 'item handle'" class="list-handle item">
               <span class="handle-item" @click="openPop('look', item)">查看</span>
               <span class="handle-item" @click="openPop('freeze', item)">{{+item.status === 3 ? '解冻' : '冻结'}}</span>
+              <span class="handle-item" @click="showPower(item)">越权</span>
             </div>
           </div>
         </div>
@@ -66,6 +68,13 @@
         </div>
       </div>
     </div>
+    <div v-show="powerShow" class="over-power">
+      <div class="power-content" :class="showActive ? 'model-active' : 'model-noactive'">
+        <span class="close" @click="hidePower"></span>
+        <p class="mobile txt">手机号：{{powerItem.phone}}</p>
+        <p class="txt">越权验证码：{{code}}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -78,15 +87,15 @@
   const SWITCH = [0, 1]
   const TAB_LIST = [
     {name: '门店名称', width: '1.8', value: 'storeName', class: 'item head'},
-    {name: '姓名', width: '1', value: 'name', class: 'item'},
+    {name: '姓名', width: '1.3', value: 'name', class: 'item name'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
-    {name: '品牌', width: '1.8', value: 'brand', class: 'item'},
+    {name: '品牌', width: '1.8', value: 'brand', class: 'item name'},
     {name: '访客', width: '1', value: 'business', class: 'item'},
     {name: '交易订单', width: '1', value: 'code', class: 'item'},
     {name: '交易金额', width: '1', value: 'money', class: 'item money'},
     {name: '退款金额', width: '1', value: 'refund', class: 'item money'},
     {name: '创建时间', width: '1.5', value: 'date', class: 'item'},
-    {name: '操作', width: '1', value: '', class: 'item handle'}
+    {name: '操作', width: '1.2', value: '', class: 'item handle'}
   ]
   export default {
     name: PAGE_NAME,
@@ -125,7 +134,10 @@
         reasonTxt: '',
         merchant_id: '',
         selectItem: '',
-        defaultUrl: HEAD_IMAGE
+        defaultUrl: HEAD_IMAGE,
+        powerShow: false,
+        code: '',
+        powerItem: {}
       }
     },
     computed: {
@@ -134,12 +146,8 @@
       }
     },
     created() {
-      let title = (this.$route.query && this.$route.query.title) || ''
-      let storeId = (this.$route.query && this.$route.query.storeId) || ''
-      if (title) {
-        this.requestData.keyword = decodeURI(title)
-        this.requestData.merchant_id = storeId
-      }
+      let merchantId = (this.$route.query && this.$route.query.merchantId) || ''
+      this.requestData.merchant_id = merchantId
       this.getList()
       this.$emit('hideNoData')
     },
@@ -173,10 +181,11 @@
         for (let val in this.headClass) {
           this.headClass[val] = ''
         }
+        let txt = inputTxt.trim()
         this.requestData = {
-          keyword: inputTxt,
+          keyword: txt,
           sort_type: '',
-          merchant_id: '',
+          merchant_id: this.requestData.merchant_id,
           sort: '',
           page: 1,
           limit: 10
@@ -222,6 +231,23 @@
         this.requestData.page = 1
         this.$refs.pageDetail.beginPage()
         this.getList()
+      },
+      // 越权
+      showPower(item) {
+        API.Brand.getCode({mobile: item.phone}).then((res) => {
+          this.$modal.showShade()
+          this.powerShow = true
+          this.powerItem = item
+          this.code = res.data.code
+          this.showActive = true
+        })
+      },
+      hidePower() {
+        this.$modal.hideShade()
+        setTimeout(() => {
+          this.powerShow = false
+        }, 200)
+        this.showActive = false
       },
       openPop(type, item) {
         // 打开弹窗
@@ -356,7 +382,7 @@
         .header-key
           flex: 1
           overflow: hidden
-          padding-right: 10px
+          padding-right: 20px
           &:last-child
             flex: 1.5
         .handle
@@ -399,10 +425,13 @@
           .item-box
             overflow: hidden
             no-wrap()
-            padding-right: 10px
+            padding-right: 20px
           .item
             flex: 1
             line-height: 18px
+          .name
+            no-wrap-plus()
+            white-space: normal
           .head
             display: flex
             align-items: center
@@ -414,7 +443,8 @@
               background: #f5f5f5
               border: 1px solid #D9D9D9
             .txt
-              no-wrap()
+              no-wrap-plus()
+              white-space: normal
               flex: 1
           .list-handle
             color: $color-main
@@ -433,7 +463,7 @@
     .bot-page
       padding-top: 40px
       padding-bottom: 30px
-  .pop-box
+  .pop-box,.over-power
     z-index: 1001
     position: fixed
     top: 0
@@ -557,4 +587,31 @@
         justify-content: center
         align-items: center
         user-select: none
+    .power-content
+      width: 400px
+      height: 200px
+      background: #FFF
+      border-radius: 3px
+      box-shadow: 0 0 5px 0 rgba(12, 6, 14, 0.6)
+      position: relative
+      .close
+        bg-image('./icon-del2')
+        width: 16px
+        height: 16px
+        cursor: pointer
+        position: absolute
+        right: 15px
+        top: 15px
+        background-size: 100% 100%
+      .txt
+        text-align: center
+        color: $color-text-main
+        font-family: $font-family-regular
+        font-size: $font-size-16
+        line-height: 30px
+      .mobile
+        margin-top: 70px
+      .grey
+        color: #999
+        fonts-size: $font-size-12
 </style>

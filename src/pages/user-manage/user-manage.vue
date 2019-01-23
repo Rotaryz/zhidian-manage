@@ -28,6 +28,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item sex'" :class="val.class">{{+item[val.value] === 1 ? '男' : item[val.value] === 2 ? '女' : '未知'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <div v-if="val.class === 'item head'" class="head item">
@@ -53,7 +54,7 @@
   const TITLE = '用户管理'
   const TAB_LIST = [
     {name: '头像', width: '1', value: 'head', class: 'item head'},
-    {name: '昵称', width: '1', value: 'name', class: 'item'},
+    {name: '昵称', width: '1.2', value: 'name', class: 'item name'},
     {name: '性别', width: '1', value: 'sex', class: 'item sex'},
     {name: '地区', width: '1', value: 'addr', class: 'item'},
     {name: '手机号', width: '1', value: 'phone', class: 'item'},
@@ -210,6 +211,9 @@
           .item
             flex: 1
             line-height: 18px
+          .name
+            no-wrap-plus()
+            white-space: normal
           .head
             display: flex
             align-items: center
