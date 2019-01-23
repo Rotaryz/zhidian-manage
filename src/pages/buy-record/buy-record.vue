@@ -31,6 +31,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
           </div>
         </div>
@@ -54,7 +55,7 @@
     {name: '交易金额', width: '1', value: 'orderMoney', class: 'item money'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '交易类型', width: '1', value: 'isRefund', class: 'item'},
-    {name: '付款人', width: '1', value: 'person', class: 'item'},
+    {name: '付款人', width: '1.2', value: 'person', class: 'item name'},
     {name: '支付时间', width: '1.3', value: 'date', class: 'item'}
   ]
   export default {
@@ -201,7 +202,7 @@
         .header-key
           flex: 1
           overflow: hidden
-          padding-right: 10px
+          padding-right: 20px
           &:last-child
             flex: 1.5
       .list-content
@@ -217,10 +218,13 @@
           text-align: left
           .item-box
             no-wrap()
-            padding-right: 10px
+            padding-right: 20px
           .item
             flex: 1
             line-height: 18px
+          .name
+            no-wrap-plus()
+            white-space: normal
           .head
             display: flex
             align-items: center

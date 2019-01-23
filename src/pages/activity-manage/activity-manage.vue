@@ -213,7 +213,7 @@
         .header-key
           flex: 1
           overflow: hidden
-          padding-right: 10px
+          padding-right: 20px
           &:last-child
             flex: 1.5
         .handle
@@ -255,7 +255,7 @@
           text-align: left
           .item-box
             no-wrap()
-            padding-right: 10px
+            padding-right: 20px
           .item
             flex: 1
             line-height: 18px
@@ -270,7 +270,8 @@
               background: #f5f5f5
               border: 1px solid #D9D9D9
             .txt
-              no-wrap()
+              no-wrap-plus()
+              white-space: normal
               flex: 1
           .before
             text-indent: 14px

@@ -27,7 +27,8 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <router-link v-if="val.class === 'item num'" tag="a" target="_blank" :to="encodeUrl(item.storeName, item.storeId)" :class="val.class"
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <router-link v-if="val.class === 'item num'" tag="a" target="_blank" :to="encodeUrl(item.id)" :class="val.class"
                          class="hand"
             >{{item[val.value] + '' || '---'}}</router-link>
             <!--<span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>-->
@@ -80,7 +81,7 @@
   const TITLE = '品牌管理'
   const TAB_LIST = [
     {name: '品牌名称', width: '2', value: 'storeName', class: 'item head'},
-    {name: '姓名', width: '1', value: 'name', class: 'item'},
+    {name: '姓名', width: '1', value: 'name', class: 'item name'},
     {name: '手机', width: '1', value: 'phone', class: 'item'},
     {name: '门店数', width: '1', value: 'num', class: 'item num'},
     {name: '开通品牌', width: '1', value: 'actived', class: 'item status'},
@@ -157,9 +158,8 @@
         this.getList()
       },
       // 跳转到门店管理
-      encodeUrl(name, id) {
-        let title = encodeURI(name)
-        let url = `/home/business-manage/store-manage?title=${title}&storeId=${id}`
+      encodeUrl(id) {
+        let url = `/home/business-manage/store-manage?merchantId=${id}`
         return url
       },
       openPop(item) {
@@ -190,6 +190,7 @@
         }, 200)
         this.showActive = false
       },
+      // 越权
       showPower(item) {
         API.Brand.getCode({mobile: item.phone}).then((res) => {
           this.$modal.showShade()
@@ -256,7 +257,7 @@
         .header-key
           flex: 1
           overflow: hidden
-          padding-right: 10px
+          padding-right: 20px
           &:last-child
             flex: 1.5
       .list-content
@@ -272,12 +273,15 @@
           text-align: left
           .item-box
             no-wrap()
-            padding-right: 10px
+            padding-right: 20px
           .item
             flex: 1
             line-height: 18px
           .num
             color: $color-main
+          .name
+            no-wrap-plus()
+            white-space: normal
           .head
             display: flex
             align-items: center
@@ -289,7 +293,8 @@
               background: #f5f5f5
               border: 1px solid #D9D9D9
             .txt
-              no-wrap()
+              no-wrap-plus()
+              white-space: normal
               flex: 1
           .before
             text-indent: 14px
