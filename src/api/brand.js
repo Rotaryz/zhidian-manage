@@ -48,7 +48,8 @@ function _changeData(res) {
       date: item.created_at,
       type: item.type,
       url: item.logo.url,
-      id: item.id
+      id: item.id,
+      storeId: item.store_id
     }
   })
   let obj = {

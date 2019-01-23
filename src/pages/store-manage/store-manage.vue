@@ -2,7 +2,7 @@
   <div class="brand-manage">
     <div class="content-top">
       <div class="left">
-        <base-search ref="search" placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
+        <base-search v-if="!hasStoreId" ref="search" placeHolder="请输入手机号/姓名/品牌" @search="search"></base-search>
       </div>
       <a :href="excelUrl" class="excel" target="_blank">导出Excel</a>
     </div>
@@ -100,6 +100,7 @@
         requestData: {
           keyword: '',
           sort_type: '',
+          merchant_id: '',
           page: 1,
           limit: 10
         },
@@ -127,16 +128,20 @@
         defaultUrl: HEAD_IMAGE
       }
     },
+    computed: {
+      hasStoreId() {
+        return this.requestData.merchant_id
+      }
+    },
     created() {
       let title = (this.$route.query && this.$route.query.title) || ''
+      let storeId = (this.$route.query && this.$route.query.storeId) || ''
       if (title) {
         this.requestData.keyword = decodeURI(title)
+        this.requestData.merchant_id = storeId
       }
       this.getList()
       this.$emit('hideNoData')
-    },
-    mounted() {
-      this.setValue(this.requestData.keyword)
     },
     methods: {
       getList() {
@@ -150,10 +155,6 @@
           }
         })
         this.getExcelUrl()
-      },
-      // 设置搜索框内容
-      setValue(txt) {
-        this.$refs.search && this.$refs.search.setValue(txt)
       },
       // 导出地址
       getExcelUrl() {

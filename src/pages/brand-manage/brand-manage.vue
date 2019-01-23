@@ -27,7 +27,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
-            <router-link v-if="val.class === 'item num'" tag="a" target="_blank" :to="encodeUrl(item.storeName)" :class="val.class"
+            <router-link v-if="val.class === 'item num'" tag="a" target="_blank" :to="encodeUrl(item.storeName, item.storeId)" :class="val.class"
                          class="hand"
             >{{item[val.value] + '' || '---'}}</router-link>
             <!--<span v-if="val.class === 'item status'" class="before" :class="{'green': +item.actived === 1}">{{(+item.actived === 1) ? '已激活' : '未激活'}}</span>-->
@@ -157,9 +157,9 @@
         this.getList()
       },
       // 跳转到门店管理
-      encodeUrl(name) {
+      encodeUrl(name, id) {
         let title = encodeURI(name)
-        let url = `/home/business-manage/store-manage?title=${title}`
+        let url = `/home/business-manage/store-manage?title=${title}&storeId=${id}`
         return url
       },
       openPop(item) {
