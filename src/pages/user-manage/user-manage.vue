@@ -56,7 +56,7 @@
     {name: '头像', width: '1', value: 'head', class: 'item head'},
     {name: '昵称', width: '1.2', value: 'name', class: 'item name'},
     {name: '性别', width: '1', value: 'sex', class: 'item sex'},
-    {name: '地区', width: '1', value: 'addr', class: 'item'},
+    {name: '地区', width: '1', value: 'addr', class: 'item name'},
     {name: '手机号', width: '1', value: 'phone', class: 'item'},
     {name: '交易订单', width: '1', value: 'num', class: 'item'},
     {name: '总消费', width: '1', value: 'money', class: 'item money'},

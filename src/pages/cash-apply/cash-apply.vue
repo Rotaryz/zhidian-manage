@@ -33,6 +33,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <div v-if="val.class === 'item card'" class="item card" @mouseenter="showText('card', index)" @mouseleave="hideText">
               <span class="txt-content">******</span>
@@ -93,7 +94,7 @@
     {name: '可提现金额', width: '1', value: 'canCashMoney', class: 'item money'},
     {name: '冻结金额', width: '1', value: 'freezeMoney', class: 'item money'},
     {name: '提现金额', width: '1', value: 'cashMoney', class: 'item money'},
-    {name: '真实姓名', width: '1', value: 'nickName', class: 'item'},
+    {name: '真实姓名', width: '1', value: 'nickName', class: 'item name'},
     {name: '银行类型', width: '1', value: 'cardType', class: 'item'},
     {name: '银行卡号', width: '1', value: 'cardNum', class: 'item card'},
     {name: '提现状态', width: '1', value: 'status', class: 'item status'},
@@ -332,6 +333,9 @@
           .item
             flex: 1
             line-height: 18px
+          .name
+            no-wrap-plus()
+            white-space: normal
           .status,.card
             display: flex
             overflow: visible

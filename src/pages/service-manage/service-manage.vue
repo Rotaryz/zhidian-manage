@@ -30,6 +30,7 @@
             class="item-box"
           >
             <span v-if="val.class === 'item'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
+            <span v-if="val.class === 'item name'" :class="val.class">{{item[val.value] + '' || '---'}}</span>
             <span v-if="val.class === 'item money'" :class="val.class">¥{{item[val.value]}}</span>
             <span v-if="val.class === 'item status'" class="before" :class="{'green': +item.status === 1}">{{(+item.status === 1) ? '已上架' : '已下架'}}</span>
             <div v-if="val.class === 'item head'" class="head item">
@@ -61,7 +62,7 @@
     {name: '浏览量', width: '1', value: 'num', class: 'item'},
     {name: '销量', width: '1', value: 'stock', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item status'},
-    {name: '来源', width: '1', value: 'source', class: 'item'},
+    {name: '来源', width: '1', value: 'source', class: 'item name'},
     {name: '创建时间', width: '1', value: 'date', class: 'item'}
   ]
   export default {
@@ -306,6 +307,9 @@
           .item
             flex: 1
             line-height: 18px
+          .name
+            no-wrap-plus()
+            white-space: normal
           .head
             display: flex
             align-items: center
