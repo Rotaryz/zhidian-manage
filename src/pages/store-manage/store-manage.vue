@@ -175,10 +175,8 @@
         }
         this.requestData = {
           keyword: inputTxt,
-          start_date: this.requestData.start_date,
-          end_data: this.requestData.end_data,
-          date_type: this.requestData.date_type,
           sort_type: '',
+          merchant_id: '',
           sort: '',
           page: 1,
           limit: 10
