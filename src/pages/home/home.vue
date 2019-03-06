@@ -121,6 +121,7 @@
       display: flex
       flex-direction: column
       box-sizing: border-box
+      z-index: 1
       .blank
         row-center()
         top: 55%
