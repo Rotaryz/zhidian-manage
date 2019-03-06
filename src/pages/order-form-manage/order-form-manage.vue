@@ -83,6 +83,7 @@
     {name: '实付金额', width: '1', value: 'total', class: 'item money'},
     {name: '业务类型', width: '1', value: 'orderType', class: 'item'},
     {name: '店铺名称', width: '1.3', value: 'shopName', class: 'item name'},
+    {name: '店铺帐号', width: '1.2', value: 'shopMobile', class: 'item'},
     {name: '下单用户', width: '1.3', value: 'customer', class: 'item name'},
     {name: '下单时间', width: '1.5', value: 'date', class: 'item'},
     {name: '状态', width: '1', value: 'status', class: 'item'}
